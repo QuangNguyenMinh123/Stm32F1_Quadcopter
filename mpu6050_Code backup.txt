@@ -1,0 +1,166 @@
+  gyro_roll = gyro_axis[1];                      //Set gyro_roll to the correct axis that was stored in the EEPROM.
+  if(0)gyro_roll *= -1;                          //Invert gyro_roll if the MSB of EEPROM bit 28 is set.
+  gyro_pitch = gyro_axis[2];                     //Set gyro_pitch to the correct axis that was stored in the EEPROM.
+  if(128)gyro_pitch *= -1;                         //Invert gyro_pitch if the MSB of EEPROM bit 29 is set.
+  gyro_yaw = gyro_axis[3];                       //Set gyro_yaw to the correct axis that was stored in the EEPROM.
+  if(128)gyro_yaw *= -1;                           //Invert gyro_yaw if the MSB of EEPROM bit 30 is set.
+
+#include "MPU6050.h"
+#include "I2C.h"
+#include "GPIO.h"
+#include <math.h>
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+#define MPU6050_Raw_DATA_TYPE	signed short int
+#define CALIBRATION_TIMES		500
+/*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
+
+/*******************************************************************************
+ * Variables
+ ******************************************************************************/
+static MPU6050_Raw_DATA_TYPE Accel_X_Raw = 0;
+static MPU6050_Raw_DATA_TYPE Accel_Y_Raw = 0;
+static MPU6050_Raw_DATA_TYPE Accel_Z_Raw = 0;
+static MPU6050_Raw_DATA_TYPE Gyro_X_Raw = 0;
+static MPU6050_Raw_DATA_TYPE Gyro_Y_Raw = 0;
+static MPU6050_Raw_DATA_TYPE Gyro_Z_Raw = 0;
+static  uint8_t Acc_data[6];
+static  uint8_t Gyro_data[6];
+MPU6050_Data_Type MPU6050_RawData;
+/*****************************ACCELEROMETER VARIABLE***************************/
+double Pitch_Acc = 0.0;
+double Roll_Acc = 0.0;
+
+static double Init_Pitch_Acc = 0.0;
+static double Init_Roll_Acc = 0.0;
+/*********************************GYRO VARIABLE********************************/
+long Gyro_Pitch_Offset = 0.0;
+long Gyro_Roll_Offset = 0.0;
+long Gyro_Yaw_Offset = 0.0;
+
+double Temp_Pitch_Gyro = 0.0;
+double Temp_Roll_Gyro = 0.0;
+double Temp_Yaw_Gyro = 0.0;
+
+double Pitch_Gyro = 0.0;
+double Roll_Gyro = 0.0;
+double Yaw_Gyro = 0.0;
+
+double Pitch_Buff = 0.0;
+double Roll_Buff = 0.0;
+
+double Output_Pitch;
+double Output_Roll;
+/*******************************************************************************
+ * Code
+ ******************************************************************************/
+void MPU6050_Write(uint8_t MPU_Address, uint8_t RegisterAddress, uint8_t Data)
+{
+	I2C2_WriteToDevice(MPU_Address, RegisterAddress, Data);
+}
+
+void MPU6050_Read (uint8_t MPU_Address, uint8_t RegisterAddress, uint8_t *buffer, uint8_t size)
+{
+	I2C2_ReadDevice(MPU_Address, RegisterAddress, buffer, size);
+}
+
+void MPU6050_Init (void)
+{
+	uint8_t ui8CheckDeviceID;
+	MPU6050_RawData.Acc_X = 0.0;
+	MPU6050_RawData.Acc_Y = 0.0;
+	MPU6050_RawData.Acc_Z = 0.0;
+	Roll_Gyro 	= 0.0;
+	Pitch_Gyro	= 0.0;
+	Yaw_Gyro	= 0.0;
+	MPU6050_Read (MPU6050_ADDR,WHO_AM_I_REG, &ui8CheckDeviceID, 1);
+
+	if (ui8CheckDeviceID == 0x68)  
+	{
+		MPU6050_Write (MPU6050_ADDR, PWR_MGMT_1_REG, 0x00);
+		
+		MPU6050_Write(MPU6050_ADDR, ACCEL_CONFIG_REG, 0x10);
+
+		MPU6050_Write(MPU6050_ADDR, GYRO_CONFIG_REG, 0x08);
+		
+		MPU6050_Write(MPU6050_ADDR, 0x1A, 0x03);
+	}
+}
+
+void MPU6050_Para (void)
+{
+	MPU6050_Read (MPU6050_ADDR, 0x3B, &Acc_data[0], 6);
+	MPU6050_Read (MPU6050_ADDR, 0x43, &Gyro_data[0], 6);
+	Accel_X_Raw = (MPU6050_Raw_DATA_TYPE)(Acc_data[0] << 8 | Acc_data [1]);
+	Accel_Y_Raw = (MPU6050_Raw_DATA_TYPE)(Acc_data[2] << 8 | Acc_data [3]);
+	Accel_Z_Raw = (MPU6050_Raw_DATA_TYPE)(Acc_data[4] << 8 | Acc_data [5]);
+	
+	Gyro_X_Raw = (MPU6050_Raw_DATA_TYPE)(Gyro_data[0] << 8 | Gyro_data [1]);
+	Gyro_Y_Raw = (MPU6050_Raw_DATA_TYPE)(Gyro_data[2] << 8 | Gyro_data [3]);
+	Gyro_Z_Raw = (MPU6050_Raw_DATA_TYPE)(Gyro_data[4] << 8 | Gyro_data [5]);
+}	
+	
+void MPU6050_CalculateAngle (void) {
+	/*** convert the Raw values into acceleration in 'g'
+	     we have to divide according to the Full scale value set in FS_SEL
+	     I have configured FS_SEL = 0. So I am dividing by 16384.0
+	     for more details check ACCEL_CONFIG Register              ****/
+	MPU6050_RawData.Acc_X = ((double) Accel_X_Raw)/ ((double)4096.0);
+	MPU6050_RawData.Acc_Y = ((double) Accel_Y_Raw)/ ((double)4096.0);
+	MPU6050_RawData.Acc_Z = ((double) Accel_Z_Raw)/ ((double)4096.0);
+	
+	MPU6050_RawData.Gyro_X = ((double) (Gyro_X_Raw - Gyro_Pitch_Offset));
+	MPU6050_RawData.Gyro_Y = ((double) (Gyro_Y_Raw - Gyro_Roll_Offset));
+	MPU6050_RawData.Gyro_Z = ((double) (Gyro_Z_Raw - Gyro_Yaw_Offset));
+	
+	Roll_Acc = RadianToDegree(atan(MPU6050_RawData.Acc_Y/
+			sqrt(sqr(MPU6050_RawData.Acc_X) + sqr(MPU6050_RawData.Acc_Z))));
+	Pitch_Acc = RadianToDegree(atan(-MPU6050_RawData.Acc_X/
+			sqrt(sqr(MPU6050_RawData.Acc_Y) + sqr(MPU6050_RawData.Acc_Z))));
+	
+	MPU6050_RawData.Gyro_X = MPU6050_RawData.Gyro_X / ((double)65.5);
+	MPU6050_RawData.Gyro_Y = MPU6050_RawData.Gyro_Y / ((double)65.5);
+	MPU6050_RawData.Gyro_Z = MPU6050_RawData.Gyro_Z / ((double)65.5);
+	
+	Temp_Pitch_Gyro = (MPU6050_RawData.Gyro_X) / ((double) 250.0);
+	Temp_Roll_Gyro = (MPU6050_RawData.Gyro_Y) / ((double) 250.0);
+	Temp_Yaw_Gyro = (MPU6050_RawData.Gyro_Z) / ((double) 250.0);
+	
+	Roll_Gyro 	+= Temp_Pitch_Gyro;
+	Pitch_Gyro 	+= Temp_Roll_Gyro;
+	 
+	Pitch_Buff = Pitch_Gyro;
+	Roll_Buff  = Roll_Gyro;
+	 
+	Pitch_Gyro = Roll_Buff * sin(Temp_Yaw_Gyro * DEG_TO_RAD) + Pitch_Buff * cos(Temp_Yaw_Gyro * DEG_TO_RAD); 
+	Roll_Gyro  = - Pitch_Buff * sin(Temp_Yaw_Gyro * DEG_TO_RAD) + Roll_Buff * cos(Temp_Yaw_Gyro * DEG_TO_RAD); ;
+
+//	Output_Pitch = ((double) 0.95) * Pitch_Acc + ((double) 0.05) * Pitch_Gyro;
+//	Output_Roll = ((double) 0.95) * Roll_Acc + ((double) 0.05) * Roll_Gyro;
+}
+
+void MPU6050_Calibration (void) {
+	uint16_t i_ui16;
+	unsigned uint32_t loop_timer = 0U;
+	Gyro_Pitch_Offset = 0.0;
+	Gyro_Roll_Offset = 0.0;
+	Gyro_Yaw_Offset = 0.0;
+	for (i_ui16 = 0; i_ui16 < CALIBRATION_TIMES; i_ui16++) {
+		loop_timer = micros();
+		MPU6050_Para();
+		Gyro_Pitch_Offset += Gyro_X_Raw;
+		Gyro_Roll_Offset += Gyro_Y_Raw;
+		Gyro_Yaw_Offset += Gyro_Z_Raw;
+		while (micros() - loop_timer < 4000) {}
+	}
+	Gyro_Pitch_Offset 	= Gyro_Pitch_Offset / CALIBRATION_TIMES;
+	Gyro_Roll_Offset 	= Gyro_Roll_Offset  / CALIBRATION_TIMES;
+	Gyro_Yaw_Offset 	= Gyro_Yaw_Offset  / CALIBRATION_TIMES;	
+}
+
+/*******************************************************************************
+ * EOF
+ ******************************************************************************/
