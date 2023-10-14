@@ -6,7 +6,6 @@
 ".\objects\clock.o"
 ".\objects\vectable.o"
 ".\objects\i2c.o"
-".\objects\mpu6050.o"
 ".\objects\ex_eeprom.o"
 ".\objects\pid.o"
 ".\objects\misc.o"

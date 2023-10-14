@@ -451,16 +451,6 @@
               <FilePath>..\USER\I2C.h</FilePath>
             </File>
             <File>
-              <FileName>MPU6050.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\USER\MPU6050.h</FilePath>
-            </File>
-            <File>
-              <FileName>MPU6050.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\USER\MPU6050.c</FilePath>
-            </File>
-            <File>
               <FileName>EX_EEPROM.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USER\EX_EEPROM.c</FilePath>
