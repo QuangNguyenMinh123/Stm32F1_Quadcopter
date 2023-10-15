@@ -962,5 +962,4 @@ void NVIC_SetPriorityGrouping(uint32_t PriorityGroup);
 uint32_t map(uint32_t MapValue, uint32_t InputLow, uint32_t InputHigh, uint32_t OutputLow, uint32_t OutputHigh);  
 double DegreeToRadian(double value);
 double RadianToDegree(double value);
-bool memcmp(unsigned char* Str1, unsigned char* Str2, uint8_t len);
 #endif   /* _COMMON_H */

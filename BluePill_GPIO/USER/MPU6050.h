@@ -77,12 +77,9 @@ extern double Roll_Angle_Output;
  ******************************************************************************/
 void MPU6050_Write (uint8_t MPU_Address, uint8_t RegisterAddress, uint8_t Data);
 void MPU6050_Read (uint8_t MPU_Address, uint8_t RegisterAddress, uint8_t *buffer, uint8_t size);
-bool MPU6050_WriteMemoryBlock(uint8_t *data, uint16_t dataSize, uint8_t bank,
-		uint8_t address, bool verify, bool useProgMem);
-void initMPU6050 (void);
-void MPU6050_Calibration (void);
-void MPU6050_DMP_Init(void);
+void MPU6050_Init (void);
 void MPU6050_getPara (void);
-void calibrateMPU6050(double * dest1, double * dest2);
-void MPU6050SelfTest(double * destination);
+void MPU6050_Calibration (void);
+void MPU6050_CalculateAngle(void);
+
 #endif   /* _MPU6050_H */

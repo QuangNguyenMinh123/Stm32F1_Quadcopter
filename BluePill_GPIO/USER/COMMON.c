@@ -45,7 +45,7 @@ void NVIC_SetPriority(IRQType IRQn, uint32_t priority)
   }
 }
 
-/*double DegreeToRadian(double value) {
+double DegreeToRadian(double value) {
 	double fRet = 0.0;
 	fRet = pi *value / ((double)180);
 	return fRet;
@@ -55,18 +55,6 @@ double RadianToDegree(double value) {
 	double fRet = 0.0;
 	fRet = ((double)180) * value / pi;
 	return fRet;
-}
-*/
-bool memcmp(unsigned char* Str1, unsigned char* Str2, uint8_t len) {
-	while (len > 0)
-    {
-        if (*Str1 != *Str2)
-            return (*Str1 - *Str2);
-        len--;
-        Str1++;
-        Str2++;
-    }
-    return 0;
 }
 /*******************************************************************************
  * EOF

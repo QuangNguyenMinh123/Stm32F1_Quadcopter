@@ -90,7 +90,7 @@ void SysTick_Handler(void) {
 	ui32micros += (SYSTICK_ARR_VALUE / 9) + 1; 
 }
 
-__inline unsigned uint32_t micros(void) {
+unsigned uint32_t micros(void) {
 	return ( ui32micros + ((SYSTICK_ARR_VALUE - SysTick->VAL) / 9) );
 }
 

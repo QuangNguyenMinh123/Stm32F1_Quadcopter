@@ -194,7 +194,6 @@ void setup()
 {
   Wire.begin();
   Serial.begin(115200);
-  pinMode(PC13, OUTPUT);
   // Read the WHO_AM_I register, this is a good test of communication
   uint8_t c = readByte(MPU6050_ADDRESS, WHO_AM_I_MPU6050);
   if (c == 0x68) // WHO_AM_I should always be 0x68
@@ -211,7 +210,6 @@ void setup()
 
 void loop()
 {  
-    digitalWrite(PC13, state);
     readAccelData(accelCount);  // Read the x/y/z adc values
     getAres();
     
@@ -250,13 +248,12 @@ void loop()
 
 //    Serial.print("Yaw, Pitch, Roll: ");
 
-//    Serial.print(yaw, 2);
-//    Serial.print(", ");
+    Serial.print(yaw, 2);
+    Serial.print(", ");
     Serial.print(pitch, 2);
     Serial.print(", ");
     Serial.println(roll, 2);
     count = millis();
-    state = ~state;  
 }
 
 
@@ -641,13 +638,8 @@ void MPU6050SelfTest(float * destination) // Should return percent deviation fro
   while (Wire.available()) {
         dest[i++] = Wire.read(); }         // Put read results in the Rx buffer
 }
-// Implementation of Sebastian Madgwick's "...efficient orientation filter for... inertial/magnetic sensor arrays"
-// (see http://www.x-io.co.uk/category/open-source/ for examples and more details)
-// which fuses acceleration and rotation rate to produce a quaternion-based estimate of relative
-// device orientation -- which can be converted to yaw, pitch, and roll. Useful for stabilizing quadcopters, etc.
-// The performance of the orientation filter is at least as good as conventional Kalman-based filtering algorithms
-// but is much less computationally intensive---it can be performed on a 3.3 V Pro Mini operating at 8 MHz!
-        void MadgwickQuaternionUpdate(float ax, float ay, float az, float gx, float gy, float gz)
+
+void MadgwickQuaternionUpdate(float ax, float ay, float az, float gx, float gy, float gz)
         {
             float q1 = q[0], q2 = q[1], q3 = q[2], q4 = q[3];         // short name local variable for readability
             float norm;                                               // vector norm
@@ -666,6 +658,9 @@ void MPU6050SelfTest(float * destination) // Should return percent deviation fro
             float _2q2 = 2.0f * q2;
             float _2q3 = 2.0f * q3;
             float _2q4 = 2.0f * q4;
+            float _2q1q3 = 2.0f * q1 * q3;
+            float _2q3q4 = 2.0f * q3 * q4;
+
             // Normalise accelerometer measurement
             norm = sqrt(ax * ax + ay * ay + az * az);
             if (norm == 0.0f) return; // handle NaN
