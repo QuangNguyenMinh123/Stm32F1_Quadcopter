@@ -7,6 +7,7 @@
  ******************************************************************************/
 #define MPU6050_Raw_DATA_TYPE	signed short int
 #define CALIBRATION_TIMES		500
+#define ALPHA					0.998
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -21,34 +22,27 @@ static MPU6050_Raw_DATA_TYPE Gyro_Roll_Raw = 0;
 static MPU6050_Raw_DATA_TYPE Gyro_Pitch_Raw = 0;
 static MPU6050_Raw_DATA_TYPE Gyro_Yaw_Raw = 0;
 static uint8_t Buffer_data[14];
-MPU6050_Data_Type MPU6050_RawData;
+static MPU6050_Data_Type MPU6050_RawData;
 /*****************************ACCELEROMETER VARIABLE***************************/
-double Pitch_Acc = 0.0;
-double Roll_Acc = 0.0;
-
-static double Init_Pitch_Acc = 0.0;
-static double Init_Roll_Acc = 0.0;
+static double Pitch_Acc = 0.0;
+static double Roll_Acc = 0.0;
 /*********************************GYRO VARIABLE********************************/
-long Gyro_Pitch_Offset = 0.0;
-long Gyro_Roll_Offset = 0.0;
-long Gyro_Yaw_Offset = 0.0;
+static long Gyro_Pitch_Offset = 0.0;
+static long Gyro_Roll_Offset = 0.0;
+static long Gyro_Yaw_Offset = 0.0;
 
-double Temp_Pitch_Gyro = 0.0;
-double Temp_Roll_Gyro = 0.0;
-double Temp_Yaw_Gyro = 0.0;
+static double Temp_Pitch_Gyro = 0.0;
+static double Temp_Roll_Gyro = 0.0;
+static double Temp_Yaw_Gyro = 0.0;
 
-double Pitch_Gyro = 0.0;
-double Roll_Gyro = 0.0;
-double Yaw_Gyro = 0.0;
+static double Pitch_Gyro = 0.0;
+static double Roll_Gyro = 0.0;
+static double Yaw_Gyro = 0.0;
 
-double Pitch_Buff = 0.0;
-double Roll_Buff = 0.0;
-double Yaw_Buff = 0.0;
+static bool setGyro = FALSE;
 
-double a1;
-
-double Output_Pitch;
-double Output_Roll;
+double Pitch;
+double Roll;
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -80,8 +74,6 @@ void MPU6050_Init (void)
 		MPU6050_Write(MPU6050_ADDR, ACCEL_CONFIG_REG, 0x10);
 
 		MPU6050_Write(MPU6050_ADDR, GYRO_CONFIG_REG, 0x08);
-		
-		MPU6050_Write(MPU6050_ADDR, 0x1A, 0x03);
 	}
 }
 
@@ -96,15 +88,11 @@ void MPU6050_getPara (void)
 	Gyro_Roll_Raw = (MPU6050_Raw_DATA_TYPE)(Buffer_data[8] << 8 | Buffer_data [9]);
 	Gyro_Pitch_Raw = (MPU6050_Raw_DATA_TYPE)(Buffer_data[10] << 8 | Buffer_data [11]);
 	Gyro_Yaw_Raw = (MPU6050_Raw_DATA_TYPE)(Buffer_data[12] << 8 | Buffer_data [13]);
-	Gyro_Yaw_Raw *= -1;
-	Gyro_Pitch_Raw *= -1;
 }	
 	
 void MPU6050_CalculateAngle (void) {
-	/*** convert the Raw values into acceleration in 'g'
-	     we have to divide according to the Full scale value set in FS_SEL
-	     I have configured FS_SEL = 0. So I am dividing by 16384.0
-	     for more details check ACCEL_CONFIG Register              ****/
+	MPU6050_getPara();
+	
 	MPU6050_RawData.Acc_X = ((double) Accel_X_Raw)/ ((double)4096.0);
 	MPU6050_RawData.Acc_Y = ((double) Accel_Y_Raw)/ ((double)4096.0);
 	MPU6050_RawData.Acc_Z = ((double) Accel_Z_Raw)/ ((double)4096.0);
@@ -127,9 +115,18 @@ void MPU6050_CalculateAngle (void) {
 	 
 	Roll_Gyro -= Pitch_Gyro * sin(Temp_Yaw_Gyro * DEG_TO_RAD);
 	Pitch_Gyro += Roll_Gyro * sin(Temp_Yaw_Gyro * DEG_TO_RAD);
-
-	Output_Pitch = ((double) 0.95) * Pitch_Gyro + ((double) 0.05) * Pitch_Acc;
-	Output_Roll = ((double) 0.95) * Roll_Gyro + ((double) 0.05) * Roll_Acc;
+	
+	if (setGyro) {
+		Pitch_Gyro = Pitch_Gyro * ALPHA + Pitch_Acc * (1.0 - ALPHA);
+		Roll_Gyro = Roll_Gyro * ALPHA + Roll_Acc * (1.0 - ALPHA);
+	} else {
+		Pitch_Gyro = Pitch_Acc;
+		Roll_Gyro = Roll_Acc;
+		setGyro = TRUE;
+	}
+	
+	Pitch = Pitch * 0.9 + Pitch_Gyro * 0.1;
+	Roll = Roll * 0.9 + Roll_Gyro * 0.1;
 }
 
 void MPU6050_Calibration (void) {
