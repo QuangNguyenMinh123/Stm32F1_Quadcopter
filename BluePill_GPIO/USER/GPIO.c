@@ -547,10 +547,10 @@ void GPIO_SetPWMMeasurement(void) {
 	RisingTimeTIM2 = 0;
 	RisingTimeTIM3 = 0;
 	GPIO_PulseWidth.CH1 = 0;
-	GPIO_PulseWidth.CH2 = 0;
+	GPIO_PulseWidth.CH5 = 0;
 	GPIO_PulseWidth.CH3 = 0;
 	GPIO_PulseWidth.CH4 = 0;
-	GPIO_PulseWidth.CH5 = 0;
+	GPIO_PulseWidth.CH2 = 0;
 	GPIO_PulseWidth.CH6 = 0;
 	GPIO_SetInPut(IO_A1,Input_doubleing);
 	GPIO_SetInPut(IO_A2,Input_doubleing);
@@ -609,7 +609,7 @@ void TIM2_IRQHandler(void) {
 		TIM2->CCER &= ~BIT_5;
 	}
 	if ((GPIOA->IDR & BIT_2) == 0 ) {
-		GPIO_PulseWidth.CH5 = (TIM2->CCR3 - RisingTimeTIM2) & 0xfff - 1;
+		GPIO_PulseWidth.CH2 = (TIM2->CCR3 - RisingTimeTIM2) & 0xfff - 1;
 	}
 	if ((GPIOA->IDR & BIT_3) == 0 ) {
 		GPIO_PulseWidth.CH4 = (TIM2->CCR4 - RisingTimeTIM2) & 0xfff - 1;
@@ -633,7 +633,7 @@ void TIM3_IRQHandler(void) {
 		TIM3->CCER &= ~BIT_1;
 	}
 	if ((GPIOA->IDR & BIT_7) == 0 ) {
-		GPIO_PulseWidth.CH2 = (TIM3->CCR2 - RisingTimeTIM3) & 0xfff - 1;
+		GPIO_PulseWidth.CH5 = (TIM3->CCR2 - RisingTimeTIM3) & 0xfff - 1;
 	}
 	TIM3->SR = 0;
 }

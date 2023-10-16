@@ -67,4 +67,6 @@ void UART1_Init(UART_BAUDRATE Baudrate);
 void UART1_sendByte(uint8_t data);
 void UART1_sendStr(uint8_t* data);
 void UART1_sendNum(uint32_t Val);
+bool UART1_CheckMessageAvail(void);
+uint8_t* UART1_GetStr(void);
 #endif   /* _UART_H */

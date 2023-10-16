@@ -17,6 +17,7 @@
 static uint8_t USART1_Buffer[BUFFER_SIZE];
 static uint8_t *Pointer;
 static uint32_t ui32gDummy;
+static bool bMessageAvail = FALSE;
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -103,6 +104,15 @@ void UART1_sendNum(uint32_t Val) {
     }
 }
 
+bool UART1_CheckMessageAvail(void) {
+	return bMessageAvail;
+}
+
+uint8_t* UART1_GetStr(void) {
+	bMessageAvail = FALSE;
+	return USART1_Buffer;
+}
+
 RAMFUNC void USART1_IRQHandler(void) {
 	*Pointer = (uint8_t) USART1->DR;
 	if (*Pointer == 0) {
@@ -112,6 +122,7 @@ RAMFUNC void USART1_IRQHandler(void) {
 	else {
 		if ( *Pointer == '\r' || *Pointer == '\n' )
 		{
+			bMessageAvail = TRUE;
 			*Pointer = 0;
 			Pointer = USART1_Buffer;
 		}

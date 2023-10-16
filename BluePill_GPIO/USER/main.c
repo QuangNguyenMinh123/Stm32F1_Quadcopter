@@ -9,7 +9,9 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-
+#define ON						1
+#define OFF						0
+#define TUNING_PID				OFF
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -17,7 +19,7 @@ void System_Init(void);
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-unsigned uint32_t loop_timer = 0U;
+static unsigned uint32_t loop_timer = 0U;
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -26,7 +28,6 @@ int main(void) {
 	System_Init();
 	while (1) {
 		loop_timer = micros();
-		MPU6050_getPara();
 		MPU6050_CalculateAngle();
 		while (micros() - loop_timer < 4000);
 	}
@@ -34,6 +35,10 @@ int main(void) {
 
 void System_Init(void) {
 	CLOCK_SystickInit();
+	GPIO_SetPWMMeasurement();
+#if (TUNING_PID == ON)
+	UART1_Init(UART_BAUDRATE_115200);
+#endif
 	I2C2_Init(I2C_SPEED_100);
 	MPU6050_Init();
 	MPU6050_Calibration();
