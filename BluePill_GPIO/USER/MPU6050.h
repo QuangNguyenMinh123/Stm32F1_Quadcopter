@@ -81,5 +81,4 @@ void MPU6050_Init (void);
 void MPU6050_getPara (void);
 void MPU6050_Calibration (void);
 void MPU6050_CalculateAngle(void);
-
 #endif   /* _MPU6050_H */

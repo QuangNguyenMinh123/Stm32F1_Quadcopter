@@ -36,10 +36,12 @@ int main(void) {
 void System_Init(void) {
 	CLOCK_SystickInit();
 	GPIO_SetPWMMeasurement();
+	GPIO_SetOutPut(IO_C13, General_Push_Pull);
+	GPIO_PINHigh(IO_C13);
 #if (TUNING_PID == ON)
 	UART1_Init(UART_BAUDRATE_115200);
 #endif
-	I2C2_Init(I2C_SPEED_100);
+	I2C2_Init(I2C_SPEED_400);
 	MPU6050_Init();
 	MPU6050_Calibration();
 }

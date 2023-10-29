@@ -15,7 +15,7 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-static uint32_t dummy = 0;
+static unsigned uint32_t dummy = 0;
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -29,21 +29,34 @@ void I2C1_Init(I2C_SPEED Speed) {
 	if ( (RCC->APB1ENR & BIT_21) == 0 ) {
 		RCC->APB1ENR |= BIT_21;
 	}
-	/* Generic setting */
+	/* Generic setting: Reset I2C */
 	/* I2C1 Reset */
-	I2C1->CR1 |= BIT_15;
 	delay(100);
+	while ( (I2C1->SR2 & BIT_1) !=0);
+	I2C1->CR1 |= BIT_15;
+	while ( (I2C1->SR2 & BIT_1) !=0);
 	I2C1->CR1 = 0;
-	/* Clock setting = 8MHz */
-	I2C1->CR2 |= (8<<0);
-	/* Speed setting */
-	/* Standard mode */
-	if (Speed == I2C_SPEED_100) {
+	if (Speed == I2C_SPEED_100)
+	{
+		/* Clock setting FREQ = 8MHz */
+		I2C1->CR2 |= (8<<0);
+		/* Speed setting */
+		/* Standard mode */
 		I2C1->TRISE = 9;
 		I2C1->CCR |= 28;
 	}
+	else if (Speed == I2C_SPEED_400)
+	{
+		/* Clock setting FREQ = 10MHz */
+		I2C1->CR2 |= (10<<0);
+		/* Speed setting */
+		/* Fast mode */
+		I2C1->TRISE = 4;
+		I2C1->CCR |= BIT_15;
+		I2C1->CCR |= 50;
+	}
 	/* ACK enable, general call enable, enable I2C */
-	I2C1->CR1 |= BIT_10 | BIT_6 | BIT_0;
+	I2C1->CR1 |= BIT_6 | BIT_0;
 }
 
 __inline void I2C1_Start (void)
@@ -123,22 +136,38 @@ void I2C2_Init(I2C_SPEED Speed) {
 	GPIO_SetOutPut(IO_B11, Alternate_Open_Drain);
 	/* I2C setting */
 	/* I2C2 clock enable */
+	delay(100);
 	if ( (RCC->APB1ENR & BIT_22) == 0 ) {
 		RCC->APB1ENR |= BIT_22;
 	}
-	/* Generic setting */
-	/* I2C2 Reset */
+	/* Generic setting: Reset I2C */
+	/* I2C1 Reset */
+	delay(100);
+	while ( (I2C2->SR2 & BIT_1) !=0);
 	I2C2->CR1 |= BIT_15;
 	delay(100);
+	while ( (I2C2->SR2 & BIT_1) !=0);
 	I2C2->CR1 = 0;
-	/* Clock setting = 8MHz */
-	I2C2->CR2 |= (8<<0);
-	/* Speed setting */
-	/* Standard mode */
-	if (Speed == I2C_SPEED_100) {
+	if (Speed == I2C_SPEED_100)
+	{
+		/* Clock setting FREQ = 8MHz */
+		I2C2->CR2 |= (8<<0);
+		/* Speed setting */
+		/* Standard mode */
 		I2C2->TRISE = 9;
 		I2C2->CCR |= 28;
 	}
+	else if (Speed == I2C_SPEED_400)
+	{
+		/* Clock setting FREQ = 20MHz */
+		I2C2->CR2 |= (20<<0);
+		/* Speed setting */
+		/* Fast mode */
+		I2C2->TRISE = 7;
+		I2C2->CCR |= BIT_15 | BIT_14;
+		I2C2->CCR |= 2;
+	}
+	delay(100);
 	/* ACK enable, general call enable, enable I2C */
 	I2C2->CR1 |= BIT_0;
 }
@@ -150,6 +179,9 @@ void I2C2_Start (void)
 	2. Wait for the SB ( Bit 0 in SR1) to set. 
 	 This indicates that the start condition is generated */
 /******************************************************************************/	
+	if (I2C2->CR1 & BIT_9)
+		I2C2->CR1 &= ~BIT_9;
+	while (I2C2->CR1 & BIT_9);
 	/* Enable ACK */
 	I2C2->CR1 |= BIT_10;  
 	/* I2C Start */
@@ -188,9 +220,9 @@ void I2C2_CallAdress (uint8_t Address)
 		address transmission
 	3. clear the ADDR by reading the SR1 and SR2				*/
 /******************************************************************************/		
-	I2C2->DR = Address;  
+	I2C2->DR = Address;
 	/* Wait until ADDR is sent */
-	while ((I2C2->SR1 & BIT_1) == 0); 
+	while ((I2C2->SR1 & BIT_1) == 0);
 	/* read SR1 and SR2 to clear the ADDR bit */
 	dummy = I2C2->SR1 | I2C2->SR2;
 }
@@ -293,7 +325,14 @@ bool I2C2_CheckDevice(uint8_t DeviceID){
 	return bRet;
 }
 
+/*
+RAMFUNC void I2C2_ER_IRQHandler(void) {
+	GPIO_PINLow(IO_C13);
+}
 
+RAMFUNC void I2C2_EV_IRQHandler (void) {
+	GPIO_PINLow(IO_C13);
+}*/
 /*******************************************************************************
  * EOF
  ******************************************************************************/
