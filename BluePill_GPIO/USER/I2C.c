@@ -66,6 +66,9 @@ __inline void I2C1_Start (void)
 	2. Wait for the SB ( Bit 0 in SR1) to set. 
 	 This indicates that the start condition is generated */
 /******************************************************************************/	
+	if (I2C1->CR1 & BIT_9)
+		I2C1->CR1 &= ~BIT_9;
+	while (I2C1->CR1 & BIT_9);
 	/* Enable ACK */
 	I2C1->CR1 |= (1<<10);  
 	/* I2C Start */
@@ -98,6 +101,9 @@ void I2C1_CallAdress (uint8_t Address)
 		address transmission
 	3. clear the ADDR by reading the SR1 and SR2				*/
 /******************************************************************************/		
+	if (I2C1->CR1 & BIT_9)
+		I2C1->CR1 &= ~BIT_9;
+	while (I2C1->CR1 & BIT_9);
 	I2C1->DR = Address;  
 	/* Wait until ADDR is sent */
 	while (!(I2C1->SR1 & BIT_1)); 
@@ -220,6 +226,9 @@ void I2C2_CallAdress (uint8_t Address)
 		address transmission
 	3. clear the ADDR by reading the SR1 and SR2				*/
 /******************************************************************************/		
+	if (I2C2->CR1 & BIT_9)
+		I2C2->CR1 &= ~BIT_9;
+	while (I2C2->CR1 & BIT_9);
 	I2C2->DR = Address;
 	/* Wait until ADDR is sent */
 	while ((I2C2->SR1 & BIT_1) == 0);
@@ -324,15 +333,6 @@ bool I2C2_CheckDevice(uint8_t DeviceID){
 	I2C2_Stop();
 	return bRet;
 }
-
-/*
-RAMFUNC void I2C2_ER_IRQHandler(void) {
-	GPIO_PINLow(IO_C13);
-}
-
-RAMFUNC void I2C2_EV_IRQHandler (void) {
-	GPIO_PINLow(IO_C13);
-}*/
 /*******************************************************************************
  * EOF
  ******************************************************************************/

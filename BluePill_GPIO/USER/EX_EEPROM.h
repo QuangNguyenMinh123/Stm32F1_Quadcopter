@@ -15,7 +15,7 @@
 /*******************************************************************************
  * API
  ******************************************************************************/
-uint8_t EEPROM_CheckDevice(void);
-void EEPROM_Write(uint16_t Address, uint8_t* Data);
-void EEPROM_Read(uint16_t Address, uint8_t* Buffer, uint8_t size);
+bool EEPROM_CheckDevice(void);
+void EEPROM_Write(uint16_t Address, char* Data);
+void EEPROM_Read(uint16_t Address, char* Buffer, uint8_t size);
 #endif   /* _EX_EEPROM_H */
