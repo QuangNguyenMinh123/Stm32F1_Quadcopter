@@ -1,62 +1,61 @@
 Dependencies for Project 'BluePill_GPIO', Target 'Target 1': (DO NOT MODIFY !)
 CompilerVersion: 6190000::V6.19::ARMCLANG
-F (..\USER\main.c)(0x653E2489)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/main.o -MD)
-I (..\USER\GPIO.h)(0x652D6317)
-I (..\USER\COMMON.h)(0x652BB266)
+F (..\USER\main.c)(0x65470686)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/main.o -MD)
+I (..\USER\GPIO.h)(0x653FF230)
+I (..\USER\COMMON.h)(0x653E2A01)
 I (..\USER\CLOCK.h)(0x652A9E3A)
-I (..\USER\UART.h)(0x652D67E2)
 I (..\USER\I2C.h)(0x652A9E3A)
 I (C:\Keil_v5\ARM\ARMCLANG\include\math.h)(0x63885718)
 I (..\USER\MPU6050.h)(0x652D6C91)
 I (..\USER\EX_EEPROM.h)(0x653E1CDB)
-I (..\USER\PID.h)(0x652A9E3A)
-F (..\USER\COMMON.h)(0x652BB266)()
-F (..\USER\GPIO.c)(0x652D64AA)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/gpio.o -MD)
-I (..\USER\GPIO.h)(0x652D6317)
-I (..\USER\COMMON.h)(0x652BB266)
+I (..\USER\PID.h)(0x653E2B04)
+F (..\USER\COMMON.h)(0x653E2A01)()
+F (..\USER\GPIO.c)(0x653FF383)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/gpio.o -MD)
+I (..\USER\GPIO.h)(0x653FF230)
+I (..\USER\COMMON.h)(0x653E2A01)
 I (..\USER\CLOCK.h)(0x652A9E3A)
-F (..\USER\GPIO.h)(0x652D6317)()
-F (..\USER\COMMON.c)(0x652BB266)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/common.o -MD)
-I (..\USER\COMMON.h)(0x652BB266)
+F (..\USER\GPIO.h)(0x653FF230)()
+F (..\USER\COMMON.c)(0x653E2A01)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/common.o -MD)
+I (..\USER\COMMON.h)(0x653E2A01)
 F (..\USER\UART.c)(0x652D67E2)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/uart.o -MD)
 I (..\USER\UART.h)(0x652D67E2)
-I (..\USER\COMMON.h)(0x652BB266)
-I (..\USER\GPIO.h)(0x652D6317)
+I (..\USER\COMMON.h)(0x653E2A01)
+I (..\USER\GPIO.h)(0x653FF230)
 I (..\USER\CLOCK.h)(0x652A9E3A)
 F (..\USER\UART.h)(0x652D67E2)()
 F (..\USER\CLOCK.c)(0x652BB3D5)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/clock.o -MD)
 I (..\USER\CLOCK.h)(0x652A9E3A)
-I (..\USER\COMMON.h)(0x652BB266)
-I (..\USER\GPIO.h)(0x652D6317)
+I (..\USER\COMMON.h)(0x653E2A01)
+I (..\USER\GPIO.h)(0x653FF230)
 F (..\USER\CLOCK.h)(0x652A9E3A)()
 F (..\USER\VECTABLE.c)(0x652A9E3A)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/vectable.o -MD)
 I (..\USER\VECTABLE.h)(0x652A9E3A)
-I (..\USER\COMMON.h)(0x652BB266)
+I (..\USER\COMMON.h)(0x653E2A01)
 F (..\USER\VECTABLE.h)(0x652A9E3A)()
 F (..\USER\I2C.c)(0x653DFA13)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/i2c.o -MD)
 I (..\USER\I2C.h)(0x652A9E3A)
-I (..\USER\COMMON.h)(0x652BB266)
-I (..\USER\GPIO.h)(0x652D6317)
+I (..\USER\COMMON.h)(0x653E2A01)
+I (..\USER\GPIO.h)(0x653FF230)
 I (..\USER\CLOCK.h)(0x652A9E3A)
 F (..\USER\I2C.h)(0x652A9E3A)()
-F (..\USER\EX_EEPROM.c)(0x653E247E)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/ex_eeprom.o -MD)
+F (..\USER\EX_EEPROM.c)(0x653E263A)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/ex_eeprom.o -MD)
 I (..\USER\EX_EEPROM.h)(0x653E1CDB)
-I (..\USER\COMMON.h)(0x652BB266)
+I (..\USER\COMMON.h)(0x653E2A01)
 I (..\USER\I2C.h)(0x652A9E3A)
 F (..\USER\EX_EEPROM.h)(0x653E1CDB)()
-F (..\USER\PID.c)(0x652A9E3A)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/pid.o -MD)
-I (..\USER\PID.h)(0x652A9E3A)
-I (..\USER\COMMON.h)(0x652BB266)
+F (..\USER\PID.c)(0x653E54B1)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/pid.o -MD)
+I (..\USER\PID.h)(0x653E2B04)
+I (..\USER\COMMON.h)(0x653E2A01)
 I (..\USER\MPU6050.h)(0x652D6C91)
-I (..\USER\GPIO.h)(0x652D6317)
+I (..\USER\GPIO.h)(0x653FF230)
 I (..\USER\CLOCK.h)(0x652A9E3A)
 I (C:\Keil_v5\ARM\ARMCLANG\include\math.h)(0x63885718)
-F (..\USER\PID.h)(0x652A9E3A)()
+F (..\USER\PID.h)(0x653E2B04)()
 F (..\USER\MPU6050.c)(0x652BE23B)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Weverything -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/Device/STM32F103C8-I./RTE/_Target_1-IC:/Users/nguye/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/Include-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/Device/StdPeriph_Driver/inc-IC:/Users/nguye/AppData/Local/Arm/Packs/Keil/STM32F1xx_DFP/2.4.1/RTE_Driver-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F10X_MD -D_RTE_-o ./objects/mpu6050.o -MD)
 I (..\USER\MPU6050.h)(0x652D6C91)
-I (..\USER\COMMON.h)(0x652BB266)
+I (..\USER\COMMON.h)(0x653E2A01)
 I (..\USER\I2C.h)(0x652A9E3A)
-I (..\USER\GPIO.h)(0x652D6317)
+I (..\USER\GPIO.h)(0x653FF230)
 I (..\USER\CLOCK.h)(0x652A9E3A)
 I (C:\Keil_v5\ARM\ARMCLANG\include\math.h)(0x63885718)
 F (..\USER\MPU6050.h)(0x652D6C91)()

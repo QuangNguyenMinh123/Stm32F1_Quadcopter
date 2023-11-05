@@ -200,6 +200,7 @@ extern GPIO_PulseWidth_Type GPIO_PulseWidth;
 void GPIO_SetOutPut(IO_PIN PIN, OUTPUT_MODE mode);
 void GPIO_PINLow(IO_PIN PIN);
 void GPIO_PINHigh(IO_PIN PIN);
+void GPIO_PINToggle(IO_PIN PIN);
 /* GPIO Input Module */
 void GPIO_SetInPut(IO_PIN PIN, INPUT_MODE MODE);
 uint32_t GPIO_ReadPIN(IO_PIN PIN);

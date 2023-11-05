@@ -21,11 +21,9 @@ void delay(uint32_t delayTime) {
 		__asm("nop");                                                                                                                               	}
 }
 
-uint32_t map(uint32_t MapValue, uint32_t InputLow, uint32_t InputHigh, uint32_t OutputLow, uint32_t OutputHigh) {
-	uint32_t a = (OutputHigh - OutputLow);
-	uint32_t b = (InputHigh - InputLow) ;
-	uint32_t z = MapValue * a;
-	return z / b;
+double map(double x, double in_min, double in_max, double out_min, double out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 void NVIC_EnableIRQ(IRQType IRQn)

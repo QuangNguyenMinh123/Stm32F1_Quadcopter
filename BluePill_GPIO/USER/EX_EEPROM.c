@@ -24,13 +24,11 @@ bool EEPROM_CheckDevice(void) {
 }
 
 void EEPROM_Write(uint16_t Address, char* Data) {
-	uint16_t Count = 0;
 	I2C2_Start();
 	I2C2_CallAdress(EEPROM_WRITE_ADR);
 	I2C2_Write((Address & 0xff));
 	I2C2_Write(Address>>8);
 	while (*Data != 0) {
-		Count++;
 		I2C2_Write(*Data);
 		Data++;
 	}

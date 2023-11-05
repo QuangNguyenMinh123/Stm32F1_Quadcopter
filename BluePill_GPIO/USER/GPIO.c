@@ -194,6 +194,41 @@ void GPIO_PINHigh(IO_PIN PIN) {
 	}
 }
 
+void GPIO_PINToggle(IO_PIN PIN) {
+	uint32_t Data = 0;
+	/* PORT A */
+	IO_PIN ui32Temp = PIN % 16;
+	if (PIN / 16 == 0) {
+		Data = GPIOA->ODR;
+		if (Data & (1 << ui32Temp)) {
+			GPIO_PINLow(PIN);
+		}
+		else {
+			GPIO_PINHigh(PIN);
+		}
+	}
+	/* PORT B */
+	else if (PIN / 16 == 1) {
+		Data = GPIOB->ODR;
+		if (Data & (1 << ui32Temp)) {
+			GPIO_PINLow(PIN);
+		}
+		else {
+			GPIO_PINHigh(PIN);
+		}
+	}
+	/* PORT C */
+	else if (PIN / 16 == 2) {
+		Data = GPIOC->ODR;
+		if (Data & (1 << ui32Temp)) {
+			GPIO_PINLow(PIN);
+		}
+		else {
+			GPIO_PINHigh(PIN);
+		}
+	}
+}
+
 /* GPIO Input Module */
 void GPIO_SetInPut(IO_PIN PIN, INPUT_MODE MODE) {
 	IO_PIN ui32Temp = PIN % 16;

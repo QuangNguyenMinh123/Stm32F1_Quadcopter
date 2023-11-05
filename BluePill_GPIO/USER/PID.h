@@ -23,6 +23,7 @@ typedef struct{
 /*******************************************************************************
  * API
  ******************************************************************************/
+void PID_GetDesiredAngle(void);
 void PID_Calculate(MPU6050_Data_Type *MPU6050_Data, GPIO_PulseWidth_Type* GPIO_Pwm);
 PID_Data_Type* PID_GetPwm(void);
 #endif   /* _PID_H */

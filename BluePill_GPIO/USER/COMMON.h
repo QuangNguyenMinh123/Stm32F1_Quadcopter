@@ -959,7 +959,7 @@ void delay(uint32_t delayTime);
 void NVIC_EnableIRQ(IRQType IRQn);
 void NVIC_SetPriority(IRQType IRQn, uint32_t priority);
 void NVIC_SetPriorityGrouping(uint32_t PriorityGroup);
-uint32_t map(uint32_t MapValue, uint32_t InputLow, uint32_t InputHigh, uint32_t OutputLow, uint32_t OutputHigh);  
+double map(double x, double in_min, double in_max, double out_min, double out_max);
 double DegreeToRadian(double value);
 double RadianToDegree(double value);
 #endif   /* _COMMON_H */
