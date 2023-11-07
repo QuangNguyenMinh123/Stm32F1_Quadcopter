@@ -14,6 +14,7 @@
 #if (TUNING_PID == ON)
 #include "UART.h"
 #endif
+#define PWM_FREQ				50
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -29,20 +30,19 @@ static unsigned uint32_t loop_timer = 0U;
 int main(void) {
 	uint8_t loopCounter = 0;
 	System_Init();
-	GPIO_SetPWM(IO_B6);
-	GPIO_SetPWM(IO_B7);
-	GPIO_SetPWM(IO_B8);
-	GPIO_SetPWM(IO_B9);
-	GPIO_B6_PWM(1000);
-	GPIO_B7_PWM(1000);
-	GPIO_B8_PWM(1000);
-	GPIO_B9_PWM(1000);
-/*	if (GPIO_PulseWidth.CH4 >= 1950) {
+	GPIO_SetPWM(IO_B6, PWM_FREQ);
+	GPIO_SetPWM(IO_B7, PWM_FREQ);
+	GPIO_SetPWM(IO_B8, PWM_FREQ);
+	GPIO_SetPWM(IO_B9, PWM_FREQ);
+	GPIO_B6_PWM(2000);
+	GPIO_B7_PWM(2000);
+	GPIO_B8_PWM(2000);
+	GPIO_B9_PWM(2000);
+	if (GPIO_PulseWidth.CH4 >= 1950) {
 		GPIO_PINLow(IO_B14);
 		GPIO_PINLow(IO_B15);
 	}
-	while (GPIO_PulseWidth.CH4 >= 1100);*/
-	delay(5*SEC);
+	while (GPIO_PulseWidth.CH4 >= 1100);
 	GPIO_PINLow(IO_B14);
 	GPIO_PINLow(IO_B15);
 	while (1) {

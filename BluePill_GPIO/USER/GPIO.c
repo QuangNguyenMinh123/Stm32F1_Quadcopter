@@ -481,7 +481,7 @@ uint32_t GPIO_ReadAnalog(ADC_TypeDef *ADCx) {
 }
 
 /* GPIO PWM Module */
-void GPIO_SetPWM(IO_PIN PIN) {
+void GPIO_SetPWM(IO_PIN PIN, uint32_t Frequency) {
 	if ( (PIN > IO_B9) || (PIN < IO_B6) )
 	{
 		return;
@@ -512,7 +512,7 @@ void GPIO_SetPWM(IO_PIN PIN) {
 	}
 	if (TIM4->PSC == 0) {
 		TIM4->PSC = 71;
-		TIM4->ARR = 5000;
+		TIM4->ARR = (uint16_t) (1000000 / Frequency);
 	}
 	if (PIN - IO_B6 == 0) {
 		TIM4->CCR1 = 1000;
@@ -607,7 +607,7 @@ void GPIO_SetPWMMeasurement(void) {
 	TIM2->DCR = 0;
 	NVIC_EnableIRQ(TIM2_IRQ);
 	
-	/* Timer 2 setting */
+	/* Timer 3 setting */
 	RCC->APB1ENR |= BIT_1;
 	TIM3->CR1 |= BIT_0;
 	TIM3->CR2 = 0;
