@@ -58,23 +58,15 @@ void MPU6050_Read (uint8_t MPU_Address, uint8_t RegisterAddress, uint8_t *buffer
 
 void MPU6050_Init (void)
 {
-	uint8_t ui8CheckDeviceID;
 	MPU6050_RawData.Acc_X = 0.0;
 	MPU6050_RawData.Acc_Y = 0.0;
 	MPU6050_RawData.Acc_Z = 0.0;
 	Roll_Gyro 	= 0.0;
 	Pitch_Gyro	= 0.0;
 	Yaw_Gyro	= 0.0;
-	MPU6050_Read (MPU6050_ADDR,WHO_AM_I_REG, &ui8CheckDeviceID, 1);
-
-	if (ui8CheckDeviceID == 0x68)  
-	{
-		MPU6050_Write (MPU6050_ADDR, PWR_MGMT_1_REG, 0x00);
-		
-		MPU6050_Write(MPU6050_ADDR, ACCEL_CONFIG_REG, 0x10);
-
-		MPU6050_Write(MPU6050_ADDR, GYRO_CONFIG_REG, 0x08);
-	}
+	MPU6050_Write(MPU6050_ADDR, PWR_MGMT_1_REG, 0x00);
+	MPU6050_Write(MPU6050_ADDR, ACCEL_CONFIG_REG, 0x10);
+	MPU6050_Write(MPU6050_ADDR, GYRO_CONFIG_REG, 0x08);
 }
 
 void MPU6050_getPara (void)

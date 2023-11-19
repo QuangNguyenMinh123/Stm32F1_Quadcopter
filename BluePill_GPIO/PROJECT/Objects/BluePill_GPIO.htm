@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\Objects\BluePill_GPIO.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\BluePill_GPIO.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Sun Nov  5 21:10:50 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Sun Nov 19 22:29:36 2023
 <BR><P>
-<H3>Maximum Stack Usage =        488 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        480 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 __rt_entry_main &rArr; main &rArr; MPU6050_CalculateAngle &rArr; sin &rArr; __ieee754_rem_pio2 &rArr; __aeabi_d2iz
 <P>
@@ -199,7 +199,7 @@ Global Symbols
 <P><STRONG><a name="[b3]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[3e]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 488 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 480 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main &rArr; MPU6050_CalculateAngle &rArr; sin &rArr; __ieee754_rem_pio2 &rArr; __aeabi_d2iz
 </UL>
 <BR>[Calls]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
@@ -529,7 +529,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PINHigh
 <LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PINLow
 </UL>
-<BR>[Called By]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;System_Init
+<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[53]"></a>GPIO_SetInPut</STRONG> (Thumb, 1542 bytes, Stack size 4 bytes, gpio.o(.text.GPIO_SetInPut))
@@ -546,7 +547,7 @@ Global Symbols
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;System_Init
 </UL>
 
-<P><STRONG><a name="[50]"></a>GPIO_SetPWM</STRONG> (Thumb, 534 bytes, Stack size 16 bytes, gpio.o(.text.GPIO_SetPWM))
+<P><STRONG><a name="[50]"></a>GPIO_SetPWM</STRONG> (Thumb, 424 bytes, Stack size 16 bytes, gpio.o(.text.GPIO_SetPWM))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = GPIO_SetPWM &rArr; GPIO_SetOutPut
 </UL>
 <BR>[Calls]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetOutPut
@@ -603,7 +604,7 @@ Global Symbols
 <LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C2_Write
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C2_Start
 </UL>
-<BR>[Called By]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Read
+<BR>[Called By]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Read
 </UL>
 
 <P><STRONG><a name="[5c]"></a>I2C2_Start</STRONG> (Thumb, 104 bytes, Stack size 0 bytes, i2c.o(.text.I2C2_Start))
@@ -632,7 +633,7 @@ Global Symbols
 <LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C2_Write
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C2_Start
 </UL>
-<BR>[Called By]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Write
+<BR>[Called By]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Write
 </UL>
 
 <P><STRONG><a name="[5f]"></a>MPU6050_CalculateAngle</STRONG> (Thumb, 1250 bytes, Stack size 264 bytes, mpu6050.o(.text.MPU6050_CalculateAngle))
@@ -661,25 +662,23 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;System_Init
 </UL>
 
-<P><STRONG><a name="[6c]"></a>MPU6050_Init</STRONG> (Thumb, 126 bytes, Stack size 24 bytes, mpu6050.o(.text.MPU6050_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 100<LI>Call Chain = MPU6050_Init &rArr; MPU6050_Read &rArr; I2C2_ReadDevice &rArr; I2C2_Read &rArr; I2C2_CallAdress
+<P><STRONG><a name="[6c]"></a>MPU6050_Init</STRONG> (Thumb, 96 bytes, Stack size 16 bytes, mpu6050.o(.text.MPU6050_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = MPU6050_Init &rArr; MPU6050_Write &rArr; I2C2_WriteToDevice &rArr; I2C2_CallAdress
 </UL>
-<BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Read
-<LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Write
+<BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Write
 </UL>
 <BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;System_Init
 </UL>
 
-<P><STRONG><a name="[6d]"></a>MPU6050_Read</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, mpu6050.o(.text.MPU6050_Read))
+<P><STRONG><a name="[6e]"></a>MPU6050_Read</STRONG> (Thumb, 40 bytes, Stack size 24 bytes, mpu6050.o(.text.MPU6050_Read))
 <BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = MPU6050_Read &rArr; I2C2_ReadDevice &rArr; I2C2_Read &rArr; I2C2_CallAdress
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C2_ReadDevice
 </UL>
 <BR>[Called By]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_getPara
-<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Init
 </UL>
 
-<P><STRONG><a name="[6e]"></a>MPU6050_Write</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, mpu6050.o(.text.MPU6050_Write))
+<P><STRONG><a name="[6d]"></a>MPU6050_Write</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, mpu6050.o(.text.MPU6050_Write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = MPU6050_Write &rArr; I2C2_WriteToDevice &rArr; I2C2_CallAdress
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C2_WriteToDevice
@@ -690,7 +689,7 @@ Global Symbols
 <P><STRONG><a name="[60]"></a>MPU6050_getPara</STRONG> (Thumb, 138 bytes, Stack size 16 bytes, mpu6050.o(.text.MPU6050_getPara))
 <BR><BR>[Stack]<UL><LI>Max Depth = 92<LI>Call Chain = MPU6050_getPara &rArr; MPU6050_Read &rArr; I2C2_ReadDevice &rArr; I2C2_Read &rArr; I2C2_CallAdress
 </UL>
-<BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Read
+<BR>[Calls]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Read
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Calibration
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_CalculateAngle
@@ -736,16 +735,18 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_md.o(.text)
 </UL>
-<P><STRONG><a name="[74]"></a>System_Init</STRONG> (Thumb, 80 bytes, Stack size 24 bytes, main.o(.text.System_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 132<LI>Call Chain = System_Init &rArr; MPU6050_Calibration &rArr; MPU6050_getPara &rArr; MPU6050_Read &rArr; I2C2_ReadDevice &rArr; I2C2_Read &rArr; I2C2_CallAdress
+<P><STRONG><a name="[74]"></a>System_Init</STRONG> (Thumb, 122 bytes, Stack size 32 bytes, main.o(.text.System_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 140<LI>Call Chain = System_Init &rArr; MPU6050_Calibration &rArr; MPU6050_getPara &rArr; MPU6050_Read &rArr; I2C2_ReadDevice &rArr; I2C2_Read &rArr; I2C2_CallAdress
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Calibration
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Init
 <LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C2_Init
+<LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay
 <LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PINHigh
 <LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetOutPut
 <LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetPWMMeasurement
 <LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLOCK_SystickInit
+<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PINToggle
 </UL>
 <BR>[Called By]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -760,20 +761,21 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = delay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C2_Init
+<LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;System_Init
 </UL>
 
-<P><STRONG><a name="[3f]"></a>main</STRONG> (Thumb, 310 bytes, Stack size 32 bytes, main.o(.text.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 488<LI>Call Chain = main &rArr; MPU6050_CalculateAngle &rArr; sin &rArr; __ieee754_rem_pio2 &rArr; __aeabi_d2iz
+<P><STRONG><a name="[3f]"></a>main</STRONG> (Thumb, 218 bytes, Stack size 24 bytes, main.o(.text.main))
+<BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = main &rArr; MPU6050_CalculateAngle &rArr; sin &rArr; __ieee754_rem_pio2 &rArr; __aeabi_d2iz
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PINToggle
-<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_GetDesiredAngle
-<LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_CalculateAngle
-<LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
-<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PINLow
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_B9_PWM
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_B8_PWM
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_B7_PWM
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_B6_PWM
+<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_GetDesiredAngle
+<LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_CalculateAngle
+<LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
+<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PINLow
 <LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetPWM
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;System_Init
 </UL>

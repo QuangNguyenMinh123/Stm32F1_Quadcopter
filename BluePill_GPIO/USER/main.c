@@ -5,6 +5,7 @@
 #include "MPU6050.h"
 #include "EX_EEPROM.h"
 #include "PID.h"
+#include "system_stm32f10x.h"
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -14,7 +15,10 @@
 #if (TUNING_PID == ON)
 #include "UART.h"
 #endif
-#define PWM_FREQ				50
+#define PWM_FREQ				250
+#define WARNING_LED				IO_C13
+#define GREEN_LED1				IO_B14
+#define GREEN_LED2				IO_B15
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -28,23 +32,14 @@ static unsigned uint32_t loop_timer = 0U;
  ******************************************************************************/
 
 int main(void) {
+	/*SystemCoreClockUpdate();*/
 	uint8_t loopCounter = 0;
 	System_Init();
 	GPIO_SetPWM(IO_B6, PWM_FREQ);
 	GPIO_SetPWM(IO_B7, PWM_FREQ);
 	GPIO_SetPWM(IO_B8, PWM_FREQ);
 	GPIO_SetPWM(IO_B9, PWM_FREQ);
-	GPIO_B6_PWM(2000);
-	GPIO_B7_PWM(2000);
-	GPIO_B8_PWM(2000);
-	GPIO_B9_PWM(2000);
-	if (GPIO_PulseWidth.CH4 >= 1950) {
-		GPIO_PINLow(IO_B14);
-		GPIO_PINLow(IO_B15);
-	}
-	while (GPIO_PulseWidth.CH4 >= 1100);
-	GPIO_PINLow(IO_B14);
-	GPIO_PINLow(IO_B15);
+	GPIO_PINLow(WARNING_LED);
 	while (1) {
 		loopCounter++;
 		loop_timer = micros();
@@ -58,7 +53,7 @@ int main(void) {
 		GPIO_B8_PWM(GPIO_PulseWidth.CH4);
 		GPIO_B9_PWM(GPIO_PulseWidth.CH4);
 		if (loopCounter == 125) {
-			GPIO_PINToggle(IO_C13);
+			GPIO_PINToggle(GREEN_LED1);
 			loopCounter = 0;
 		}
 		while (micros() - loop_timer < 4000);
@@ -66,6 +61,7 @@ int main(void) {
 }
 
 void System_Init(void) {
+	int i=0;
 	CLOCK_SystickInit();
 	GPIO_SetPWMMeasurement();
 	GPIO_SetOutPut(IO_C13, General_Push_Pull);
@@ -74,6 +70,13 @@ void System_Init(void) {
 	GPIO_PINHigh(IO_C13);
 	GPIO_PINHigh(IO_B14);
 	GPIO_PINHigh(IO_B15);
+	
+	for (;i<=10;i++)
+	{
+		GPIO_PINToggle(WARNING_LED);
+		delay(100*MS);
+	}
+	
 #if (TUNING_PID == ON)
 	UART1_Init(UART_BAUDRATE_115200);
 #endif

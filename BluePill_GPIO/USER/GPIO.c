@@ -514,18 +514,6 @@ void GPIO_SetPWM(IO_PIN PIN, uint32_t Frequency) {
 		TIM4->PSC = 71;
 		TIM4->ARR = (uint16_t) (1000000 / Frequency);
 	}
-	if (PIN - IO_B6 == 0) {
-		TIM4->CCR1 = 1000;
-	}
-	else if (PIN - IO_B6 == 1) {
-		TIM4->CCR2 = 1000;
-	} 
-	else if (PIN - IO_B6 == 2) {
-		TIM4->CCR3 = 1000;
-	} 
-	else if (PIN - IO_B6 == 3) {
-		TIM4->CCR4 = 1000;
-	}
 }
 
 __INLINE void GPIO_B6_PWM(uint16_t PWMValue) {
