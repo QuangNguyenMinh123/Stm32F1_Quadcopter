@@ -36,25 +36,21 @@ static const double PID_Yaw_D_Gain 	= 0.0;
 static const double PID_Yaw_I_Max  	= 0.0;
 static double PID_Yaw_I_Stack 		= 0.0;
 /* Desired angle */
-double Desired_Pitch;
-double Desired_Roll;
+static double Desired_Pitch;
+static double Desired_Roll;
 /********************** END OF DEFINE PID VARIABLE ****************************/
 PID_Data_Type PID_Pwm;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-void PID_GetDesiredAngle(void) {
-	Desired_Roll 	= map(GPIO_PulseWidth.CH1, 1000.0, 2000.0, -20.0, 20.0);
-	Desired_Pitch 	= map(GPIO_PulseWidth.CH2, 1000.0, 2000.0, -20.0, 20.0);
+__inline static void PID_GetDesiredAngle(void) {
+	Desired_Roll 	= map(GPIO_PulseWidth.CH1, 1000.0, 2000.0, -30.0, 30.0);
+	Desired_Pitch 	= map(GPIO_PulseWidth.CH2, 1000.0, 2000.0, -30.0, 30.0);
 }
 
-void PID_Calculate(MPU6050_Data_Type *MPU6050_Data, GPIO_PulseWidth_Type* 
+void PID_Calculate(double *PitchVal, double *RollVal, GPIO_PulseWidth_Type* 
 	GPIO_Pwm) {
-
-}
-	
-__inline PID_Data_Type* PID_GetPwm(void) {
-	return &PID_Pwm;
+	PID_GetDesiredAngle();
 }
 /*******************************************************************************
  * EOF

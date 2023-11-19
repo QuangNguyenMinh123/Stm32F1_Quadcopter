@@ -27,34 +27,10 @@ Project File Date:  11/19/2023
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target 1'
-../USER/PID.c(51): error: conflicting types for 'PID_Calculate'
-void PID_Calculate(MPU6050_Data_Type *MPU6050_Data, GPIO_PulseWidth_Type* 
-     ^
-../USER/PID.h(27): note: previous declaration is here
-void PID_Calculate(double *PitchVal, double *RollVal, GPIO_PulseWidth_Type* GPIO_Pwm);
-     ^
-../USER/PID.c(39): warning: no previous extern declaration for non-static variable 'Desired_Pitch' [-Wmissing-variable-declarations]
-double Desired_Pitch;
-       ^
-../USER/PID.c(39): note: declare 'static' if the variable is not intended to be used outside of this translation unit
-double Desired_Pitch;
-^
-../USER/PID.c(40): warning: no previous extern declaration for non-static variable 'Desired_Roll' [-Wmissing-variable-declarations]
-double Desired_Roll;
-       ^
-../USER/PID.c(40): note: declare 'static' if the variable is not intended to be used outside of this translation unit
-double Desired_Roll;
-^
-../USER/PID.c(42): warning: no previous extern declaration for non-static variable 'PID_Pwm' [-Wmissing-variable-declarations]
-PID_Data_Type PID_Pwm;
-              ^
-../USER/PID.c(42): note: declare 'static' if the variable is not intended to be used outside of this translation unit
-PID_Data_Type PID_Pwm;
-^
-3 warnings and 1 error generated.
-compiling PID.c...
 compiling main.c...
-".\Objects\BluePill_GPIO.axf" - 1 Error(s), 3 Warning(s).
+linking...
+Program Size: Code=15396 RO-data=700 RW-data=0 ZI-data=2016  
+".\Objects\BluePill_GPIO.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -110,7 +86,6 @@ Package Vendor: Keil
    * Component: Keil::Device:StdPeriph Drivers:RCC:3.6.0
       Source file:   Device/StdPeriph_Driver/src/stm32f10x_rcc.c
       Include file:  Device/StdPeriph_Driver/inc/stm32f10x_rcc.h
-Target not created.
 Build Time Elapsed:  00:00:00
 </pre>
 </body>

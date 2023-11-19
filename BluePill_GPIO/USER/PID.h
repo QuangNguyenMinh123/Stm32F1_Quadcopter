@@ -15,15 +15,20 @@
  * Prototypes
  ******************************************************************************/
 typedef struct{
-	uint16_t FrontLeft;
 	uint16_t FrontRight;
+	uint16_t FrontLeft;
 	uint16_t BackLeft;
 	uint16_t BackRight;
 }PID_Data_Type;
+
+/*******************************************************************************
+ * Global variables
+ ******************************************************************************/
+extern PID_Data_Type PID_Pwm;
 /*******************************************************************************
  * API
  ******************************************************************************/
-void PID_GetDesiredAngle(void);
-void PID_Calculate(double *PitchVal, double *RollVal, GPIO_PulseWidth_Type* GPIO_Pwm);
+void PID_Calculate(double *PitchVal, double *RollVal, 
+	GPIO_PulseWidth_Type* GPIO_Pwm);
 PID_Data_Type* PID_GetPwm(void);
 #endif   /* _PID_H */
