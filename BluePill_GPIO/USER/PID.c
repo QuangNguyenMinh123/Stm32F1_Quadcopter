@@ -36,8 +36,8 @@ static const double PID_Yaw_D_Gain 	= 0.0;
 static const double PID_Yaw_I_Max  	= 0.0;
 static double PID_Yaw_I_Stack 		= 0.0;
 /* Desired angle */
-static double Desired_Pitch;
-static double Desired_Roll;
+double Desired_Pitch;
+double Desired_Roll;
 /********************** END OF DEFINE PID VARIABLE ****************************/
 PID_Data_Type PID_Pwm;
 /*******************************************************************************

@@ -153,22 +153,12 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>GPIO_PulseWidth,0x0A</ItemText>
+          <ItemText>Desired_Roll</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>GPIO_PulseWidth.CH3</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>GPIO_PulseWidth.CH4,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>3</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>SystemCoreClock,0x0A</ItemText>
+          <ItemText>Desired_Pitch</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
