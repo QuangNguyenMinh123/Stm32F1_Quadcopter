@@ -19,7 +19,8 @@
 #define WARNING_LED				IO_C13
 #define GREEN_LED1				IO_B14
 #define GREEN_LED2				IO_B15
-#define MAX_THROTTLE			1700
+#define MAX_THROTTLE			2000
+#define MIN_THROTTLE			1000
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -39,11 +40,12 @@ static uint8_t ErrorIdx = 0;
  * API
  ******************************************************************************/
 void System_Init(void);
-void GetFlyingState(void);
+FlyingStateType GetFlyingState(void);
 void FlyingMode_IDLE(void);
 void FlyingMode_TAKE_OFF(void);
 void FlyingMode_STAND_BY(void);
 void CheckTimeOut(void);
+void LedWarning_NotInIdleMode(void);
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -56,11 +58,15 @@ int main(void) {
 	GPIO_SetPWM(IO_B7, PWM_FREQ);
 	GPIO_SetPWM(IO_B8, PWM_FREQ);
 	GPIO_SetPWM(IO_B9, PWM_FREQ);
+	FlyingMode_IDLE();
+	while (GetFlyingState() != IDLE) {
+		LedWarning_NotInIdleMode();
+	}
 	GPIO_PINHigh(WARNING_LED);
 	while (1) {
 		loopCounter++;
 		loop_timer = micros();
-		GetFlyingState();
+		FlyingState = GetFlyingState();
 		if (FlyingState == IDLE) {
 			FlyingMode_IDLE();
 		}
@@ -75,6 +81,18 @@ int main(void) {
 			loopCounter = 0;
 		}
 #if (TUNING_PID == ON)
+		UART1_sendStr("FR:");
+		UART1_sendNum(PID_Pwm.FrontRight);
+		UART1_sendStr("\t");
+		UART1_sendStr("FL:");
+		UART1_sendNum(PID_Pwm.FrontLeft);
+		UART1_sendStr("\t");
+		UART1_sendStr("BL:");
+		UART1_sendNum(PID_Pwm.BackLeft);
+		UART1_sendStr("\t");
+		UART1_sendStr("BR:");
+		UART1_sendNum(PID_Pwm.BackRight);
+		UART1_sendStr("\n");
 #endif
 		CheckTimeOut();
 		while (micros() - loop_timer < 4000);
@@ -104,18 +122,20 @@ void System_Init(void) {
 	MPU6050_Calibration();
 }
 
-void GetFlyingState(void)
+FlyingStateType GetFlyingState(void)
 {
+	FlyingStateType Ret_en;
 	if (GPIO_PulseWidth.Aux1 < 1250)
 	{
-		FlyingState = IDLE;
+		Ret_en = IDLE;
 	}
 	else if (GPIO_PulseWidth.Aux1 < 1750)
 	{
-		FlyingState = TAKE_OFF;
+		Ret_en = TAKE_OFF;
 	}
 	else
-		FlyingState = STAND_BY;
+		Ret_en = STAND_BY;
+	return Ret_en;
 }
 
 void FlyingMode_IDLE(void) {
@@ -128,6 +148,8 @@ void FlyingMode_IDLE(void) {
 
 void FlyingMode_TAKE_OFF(void) {
 	MPU6050_CalculateAngle();
+	if (GPIO_PulseWidth.Throttle < 1000)
+		GPIO_PulseWidth.Throttle = 1000;
 	PID_Calculate(&Pitch, &Roll, &GPIO_PulseWidth);
 	if (PID_Pwm.FrontRight > MAX_THROTTLE)
 		PID_Pwm.FrontRight = MAX_THROTTLE;
@@ -137,14 +159,14 @@ void FlyingMode_TAKE_OFF(void) {
 		PID_Pwm.BackLeft   = MAX_THROTTLE;
 	if (PID_Pwm.BackRight  > MAX_THROTTLE)
 		PID_Pwm.BackRight  = MAX_THROTTLE;
-	if (PID_Pwm.FrontRight < 1000)
-		PID_Pwm.FrontRight = 1000;
-	if (PID_Pwm.FrontLeft  < 1000)
-		PID_Pwm.FrontLeft  = 1000;
-	if (PID_Pwm.BackLeft   < 1000)
-		PID_Pwm.BackLeft   = 1000;
-	if (PID_Pwm.BackRight  < 1000)
-		PID_Pwm.BackRight  = 1000;
+	if (PID_Pwm.FrontRight < MIN_THROTTLE)
+		PID_Pwm.FrontRight = MIN_THROTTLE;
+	if (PID_Pwm.FrontLeft  < MIN_THROTTLE)
+		PID_Pwm.FrontLeft  = MIN_THROTTLE;
+	if (PID_Pwm.BackLeft   < MIN_THROTTLE)
+		PID_Pwm.BackLeft   = MIN_THROTTLE;
+	if (PID_Pwm.BackRight  < MIN_THROTTLE)
+		PID_Pwm.BackRight  = MIN_THROTTLE;
 	GPIO_B6_PWM(PID_Pwm.FrontRight);
 	GPIO_B7_PWM(PID_Pwm.FrontLeft);
 	GPIO_B8_PWM(PID_Pwm.BackLeft);
@@ -160,4 +182,17 @@ void CheckTimeOut(void) {
 		ErrorIdx++;
 	if (ErrorIdx)
 		GPIO_PINLow(WARNING_LED);
+}
+
+void LedWarning_NotInIdleMode(void) {
+	uint8_t i = 0;
+	GPIO_PINHigh(WARNING_LED);
+	for (i = 0; i <= 10; i++) {
+		GPIO_PINToggle(WARNING_LED);
+		delay(100*MS);
+	}
+	while (i > 0) {
+		i--;
+		delay(100*MS);
+	}
 }
