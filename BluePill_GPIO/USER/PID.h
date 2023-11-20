@@ -28,6 +28,7 @@ extern PID_Data_Type PID_Pwm;
 /*******************************************************************************
  * API
  ******************************************************************************/
+void PID_Reset(void);
 void PID_Calculate(double *PitchVal, double *RollVal, 
 	GPIO_PulseWidth_Type* GPIO_Pwm);
 PID_Data_Type* PID_GetPwm(void);

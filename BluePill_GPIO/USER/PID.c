@@ -43,14 +43,21 @@ PID_Data_Type PID_Pwm;
 /*******************************************************************************
  * Code
  ******************************************************************************/
+void PID_Reset(void) {
+	PID_Pitch_I_Stack 	= 0.0;
+	PID_Roll_I_Stack 	= 0.0;
+	PID_Yaw_I_Stack		= 0.0;
+}
+
 __inline static void PID_GetDesiredAngle(void) {
-	Desired_Roll 	= map(GPIO_PulseWidth.CH1, 1000.0, 2000.0, -30.0, 30.0);
-	Desired_Pitch 	= map(GPIO_PulseWidth.CH2, 1000.0, 2000.0, -30.0, 30.0);
+	Desired_Roll 	= map(GPIO_PulseWidth.Roll, 1000.0, 2000.0, -30.0, 30.0);
+	Desired_Pitch 	= map(GPIO_PulseWidth.Pitch, 1000.0, 2000.0, -30.0, 30.0);
 }
 
 void PID_Calculate(double *PitchVal, double *RollVal, GPIO_PulseWidth_Type* 
 	GPIO_Pwm) {
 	PID_GetDesiredAngle();
+		
 }
 /*******************************************************************************
  * EOF

@@ -182,12 +182,12 @@ typedef enum {
 } EDGE;
 
 typedef struct {
-  uint16_t CH1;
-  uint16_t CH2;
-  uint16_t CH3;
-  uint16_t CH4;
-  uint16_t CH5;
-  uint16_t CH6;
+  uint16_t Throttle;
+  uint16_t Yaw;
+  uint16_t Pitch;
+  uint16_t Roll;
+  uint16_t Aux1;
+  uint16_t Aux2;
 } GPIO_PulseWidth_Type;
 /*******************************************************************************
  * Global variables
