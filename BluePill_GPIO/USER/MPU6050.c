@@ -43,6 +43,7 @@ static bool setGyro = FALSE;
 
 double Pitch;
 double Roll;
+double Yaw;
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -118,7 +119,8 @@ void MPU6050_CalculateAngle (void) {
 	}
 	
 	Pitch = Pitch * 0.9 + Pitch_Gyro * 0.1;
-	Roll = Roll * 0.9 + Roll_Gyro * 0.1;
+	Roll  = Roll * 0.9 + Roll_Gyro * 0.1;
+	Yaw   = Temp_Yaw_Gyro;
 }
 
 void MPU6050_Calibration (void) {

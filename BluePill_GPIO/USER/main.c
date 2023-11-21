@@ -150,7 +150,7 @@ void FlyingMode_TAKE_OFF(void) {
 	MPU6050_CalculateAngle();
 	if (GPIO_PulseWidth.Throttle < 1000)
 		GPIO_PulseWidth.Throttle = 1000;
-	PID_Calculate(&Pitch, &Roll, &GPIO_PulseWidth);
+	PID_Calculate(&Pitch, &Roll, &Yaw, &GPIO_PulseWidth);
 	if (PID_Pwm.FrontRight > MAX_THROTTLE)
 		PID_Pwm.FrontRight = MAX_THROTTLE;
 	if (PID_Pwm.FrontLeft  > MAX_THROTTLE)
