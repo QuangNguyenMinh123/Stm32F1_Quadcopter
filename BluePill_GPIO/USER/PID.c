@@ -87,12 +87,18 @@ void PID_Calculate(double *PitchVal, double *RollVal, double *YawVal,
 	I_Pitch = I_Pitch + Pitch_Error * PID_Pitch_I_Gain;
 	I_Roll	= I_Roll  + Roll_Error  * PID_Roll_I_Gain;
 	I_Yaw	= I_Yaw   + Yaw_Error   * PID_Yaw_I_Gain;
-	if (I_Pitch > PID_Pitch_I_Max) 		I_Pitch = PID_Pitch_I_Max;
-	if (I_Roll  > PID_Roll_I_Max) 		I_Roll  = PID_Roll_I_Max;
-	if (I_Roll  > PID_Yaw_I_Max) 		I_Roll  = PID_Yaw_I_Max;
-	if (I_Pitch < -PID_Pitch_I_Max) 	I_Pitch = -PID_Pitch_I_Max;
-	if (I_Roll  < -PID_Roll_I_Max) 		I_Roll  = -PID_Roll_I_Max;
-	if (I_Yaw   < -PID_Yaw_I_Max) 		I_Roll  = -PID_Yaw_I_Max;
+	if (I_Pitch > PID_Pitch_I_Max)
+		I_Pitch = PID_Pitch_I_Max;
+	if (I_Roll  > PID_Roll_I_Max)
+		I_Roll  = PID_Roll_I_Max;
+	if (I_Roll  > PID_Yaw_I_Max)
+		I_Roll  = PID_Yaw_I_Max;
+	if (I_Pitch < -PID_Pitch_I_Max)
+		I_Pitch = -PID_Pitch_I_Max;
+	if (I_Roll  < -PID_Roll_I_Max)
+		I_Roll  = -PID_Roll_I_Max;
+	if (I_Yaw   < -PID_Yaw_I_Max)
+		I_Roll  = -PID_Yaw_I_Max;
 	/* Sum up */
 	PID_Pwm.FrontRight = GPIO_Pwm->Throttle - (ui16)P_Pitch - (ui16)P_Roll;
 	PID_Pwm.FrontLeft  = GPIO_Pwm->Throttle - (ui16)P_Pitch + (ui16)P_Roll;
