@@ -20,7 +20,8 @@
 #define GREEN_LED1				IO_B14
 #define GREEN_LED2				IO_B15
 #define MAX_THROTTLE			2000
-#define MIN_THROTTLE			1000
+#define MIN_THROTTLE			1050
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -46,6 +47,8 @@ void FlyingMode_TAKE_OFF(void);
 void FlyingMode_STAND_BY(void);
 void CheckTimeOut(void);
 void LedWarning_NotInIdleMode(void);
+bool TX_Unavailable(void);
+void ESC_Clibration(void);
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -58,10 +61,17 @@ int main(void) {
 	GPIO_SetPWM(IO_B7, PWM_FREQ);
 	GPIO_SetPWM(IO_B8, PWM_FREQ);
 	GPIO_SetPWM(IO_B9, PWM_FREQ);
-	FlyingMode_IDLE();
-	while (GetFlyingState() != IDLE) {
-		LedWarning_NotInIdleMode();
+	
+	/*while (GPIO_PulseWidth.Throttle >= 1950) {
+		ESC_Clibration();
 	}
+	while (GPIO_PulseWidth.Throttle > 1050) {
+		ESC_Clibration();
+	}*/
+	//FlyingMode_IDLE();
+	/*while (GetFlyingState() != IDLE || TX_Unavailable()) {
+		LedWarning_NotInIdleMode();
+	}*/
 	GPIO_PINHigh(WARNING_LED);
 	while (1) {
 		loopCounter++;
@@ -138,14 +148,6 @@ FlyingStateType GetFlyingState(void)
 	return Ret_en;
 }
 
-void FlyingMode_IDLE(void) {
-	GPIO_B6_PWM(1000);
-	GPIO_B7_PWM(1000);
-	GPIO_B8_PWM(1000);
-	GPIO_B9_PWM(1000);
-	PID_Reset();
-}
-
 void FlyingMode_TAKE_OFF(void) {
 	MPU6050_CalculateAngle();
 	if (GPIO_PulseWidth.Throttle < 1000)
@@ -195,4 +197,27 @@ void LedWarning_NotInIdleMode(void) {
 		i--;
 		delay(100*MS);
 	}
+}
+
+bool TX_Unavailable(void) {
+	if ( !GPIO_PulseWidth.Throttle && !GPIO_PulseWidth.Aux1 
+		&& !GPIO_PulseWidth.Yaw && !GPIO_PulseWidth.Pitch && !GPIO_PulseWidth.Roll)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+void FlyingMode_IDLE(void) {
+	GPIO_B6_PWM(1000);
+	GPIO_B7_PWM(1000);
+	GPIO_B8_PWM(1000);
+	GPIO_B9_PWM(1000);
+	PID_Reset();
+}
+
+void ESC_Clibration(void) {
+	GPIO_B6_PWM(GPIO_PulseWidth.Throttle);
+	GPIO_B7_PWM(GPIO_PulseWidth.Throttle);
+	GPIO_B8_PWM(GPIO_PulseWidth.Throttle);
+	GPIO_B9_PWM(GPIO_PulseWidth.Throttle);
 }

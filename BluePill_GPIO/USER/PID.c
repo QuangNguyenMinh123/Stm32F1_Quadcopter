@@ -14,10 +14,10 @@
  ******************************************************************************/
 /**************************** DEFINE PID VARIABLE *****************************/
 /* PID Pitch variable */
-static const double PID_Pitch_P_Gain = 5.0;
-static const double PID_Pitch_I_Gain = 0.01;
-static const double PID_Pitch_D_Gain = 20.0;
-static const double PID_Pitch_I_Max  = 100.0;
+static const double PID_Pitch_P_Gain = 1.3;
+static const double PID_Pitch_I_Gain = 0.0112;
+static const double PID_Pitch_D_Gain = 17.5;
+static const double PID_Pitch_I_Max  = 400.0;
 
 /* PID Roll variable */
 static const double PID_Roll_P_Gain = PID_Pitch_P_Gain;
@@ -27,10 +27,10 @@ static const double PID_Roll_I_Max  = PID_Pitch_I_Max;
 
 
 /* PID Yaw variable */
-static const double PID_Yaw_P_Gain 	= 1.0;
-static const double PID_Yaw_I_Gain 	= 5.0;
-static const double PID_Yaw_D_Gain 	= 0.01;
-static const double PID_Yaw_I_Max  	= 10.0;
+static const double PID_Yaw_P_Gain 	= 4.0;
+static const double PID_Yaw_I_Gain 	= 0.015;
+static const double PID_Yaw_D_Gain 	= 0.0112;
+static const double PID_Yaw_I_Max  	= 400.0;
 /* Desired angle */
 static double Desired_Pitch;
 static double Desired_Roll;
@@ -45,9 +45,9 @@ static double P_Pitch = 0.0;
 static double P_Roll = 0.0;
 static double P_Yaw = 0.0;
 /* I element */
-static double I_Pitch = 0.0;			/* I of Pitch element accumulation */
-static double I_Roll = 0.0;				/* I of Roll element accumulation */
-static double I_Yaw = 0.0;				/* I of Yaw element accumulation */
+ double I_Pitch = 0.0;			/* I of Pitch element accumulation */
+ double I_Roll = 0.0;				/* I of Roll element accumulation */
+ double I_Yaw = 0.0;				/* I of Yaw element accumulation */
 /* D element */
 static double D_Pitch = 0.0;
 static double D_Roll = 0.0;
@@ -91,19 +91,23 @@ void PID_Calculate(double *PitchVal, double *RollVal, double *YawVal,
 		I_Pitch = PID_Pitch_I_Max;
 	if (I_Roll  > PID_Roll_I_Max)
 		I_Roll  = PID_Roll_I_Max;
-	if (I_Roll  > PID_Yaw_I_Max)
-		I_Roll  = PID_Yaw_I_Max;
+	if (I_Yaw   > PID_Yaw_I_Max)
+		I_Yaw   = PID_Yaw_I_Max;
 	if (I_Pitch < -PID_Pitch_I_Max)
 		I_Pitch = -PID_Pitch_I_Max;
 	if (I_Roll  < -PID_Roll_I_Max)
 		I_Roll  = -PID_Roll_I_Max;
 	if (I_Yaw   < -PID_Yaw_I_Max)
-		I_Roll  = -PID_Yaw_I_Max;
+		I_Yaw   = -PID_Yaw_I_Max;
 	/* Sum up */
-	PID_Pwm.FrontRight = GPIO_Pwm->Throttle - (ui16)P_Pitch - (ui16)P_Roll;
-	PID_Pwm.FrontLeft  = GPIO_Pwm->Throttle - (ui16)P_Pitch + (ui16)P_Roll;
-	PID_Pwm.BackLeft   = GPIO_Pwm->Throttle + (ui16)P_Pitch + (ui16)P_Roll;
-	PID_Pwm.BackRight  = GPIO_Pwm->Throttle + (ui16)P_Pitch - (ui16)P_Roll;
+	PID_Pwm.FrontRight = GPIO_Pwm->Throttle - (ui16)P_Pitch - (ui16)P_Roll
+		- (ui16)D_Pitch + (ui16)D_Roll - (ui16)I_Roll - (ui16)I_Pitch;
+	PID_Pwm.FrontLeft  = GPIO_Pwm->Throttle - (ui16)P_Pitch + (ui16)P_Roll
+		- (ui16)D_Pitch - (ui16)D_Roll + (ui16)I_Roll - (ui16)I_Pitch;
+	PID_Pwm.BackLeft   = GPIO_Pwm->Throttle + (ui16)P_Pitch + (ui16)P_Roll
+		+ (ui16)D_Pitch - (ui16)D_Roll + (ui16)I_Roll + (ui16)I_Pitch;
+	PID_Pwm.BackRight  = GPIO_Pwm->Throttle + (ui16)P_Pitch - (ui16)P_Roll
+		+ (ui16)D_Pitch + (ui16)D_Roll - (ui16)I_Roll + (ui16)I_Pitch;
 	/* Saving error */
 	Pre_Pitch_Error = Pitch_Error;
 	Pre_Roll_Error  = Roll_Error;
