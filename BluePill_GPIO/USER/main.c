@@ -61,17 +61,13 @@ int main(void) {
 	GPIO_SetPWM(IO_B7, PWM_FREQ);
 	GPIO_SetPWM(IO_B8, PWM_FREQ);
 	GPIO_SetPWM(IO_B9, PWM_FREQ);
-	
-	/*while (GPIO_PulseWidth.Throttle >= 1950) {
+	FlyingMode_IDLE();
+	if (GPIO_PulseWidth.Throttle >= 1900) {
 		ESC_Clibration();
 	}
-	while (GPIO_PulseWidth.Throttle > 1050) {
-		ESC_Clibration();
-	}*/
-	//FlyingMode_IDLE();
-	/*while (GetFlyingState() != IDLE || TX_Unavailable()) {
+	while (GetFlyingState() != IDLE || TX_Unavailable()) {
 		LedWarning_NotInIdleMode();
-	}*/
+	}
 	GPIO_PINHigh(WARNING_LED);
 	while (1) {
 		loopCounter++;
@@ -216,8 +212,10 @@ void FlyingMode_IDLE(void) {
 }
 
 void ESC_Clibration(void) {
-	GPIO_B6_PWM(GPIO_PulseWidth.Throttle);
-	GPIO_B7_PWM(GPIO_PulseWidth.Throttle);
-	GPIO_B8_PWM(GPIO_PulseWidth.Throttle);
-	GPIO_B9_PWM(GPIO_PulseWidth.Throttle);
+	while (GPIO_PulseWidth.Throttle > 1000) {
+		GPIO_B6_PWM(GPIO_PulseWidth.Throttle);
+		GPIO_B7_PWM(GPIO_PulseWidth.Throttle);
+		GPIO_B8_PWM(GPIO_PulseWidth.Throttle);
+		GPIO_B9_PWM(GPIO_PulseWidth.Throttle);
+	}
 }

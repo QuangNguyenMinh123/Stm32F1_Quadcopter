@@ -6,7 +6,7 @@
  * Definitions
  ******************************************************************************/
 #define MPU6050_Raw_DATA_TYPE	signed short int
-#define CALIBRATION_TIMES		500
+#define CALIBRATION_TIMES		1000
 #define ALPHA					0.998
 /*******************************************************************************
  * Prototypes
@@ -129,14 +129,28 @@ void MPU6050_Calibration (void) {
 	Gyro_Pitch_Offset = 0.0;
 	Gyro_Roll_Offset = 0.0;
 	Gyro_Yaw_Offset = 0.0;
+	Pitch = 0.0;
+	Roll = 0.0;
 	for (i_ui16 = 0; i_ui16 < CALIBRATION_TIMES; i_ui16++) {
 		loop_time = micros();
 		MPU6050_getPara();
+		MPU6050_RawData.Acc_X = ((double) Accel_X_Raw)/ ((double)4096.0);
+		MPU6050_RawData.Acc_Y = ((double) Accel_Y_Raw)/ ((double)4096.0);
+		MPU6050_RawData.Acc_Z = ((double) Accel_Z_Raw)/ ((double)4096.0);
+		Roll_Acc = RadianToDegree(atan(MPU6050_RawData.Acc_Y/
+			sqrt(sqr(MPU6050_RawData.Acc_X) + sqr(MPU6050_RawData.Acc_Z))));
+		Pitch_Acc = RadianToDegree(atan(-MPU6050_RawData.Acc_X/
+			sqrt(sqr(MPU6050_RawData.Acc_Y) + sqr(MPU6050_RawData.Acc_Z))));
+		Pitch += Pitch_Acc;
+		Roll  += Roll_Acc;
+		
 		Gyro_Pitch_Offset += Gyro_Roll_Raw;
 		Gyro_Roll_Offset += Gyro_Pitch_Raw;
 		Gyro_Yaw_Offset += Gyro_Yaw_Raw;
 		while (micros() - loop_time < 4000) {}
 	}
+	Pitch 				= Pitch / CALIBRATION_TIMES;
+	Roll				= Roll  / CALIBRATION_TIMES;
 	Gyro_Pitch_Offset 	= Gyro_Pitch_Offset / CALIBRATION_TIMES;
 	Gyro_Roll_Offset 	= Gyro_Roll_Offset  / CALIBRATION_TIMES;
 	Gyro_Yaw_Offset 	= Gyro_Yaw_Offset  / CALIBRATION_TIMES;	
