@@ -67,7 +67,7 @@ void PID_Reset(void) {
 }
 
 void PID_Calculate(double *PitchVal, double *RollVal, double *YawVal,
-	GPIO_PulseWidth_Type* GPIO_Pwm) {
+	GPIO_PulseWidth_Type* GPIO_Pwm, double* BatLevel) {
 	Desired_Roll 	= map(GPIO_PulseWidth.Roll, 1000.0, 2000.0, -30.0, 30.0);
 	Desired_Pitch 	= map(GPIO_PulseWidth.Pitch, 1000.0, 2000.0, -30.0, 30.0);
 	Desired_Yaw     = map(GPIO_PulseWidth.Yaw, 1000.0, 2000.0, -90.0, 90.0);

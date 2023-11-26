@@ -30,6 +30,6 @@ extern PID_Data_Type PID_Pwm;
  ******************************************************************************/
 void PID_Reset(void);
 void PID_Calculate(double *PitchVal, double *RollVal, double *YawVal,
-	GPIO_PulseWidth_Type* GPIO_Pwm);
+	GPIO_PulseWidth_Type* GPIO_Pwm, double* BatLevel);
 PID_Data_Type* PID_GetPwm(void);
 #endif   /* _PID_H */
