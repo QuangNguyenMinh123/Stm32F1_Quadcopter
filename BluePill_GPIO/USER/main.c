@@ -70,7 +70,7 @@ int main(void) {
 	}
 	GPIO_PINHigh(WARNING_LED);
 	while (1) {
-		loopCounter++;
+		
 		loop_timer = micros();
 		FlyingState = GetFlyingState();
 		if (FlyingState == IDLE) {
@@ -81,10 +81,6 @@ int main(void) {
 		}
 		if (FlyingState == STAND_BY) {
 			FlyingMode_TAKE_OFF();
-		}
-		if (loopCounter == 125) {
-			GPIO_PINToggle(GREEN_LED1);
-			loopCounter = 0;
 		}
 #if (TUNING_PID == ON)
 		UART1_sendStr("FR:");
@@ -145,6 +141,7 @@ FlyingStateType GetFlyingState(void)
 }
 
 void FlyingMode_TAKE_OFF(void) {
+	loopCounter++;
 	MPU6050_CalculateAngle();
 	if (GPIO_PulseWidth.Throttle < 1000)
 		GPIO_PulseWidth.Throttle = 1000;
@@ -169,6 +166,10 @@ void FlyingMode_TAKE_OFF(void) {
 	GPIO_B7_PWM(PID_Pwm.FrontLeft);
 	GPIO_B8_PWM(PID_Pwm.BackLeft);
 	GPIO_B9_PWM(PID_Pwm.BackRight);
+	if (loopCounter == 125) {
+		GPIO_PINToggle(GREEN_LED1);
+		loopCounter = 0;
+	}
 }
 
 void FlyingMode_STAND_BY(void) {
@@ -204,6 +205,7 @@ bool TX_Unavailable(void) {
 }
 
 void FlyingMode_IDLE(void) {
+	GPIO_PINHigh(GREEN_LED1);
 	GPIO_B6_PWM(1000);
 	GPIO_B7_PWM(1000);
 	GPIO_B8_PWM(1000);

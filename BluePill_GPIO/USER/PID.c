@@ -14,9 +14,9 @@
  ******************************************************************************/
 /**************************** DEFINE PID VARIABLE *****************************/
 /* PID Pitch variable */
-static const double PID_Pitch_P_Gain = 1.3;
-static const double PID_Pitch_I_Gain = 0.0112;
-static const double PID_Pitch_D_Gain = 17.5;
+static const double PID_Pitch_P_Gain = 3.2;
+static const double PID_Pitch_I_Gain = 0.0125;
+static const double PID_Pitch_D_Gain = 38.7;
 static const double PID_Pitch_I_Max  = 400.0;
 
 /* PID Roll variable */
@@ -45,9 +45,9 @@ static double P_Pitch = 0.0;
 static double P_Roll = 0.0;
 static double P_Yaw = 0.0;
 /* I element */
- double I_Pitch = 0.0;			/* I of Pitch element accumulation */
- double I_Roll = 0.0;				/* I of Roll element accumulation */
- double I_Yaw = 0.0;				/* I of Yaw element accumulation */
+static double I_Pitch = 0.0;			/* I of Pitch element accumulation */
+static double I_Roll = 0.0;				/* I of Roll element accumulation */
+static double I_Yaw = 0.0;				/* I of Yaw element accumulation */
 /* D element */
 static double D_Pitch = 0.0;
 static double D_Roll = 0.0;
