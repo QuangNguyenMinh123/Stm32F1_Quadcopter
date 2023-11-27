@@ -39,19 +39,19 @@ static double Desired_Yaw;
 /* Error */
 static double Pitch_Error = 0.0;
 static double Roll_Error = 0.0;
-static double Yaw_Error = 0.0;
+ double Yaw_Error = 0.0;
 /* P element */
 static double P_Pitch = 0.0;
 static double P_Roll = 0.0;
-static double P_Yaw = 0.0;
+ double P_Yaw = 0.0;
 /* I element */
 static double I_Pitch = 0.0;			/* I of Pitch element accumulation */
 static double I_Roll = 0.0;				/* I of Roll element accumulation */
-static double I_Yaw = 0.0;				/* I of Yaw element accumulation */
+ double I_Yaw = 0.0;				/* I of Yaw element accumulation */
 /* D element */
 static double D_Pitch = 0.0;
 static double D_Roll = 0.0;
-static double D_Yaw = 0.0;
+ double D_Yaw = 0.0;
 static double Pre_Pitch_Error = 0.0;
 static double Pre_Roll_Error = 0.0;
 static double Pre_Yaw_Error = 0.0;
@@ -101,14 +101,22 @@ void PID_Calculate(double *PitchVal, double *RollVal, double *YawVal,
 	if (I_Yaw   < -PID_Yaw_I_Max)
 		I_Yaw   = -PID_Yaw_I_Max;
 	/* Sum up */
-	PID_Pwm.FrontRight = GPIO_Pwm->Throttle - (ui16)P_Pitch - (ui16)P_Roll
-		- (ui16)D_Pitch + (ui16)D_Roll - (ui16)I_Roll - (ui16)I_Pitch;
-	PID_Pwm.FrontLeft  = GPIO_Pwm->Throttle - (ui16)P_Pitch + (ui16)P_Roll
-		- (ui16)D_Pitch - (ui16)D_Roll + (ui16)I_Roll - (ui16)I_Pitch;
-	PID_Pwm.BackLeft   = GPIO_Pwm->Throttle + (ui16)P_Pitch + (ui16)P_Roll
-		+ (ui16)D_Pitch - (ui16)D_Roll + (ui16)I_Roll + (ui16)I_Pitch;
-	PID_Pwm.BackRight  = GPIO_Pwm->Throttle + (ui16)P_Pitch - (ui16)P_Roll
-		+ (ui16)D_Pitch + (ui16)D_Roll - (ui16)I_Roll + (ui16)I_Pitch;
+	PID_Pwm.FrontRight = GPIO_Pwm->Throttle
+		- (ui16)P_Pitch - (ui16)P_Roll - (ui16)P_Yaw
+		- (ui16)D_Pitch + (ui16)D_Roll - (ui16)D_Yaw
+		- (ui16)I_Pitch - (ui16)I_Roll - (ui16)I_Yaw;
+	PID_Pwm.FrontLeft  = GPIO_Pwm->Throttle
+		- (ui16)P_Pitch + (ui16)P_Roll + (ui16)P_Yaw
+		- (ui16)D_Pitch - (ui16)D_Roll + (ui16)D_Yaw
+		+ (ui16)I_Pitch - (ui16)I_Roll + (ui16)I_Yaw;
+	PID_Pwm.BackLeft   = GPIO_Pwm->Throttle
+		+ (ui16)P_Pitch + (ui16)P_Roll + (ui16)P_Yaw
+		+ (ui16)D_Pitch - (ui16)D_Roll + (ui16)D_Yaw
+		+ (ui16)I_Pitch + (ui16)I_Roll + (ui16)I_Yaw;
+	PID_Pwm.BackRight  = GPIO_Pwm->Throttle
+		+ (ui16)P_Pitch - (ui16)P_Roll - (ui16)P_Yaw
+		+ (ui16)D_Pitch + (ui16)D_Roll - (ui16)D_Yaw
+		- (ui16)I_Pitch + (ui16)I_Roll - (ui16)I_Yaw;
 	/* Battery compensation */
 	PID_Pwm.FrontRight 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
 	PID_Pwm.FrontLeft 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
