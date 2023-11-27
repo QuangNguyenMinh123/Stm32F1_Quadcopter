@@ -14,9 +14,9 @@
  ******************************************************************************/
 /**************************** DEFINE PID VARIABLE *****************************/
 /* PID Pitch variable */
-static const double PID_Pitch_P_Gain = 3.8;			/* 1.3 */
-static const double PID_Pitch_I_Gain = 0.01465;		/* 0.0112 */
-static const double PID_Pitch_D_Gain = 51.4;		/* 17.5 */
+static const double PID_Pitch_P_Gain = 1.3;			/* 1.3 */
+static const double PID_Pitch_I_Gain = 0.01145;		/* 0.0112 */
+static const double PID_Pitch_D_Gain = 17.5;		/* 17.5 */
 static const double PID_Pitch_I_Max  = 500.0;
 
 /* PID Roll variable */
