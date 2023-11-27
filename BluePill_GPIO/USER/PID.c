@@ -14,10 +14,10 @@
  ******************************************************************************/
 /**************************** DEFINE PID VARIABLE *****************************/
 /* PID Pitch variable */
-static const double PID_Pitch_P_Gain = 3.2;
-static const double PID_Pitch_I_Gain = 0.0125;
-static const double PID_Pitch_D_Gain = 38.7;
-static const double PID_Pitch_I_Max  = 400.0;
+static const double PID_Pitch_P_Gain = 3.8;			/* 1.3 */
+static const double PID_Pitch_I_Gain = 0.01465;		/* 0.0112 */
+static const double PID_Pitch_D_Gain = 51.4;		/* 17.5 */
+static const double PID_Pitch_I_Max  = 500.0;
 
 /* PID Roll variable */
 static const double PID_Roll_P_Gain = PID_Pitch_P_Gain;
@@ -55,6 +55,7 @@ static double D_Yaw = 0.0;
 static double Pre_Pitch_Error = 0.0;
 static double Pre_Roll_Error = 0.0;
 static double Pre_Yaw_Error = 0.0;
+static double Battery_Compensation = 40.0;
 /********************** END OF DEFINE PID VARIABLE ****************************/
 PID_Data_Type PID_Pwm;
 /*******************************************************************************
@@ -108,6 +109,11 @@ void PID_Calculate(double *PitchVal, double *RollVal, double *YawVal,
 		+ (ui16)D_Pitch - (ui16)D_Roll + (ui16)I_Roll + (ui16)I_Pitch;
 	PID_Pwm.BackRight  = GPIO_Pwm->Throttle + (ui16)P_Pitch - (ui16)P_Roll
 		+ (ui16)D_Pitch + (ui16)D_Roll - (ui16)I_Roll + (ui16)I_Pitch;
+	/* Battery compensation */
+	PID_Pwm.FrontRight 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
+	PID_Pwm.FrontLeft 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
+	PID_Pwm.BackLeft 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
+	PID_Pwm.BackRight 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
 	/* Saving error */
 	Pre_Pitch_Error = Pitch_Error;
 	Pre_Roll_Error  = Roll_Error;
