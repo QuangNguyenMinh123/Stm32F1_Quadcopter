@@ -51,11 +51,17 @@ Build target 'Target 1'
 ../USER/PID.c(54): note: declare 'static' if the variable is not intended to be used outside of this translation unit
  double D_Yaw = 0.0;
  ^
-4 warnings generated.
+../USER/PID.c(37): warning: no previous extern declaration for non-static variable 'Desired_Yaw' [-Wmissing-variable-declarations]
+ double Desired_Yaw;
+        ^
+../USER/PID.c(37): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+ double Desired_Yaw;
+ ^
+5 warnings generated.
 compiling PID.c...
 linking...
-Program Size: Code=20052 RO-data=716 RW-data=8 ZI-data=2168  
-".\Objects\BluePill_GPIO.axf" - 0 Error(s), 4 Warning(s).
+Program Size: Code=20212 RO-data=716 RW-data=8 ZI-data=2168  
+".\Objects\BluePill_GPIO.axf" - 0 Error(s), 5 Warning(s).
 
 <h2>Software Packages used:</h2>
 

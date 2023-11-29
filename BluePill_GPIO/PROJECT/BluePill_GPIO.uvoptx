@@ -158,27 +158,32 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>PID_Pwm,0x0A</ItemText>
+          <ItemText>I_Yaw</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>GPIO_PulseWidth,0x0A</ItemText>
+          <ItemText>Yaw_Error</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>I_Yaw</ItemText>
+          <ItemText>P_Yaw</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>Yaw_Error</ItemText>
+          <ItemText>D_Yaw</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>P_Yaw</ItemText>
+          <ItemText>Yaw</ItemText>
+        </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>Desired_Yaw</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

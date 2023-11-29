@@ -30,11 +30,11 @@ static const double PID_Roll_I_Max  = PID_Pitch_I_Max;
 static const double PID_Yaw_P_Gain 	= 2.0;
 static const double PID_Yaw_I_Gain 	= 0.015;
 static const double PID_Yaw_D_Gain 	= 0.0112;
-static const double PID_Yaw_I_Max  	= 400.0;
+static const double PID_Yaw_I_Max  	= 100.0;
 /* Desired angle */
 static double Desired_Pitch;
 static double Desired_Roll;
-static double Desired_Yaw;
+ double Desired_Yaw;
 /* Variable declaration */
 /* Error */
 static double Pitch_Error = 0.0;
@@ -72,6 +72,10 @@ void PID_Calculate(double *PitchVal, double *RollVal, double *YawVal,
 	Desired_Roll 	= map(GPIO_PulseWidth.Roll, 1000.0, 2000.0, -30.0, 30.0);
 	Desired_Pitch 	= map(GPIO_PulseWidth.Pitch, 1000.0, 2000.0, -30.0, 30.0);
 	Desired_Yaw     = map(GPIO_PulseWidth.Yaw, 1000.0, 2000.0, -90.0, 90.0);
+	if (GPIO_PulseWidth.Yaw >= 1450 && GPIO_PulseWidth.Yaw <= 1550) {
+		Desired_Yaw = 0;
+		I_Yaw = 0;
+	}
 	/* Calculating e(t) */
 	Pitch_Error = Desired_Pitch - *PitchVal;
 	Roll_Error  = Desired_Roll  - *RollVal;
