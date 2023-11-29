@@ -104,19 +104,19 @@ void PID_Calculate(double *PitchVal, double *RollVal, double *YawVal,
 	PID_Pwm.FrontRight = GPIO_Pwm->Throttle
 		- (ui16)P_Pitch - (ui16)P_Roll + (ui16)P_Yaw
 		- (ui16)D_Pitch + (ui16)D_Roll 
-		- (ui16)I_Pitch - (ui16)I_Roll ;
+		- (ui16)I_Pitch - (ui16)I_Roll + (ui16)I_Yaw;
 	PID_Pwm.FrontLeft  = GPIO_Pwm->Throttle
 		- (ui16)P_Pitch + (ui16)P_Roll - (ui16)P_Yaw
 		- (ui16)D_Pitch - (ui16)D_Roll 
-		- (ui16)I_Pitch + (ui16)I_Roll ;
+		- (ui16)I_Pitch + (ui16)I_Roll - (ui16)I_Yaw;
 	PID_Pwm.BackLeft   = GPIO_Pwm->Throttle
 		+ (ui16)P_Pitch + (ui16)P_Roll + (ui16)P_Yaw
 		+ (ui16)D_Pitch - (ui16)D_Roll 
-		+ (ui16)I_Pitch + (ui16)I_Roll ;
+		+ (ui16)I_Pitch + (ui16)I_Roll + (ui16)I_Yaw;
 	PID_Pwm.BackRight  = GPIO_Pwm->Throttle
 		+ (ui16)P_Pitch - (ui16)P_Roll - (ui16)P_Yaw
 		+ (ui16)D_Pitch + (ui16)D_Roll 
-		+ (ui16)I_Pitch - (ui16)I_Roll ;
+		+ (ui16)I_Pitch - (ui16)I_Roll - (ui16)I_Yaw;
 	/* Battery compensation */
 	PID_Pwm.FrontRight 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
 	PID_Pwm.FrontLeft 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
