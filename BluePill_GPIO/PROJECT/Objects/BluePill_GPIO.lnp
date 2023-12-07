@@ -9,6 +9,7 @@
 ".\objects\ex_eeprom.o"
 ".\objects\pid.o"
 ".\objects\mpu6050.o"
+".\objects\lcd.o"
 ".\objects\misc.o"
 ".\objects\stm32f10x_gpio.o"
 ".\objects\stm32f10x_rcc.o"

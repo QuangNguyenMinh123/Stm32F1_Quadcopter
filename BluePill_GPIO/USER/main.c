@@ -38,7 +38,7 @@ static unsigned uint32_t loop_timer = 0U;
 static FlyingStateType FlyingState = IDLE;
 static uint8_t loopCounter = 0;
 static uint8_t ErrorIdx = 0;
-static double Battery = 0;
+ double Battery = 0;
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -115,6 +115,7 @@ void System_Init(void) {
 	GPIO_PINHigh(IO_B14);
 	GPIO_PINHigh(IO_B15);
 	GPIO_SetAnalog(ADC_A0);
+	Battery =  GPIO_ReadAnalog(ADC1) * 36.3 / 4096.0;
 	for (;i<=10;i++)
 	{
 		GPIO_PINToggle(WARNING_LED);
@@ -153,6 +154,7 @@ void FlyingMode_TAKE_OFF(void) {
 	MPU6050_CalculateAngle();
 	if (GPIO_PulseWidth.Throttle < 1000)
 		GPIO_PulseWidth.Throttle = 1000;
+	Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
 	PID_Calculate(&Pitch, &Roll, &Yaw, &GPIO_PulseWidth, &Battery);
 	if (PID_Pwm.FrontRight > MAX_THROTTLE)
 		PID_Pwm.FrontRight = MAX_THROTTLE;
@@ -174,7 +176,6 @@ void FlyingMode_TAKE_OFF(void) {
 	GPIO_B7_PWM(PID_Pwm.FrontLeft);
 	GPIO_B8_PWM(PID_Pwm.BackLeft);
 	GPIO_B9_PWM(PID_Pwm.BackRight);
-	Battery = GPIO_ReadAnalog(ADC1) * 36.3 / 4096.0;
 	if (loopCounter == 125) {
 		GPIO_PINToggle(GREEN_LED1);
 		/* Battery warning */

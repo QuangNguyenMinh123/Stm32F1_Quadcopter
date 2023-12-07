@@ -480,6 +480,16 @@
               <FileType>5</FileType>
               <FilePath>..\USER\MPU6050.h</FilePath>
             </File>
+            <File>
+              <FileName>LCD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\LCD.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCD.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\USER\LCD.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
