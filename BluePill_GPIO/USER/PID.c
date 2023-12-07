@@ -14,10 +14,10 @@
  ******************************************************************************/
 /**************************** DEFINE PID VARIABLE *****************************/
 /* PID Pitch variable */
-static const double PID_Pitch_P_Gain = 1.3;			/* 1.3 */
-static const double PID_Pitch_I_Gain = 0.01145;		/* 0.0112 */
-static const double PID_Pitch_D_Gain = 17.5;		/* 17.5 */
-static const double PID_Pitch_I_Max  = 500.0;
+static const double PID_Pitch_P_Gain = 1.23;			/* 1.3 */
+static const double PID_Pitch_I_Gain = 0.0075;		/* 0.0112 */
+static const double PID_Pitch_D_Gain = 30;				/* 17.5 */
+static const double PID_Pitch_I_Max  = 400.0;
 
 /* PID Roll variable */
 static const double PID_Roll_P_Gain = PID_Pitch_P_Gain;
@@ -27,9 +27,9 @@ static const double PID_Roll_I_Max  = PID_Pitch_I_Max;
 
 
 /* PID Yaw variable */
-static const double PID_Yaw_P_Gain 	= 2.0;
-static const double PID_Yaw_I_Gain 	= 0.015;
-static const double PID_Yaw_D_Gain 	= 0.0112;
+static const double PID_Yaw_P_Gain 	= 0;		//2.0
+static const double PID_Yaw_I_Gain 	= 0;	// 0.015
+static const double PID_Yaw_D_Gain 	= 0;		// 7
 static const double PID_Yaw_I_Max  	= 100.0;
 /* Desired angle */
 static double Desired_Pitch;
