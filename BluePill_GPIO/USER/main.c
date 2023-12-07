@@ -3,6 +3,7 @@
 #include "I2C.h"
 #include "MPU6050.h"
 #include "PID.h"
+#include "LCD.h"
 /*	This lib used for checking clock speed
 #include "system_stm32f10x.h"
 */
@@ -58,10 +59,6 @@ int main(void) {
 	/*SystemCoreClockUpdate();*/
 	
 	System_Init();
-	GPIO_SetPWM(IO_B6, PWM_FREQ);
-	GPIO_SetPWM(IO_B7, PWM_FREQ);
-	GPIO_SetPWM(IO_B8, PWM_FREQ);
-	GPIO_SetPWM(IO_B9, PWM_FREQ);
 	FlyingMode_IDLE();
 	if (GPIO_PulseWidth.Throttle >= 1900) {
 		ESC_Clibration();
@@ -105,6 +102,10 @@ int main(void) {
 
 void System_Init(void) {
 	int i=0;
+	GPIO_SetPWM(IO_B6, PWM_FREQ);
+	GPIO_SetPWM(IO_B7, PWM_FREQ);
+	GPIO_SetPWM(IO_B8, PWM_FREQ);
+	GPIO_SetPWM(IO_B9, PWM_FREQ);
 	CLOCK_SystickInit();
 	GPIO_SetPWMMeasurement();
 	GPIO_SetOutPut(IO_C13, General_Push_Pull);
@@ -123,8 +124,12 @@ void System_Init(void) {
 	UART1_Init(UART_BAUDRATE_115200);
 #endif
 	I2C2_Init(I2C_SPEED_400);
+	if (LCD_Check()) {
+		LCD_Test();
+	}
 	MPU6050_Init();
 	MPU6050_Calibration();
+	
 }
 
 FlyingStateType GetFlyingState(void)
