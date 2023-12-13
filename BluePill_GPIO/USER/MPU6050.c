@@ -6,8 +6,8 @@
  * Definitions
  ******************************************************************************/
 #define MPU6050_Raw_DATA_TYPE	signed short int
-#define CALIBRATION_TIMES		1000
-#define ALPHA					0.998
+#define CALIBRATION_TIMES		2000
+#define ALPHA					0.9996
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -141,16 +141,11 @@ void MPU6050_Calibration (void) {
 			sqrt(sqr(MPU6050_RawData.Acc_X) + sqr(MPU6050_RawData.Acc_Z))));
 		Pitch_Acc = RadianToDegree(atan(-MPU6050_RawData.Acc_X/
 			sqrt(sqr(MPU6050_RawData.Acc_Y) + sqr(MPU6050_RawData.Acc_Z))));
-		Pitch += Pitch_Acc;
-		Roll  += Roll_Acc;
-		
 		Gyro_Pitch_Offset += Gyro_Roll_Raw;
 		Gyro_Roll_Offset += Gyro_Pitch_Raw;
 		Gyro_Yaw_Offset += Gyro_Yaw_Raw;
 		while (micros() - loop_time < 4000) {}
 	}
-	Pitch 				= Pitch / CALIBRATION_TIMES;
-	Roll				= Roll  / CALIBRATION_TIMES;
 	Gyro_Pitch_Offset 	= Gyro_Pitch_Offset / CALIBRATION_TIMES;
 	Gyro_Roll_Offset 	= Gyro_Roll_Offset  / CALIBRATION_TIMES;
 	Gyro_Yaw_Offset 	= Gyro_Yaw_Offset  / CALIBRATION_TIMES;	
