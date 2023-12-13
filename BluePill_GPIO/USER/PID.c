@@ -65,6 +65,9 @@ void PID_Reset(void) {
 	I_Pitch = 0.0;
 	I_Roll 	= 0.0;
 	I_Yaw	= 0.0;
+	Pre_Pitch_Error = 0.0;
+	Pre_Roll_Error = 0.0;
+	Pre_Yaw_Error = 0.0;
 }
 
 void PID_Calculate(double *PitchVal, double *RollVal, double *YawVal,

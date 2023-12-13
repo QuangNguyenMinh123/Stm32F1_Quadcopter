@@ -73,6 +73,11 @@ typedef struct MPU6050_Data_Type{
 extern double Pitch;
 extern double Roll;
 extern double Yaw;
+extern double Pitch_Gyro;
+extern double Roll_Gyro;
+extern double Yaw_Gyro;
+extern double Pitch_Acc;
+extern double Roll_Acc;
 /*******************************************************************************
  * API
  ******************************************************************************/

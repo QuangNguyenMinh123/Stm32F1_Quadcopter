@@ -24,8 +24,8 @@ static MPU6050_Raw_DATA_TYPE Gyro_Yaw_Raw = 0;
 static uint8_t Buffer_data[14];
 static MPU6050_Data_Type MPU6050_RawData;
 /*****************************ACCELEROMETER VARIABLE***************************/
-static double Pitch_Acc = 0.0;
-static double Roll_Acc = 0.0;
+ double Pitch_Acc = 0.0;
+ double Roll_Acc = 0.0;
 /*********************************GYRO VARIABLE********************************/
 static long Gyro_Pitch_Offset = 0.0;
 static long Gyro_Roll_Offset = 0.0;
@@ -35,9 +35,9 @@ static double Temp_Pitch_Gyro = 0.0;
 static double Temp_Roll_Gyro = 0.0;
 static double Temp_Yaw_Gyro = 0.0;
 
-static double Pitch_Gyro = 0.0;
-static double Roll_Gyro = 0.0;
-static double Yaw_Gyro = 0.0;
+ double Pitch_Gyro = 0.0;
+ double Roll_Gyro = 0.0;
+ double Yaw_Gyro = 0.0;
 
 static bool setGyro = FALSE;
 

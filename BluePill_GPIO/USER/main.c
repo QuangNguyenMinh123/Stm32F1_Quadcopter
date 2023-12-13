@@ -155,7 +155,7 @@ void FlyingMode_TAKE_OFF(void) {
 	if (GPIO_PulseWidth.Throttle < 1000)
 		GPIO_PulseWidth.Throttle = 1000;
 	Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
-	PID_Calculate(&Pitch, &Roll, &Yaw, &GPIO_PulseWidth, &Battery);
+	PID_Calculate(&Pitch_Gyro, &Roll_Gyro, &Yaw_Gyro, &GPIO_PulseWidth, &Battery);
 	if (PID_Pwm.FrontRight > MAX_THROTTLE)
 		PID_Pwm.FrontRight = MAX_THROTTLE;
 	if (PID_Pwm.FrontLeft  > MAX_THROTTLE)
