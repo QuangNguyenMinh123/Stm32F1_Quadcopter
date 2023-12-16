@@ -39,36 +39,9 @@ Build target 'Target 1'
 ../USER/MPU6050.c(30): note: declare 'static' if the variable is not intended to be used outside of this translation unit
  double Roll_Acc = 0.0;
  ^
-../USER/MPU6050.c(51): warning: no previous extern declaration for non-static variable 'firstStart' [-Wmissing-variable-declarations]
-bool firstStart = TRUE;
-     ^
-../USER/MPU6050.c(51): note: declare 'static' if the variable is not intended to be used outside of this translation unit
-bool firstStart = TRUE;
-^
-../USER/COMMON.h(75): note: expanded from macro 'bool'
-#define bool            uint8_t
-                        ^
-../USER/COMMON.h(70): note: expanded from macro 'uint8_t'
-#define uint8_t         unsigned char
-                        ^
-../USER/MPU6050.c(98): warning: // comments are not allowed in this language [-Wcomment]
-        //Gyro_Pitch_Raw        -= Gyro_Pitch_Offset;
-        ^
-../USER/MPU6050.c(145): warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
-        uint32_t Gyro_Pitch_Cal = 0;
+../USER/MPU6050.c(136): warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
+        uint32_t Gyro_X_Cal = 0;
                  ^
-../USER/MPU6050.c(48): warning: no previous extern declaration for non-static variable 'angle_pitch_output' [-Wmissing-variable-declarations]
-double angle_pitch_output;
-       ^
-../USER/MPU6050.c(48): note: declare 'static' if the variable is not intended to be used outside of this translation unit
-double angle_pitch_output;
-^
-../USER/MPU6050.c(49): warning: no previous extern declaration for non-static variable 'angle_roll_output' [-Wmissing-variable-declarations]
-double angle_roll_output;
-       ^
-../USER/MPU6050.c(49): note: declare 'static' if the variable is not intended to be used outside of this translation unit
-double angle_roll_output;
-^
 ../USER/MPU6050.c(36): warning: unused variable 'Temp_Pitch_Gyro' [-Wunused-variable]
 static double Temp_Pitch_Gyro = 0.0;
               ^
@@ -78,14 +51,27 @@ static double Temp_Roll_Gyro = 0.0;
 ../USER/MPU6050.c(38): warning: unused variable 'Temp_Yaw_Gyro' [-Wunused-variable]
 static double Temp_Yaw_Gyro = 0.0;
               ^
-../USER/MPU6050.c(55): warning: unused function 'abs' [-Wunused-function]
+../USER/MPU6050.c(52): warning: unused function 'abs' [-Wunused-function]
 static double abs(double value) {
               ^
-11 warnings generated.
+7 warnings generated.
 compiling MPU6050.c...
+../USER/main.c(45): warning: no previous extern declaration for non-static variable 'Battery' [-Wmissing-variable-declarations]
+ double Battery = 0;
+        ^
+../USER/main.c(45): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+ double Battery = 0;
+ ^
+1 warning generated.
+compiling main.c...
 linking...
-Program Size: Code=20124 RO-data=644 RW-data=12 ZI-data=2172  
-".\Objects\BluePill_GPIO.axf" - 0 Error(s), 11 Warning(s).
+.\Objects\BluePill_GPIO.axf: Error: L6218E: Undefined symbol Yaw_Gyro (referred from main.o).
+.\Objects\BluePill_GPIO.axf: Error: L6218E: Undefined symbol Angle_Pitch (referred from mpu6050.o).
+.\Objects\BluePill_GPIO.axf: Error: L6218E: Undefined symbol Angle_Roll (referred from mpu6050.o).
+Not enough information to list image symbols.
+Not enough information to list load addresses in the image map.
+Finished: 2 information, 0 warning and 3 error messages.
+".\Objects\BluePill_GPIO.axf" - 3 Error(s), 8 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -118,21 +104,21 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:5.6.0
 
    * Component: Keil::Device:GPIO:1.3
-      Source file:   RTE_Driver/GPIO_STM32F10x.c
       Include file:  RTE_Driver/GPIO_STM32F10x.h
+      Source file:   RTE_Driver/GPIO_STM32F10x.c
 
    * Component: Keil::Device:Startup:1.0.0
-      Source file:   Device/Source/system_stm32f10x.c
       Source file:   Device/Source/ARM/STM32F1xx_OPT.s
-      Source file:   Device/Source/ARM/startup_stm32f10x_md.s
       Include file:  RTE_Driver/Config/RTE_Device.h
+      Source file:   Device/Source/ARM/startup_stm32f10x_md.s
+      Source file:   Device/Source/system_stm32f10x.c
 
    * Component: Keil::Device:StdPeriph Drivers:Framework:3.6.0
-      Include file:  Device/StdPeriph_Driver/templates/stm32f10x_it.h
-      Source file:   Device/StdPeriph_Driver/templates/stm32f10x_it.c
-      Source file:   Device/StdPeriph_Driver/src/misc.c
       Include file:  Device/StdPeriph_Driver/inc/misc.h
+      Include file:  Device/StdPeriph_Driver/templates/stm32f10x_it.h
       Source file:   Device/StdPeriph_Driver/templates/stm32f10x_conf.h
+      Source file:   Device/StdPeriph_Driver/src/misc.c
+      Source file:   Device/StdPeriph_Driver/templates/stm32f10x_it.c
 
    * Component: Keil::Device:StdPeriph Drivers:GPIO:3.6.0
       Include file:  Device/StdPeriph_Driver/inc/stm32f10x_gpio.h
@@ -141,6 +127,7 @@ Package Vendor: Keil
    * Component: Keil::Device:StdPeriph Drivers:RCC:3.6.0
       Include file:  Device/StdPeriph_Driver/inc/stm32f10x_rcc.h
       Source file:   Device/StdPeriph_Driver/src/stm32f10x_rcc.c
+Target not created.
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

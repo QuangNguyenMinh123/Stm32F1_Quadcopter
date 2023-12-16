@@ -45,6 +45,9 @@ static bool ErrorTimeout = FALSE;
  double Battery = 0;
 static uint8_t Error = 0;
 static uint8_t RedLedCnt = 0;
+#if (TUNING_PID == ON)
+char buffer[10];
+#endif
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -75,12 +78,12 @@ int main(void) {
 	}
 	*/
 	GPIO_PINHigh(WARNING_LED);
+	loop_timer = micros();
 	while (1) {
-		loop_timer = micros();
 		loopCounter++;
 		MPU6050_CalculateAngle();
 		Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
-		PID_Calculate(&Angle_Pitch, &Angle_Roll, &Yaw_Gyro, &GPIO_PulseWidth, &Battery);
+		PID_Calculate(&angle_roll_output, &angle_pitch_output, &Yaw_Gyro, &GPIO_PulseWidth, &Battery);
 		FlyingState = GetFlyingState();
 		if (PreviousFlyingState == IDLE && FlyingState == TAKE_OFF) {
 			PID_Reset();
@@ -90,19 +93,14 @@ int main(void) {
 		if (FlyingState == TAKE_OFF) {
 			FlyingMode_TAKE_OFF();
 		}
-		
 #if (TUNING_PID == ON)
-		UART1_sendStr("FR:");
-		UART1_sendNum(PID_Pwm.FrontRight);
+		sprintf(buffer, "%.2f",angle_pitch_output); 
+		UART1_sendStr("Pitch:");
+		UART1_sendStr(buffer);
 		UART1_sendStr("\t");
-		UART1_sendStr("FL:");
-		UART1_sendNum(PID_Pwm.FrontLeft);
-		UART1_sendStr("\t");
-		UART1_sendStr("BL:");
-		UART1_sendNum(PID_Pwm.BackLeft);
-		UART1_sendStr("\t");
-		UART1_sendStr("BR:");
-		UART1_sendNum(PID_Pwm.BackRight);
+		sprintf(buffer, "%.2f",angle_roll_output); 
+		UART1_sendStr("Roll:");
+		UART1_sendStr(buffer);
 		UART1_sendStr("\n");
 #endif
 		if (FlyingState == IDLE) {
@@ -131,6 +129,7 @@ int main(void) {
 		}
 		PreviousFlyingState = FlyingState;
 		while (micros() - loop_timer < 4000);
+		loop_timer = micros();
 	}
 }
 
