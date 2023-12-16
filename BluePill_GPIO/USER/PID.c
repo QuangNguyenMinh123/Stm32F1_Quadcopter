@@ -14,52 +14,52 @@
  ******************************************************************************/
 /**************************** DEFINE PID VARIABLE *****************************/
 /* PID Pitch variable */
-static const double PID_Pitch_P_Gain = 1.3;			/* 1.3 */
-static const double PID_Pitch_I_Gain = 0.0112;			/* 0.0112 */
-static const double PID_Pitch_D_Gain = 17.5;				/* 17.5 */
-static const double PID_Max_Pitch  = 400.0;
+ const double PID_Pitch_P_Gain = 1.3;			/* 1.3 */
+ const double PID_Pitch_I_Gain = 0.04;			/* 0.0112 */
+ const double PID_Pitch_D_Gain = 18;				/* 17.5 */
+ const double PID_Max_Pitch  = 400.0;
 
 /* PID Roll variable */
-static const double PID_Roll_P_Gain = PID_Pitch_P_Gain;
-static const double PID_Roll_I_Gain = PID_Pitch_I_Gain;
-static const double PID_Roll_D_Gain = PID_Pitch_D_Gain;
-static const double PID_Max_Roll  = PID_Max_Pitch;
+ const double PID_Roll_P_Gain = PID_Pitch_P_Gain;
+ const double PID_Roll_I_Gain = PID_Pitch_I_Gain;
+ const double PID_Roll_D_Gain = PID_Pitch_D_Gain;
+ const double PID_Max_Roll  = PID_Max_Pitch;
 
 
 /* PID Yaw variable */
-static const double PID_Yaw_P_Gain 	= 0.0;		/* 4.0  */
-static const double PID_Yaw_I_Gain 	= 0.0;		/* 0.015 */
-static const double PID_Yaw_D_Gain 	= 0.0;		/* 0 */
-static const double PID_Max_Yaw  	= 400.0;
+ const double PID_Yaw_P_Gain 	= 4.0;		/* 4.0  */
+ const double PID_Yaw_I_Gain 	= 0.2;		/* 0.015 */
+ const double PID_Yaw_D_Gain 	= 0.0;		/* 0 */
+ const double PID_Max_Yaw  	= 400.0;
 /* Desired angle */
 static double Desired_Pitch;
 static double Desired_Roll;
  double Desired_Yaw;
 /* Variable declaration */
 /* Error */
-static double Pitch_Error = 0.0;
-static double Roll_Error = 0.0;
+ double Pitch_Error = 0.0;
+ double Roll_Error = 0.0;
  double Yaw_Error = 0.0;
 /* P element */
-static double P_Pitch = 0.0;
-static double P_Roll = 0.0;
+ double P_Pitch = 0.0;
+ double P_Roll = 0.0;
  double P_Yaw = 0.0;
 /* I element */
-static double I_Pitch = 0.0;			/* I of Pitch element accumulation */
-static double I_Roll = 0.0;				/* I of Roll element accumulation */
+ double I_Pitch = 0.0;			/* I of Pitch element accumulation */
+ double I_Roll = 0.0;				/* I of Roll element accumulation */
  double I_Yaw = 0.0;				/* I of Yaw element accumulation */
 /* D element */
-static double D_Pitch = 0.0;
-static double D_Roll = 0.0;
+ double D_Pitch = 0.0;
+ double D_Roll = 0.0;
  double D_Yaw = 0.0;
-static double Pre_Pitch_Error = 0.0;
-static double Pre_Roll_Error = 0.0;
-static double Pre_Yaw_Error = 0.0;
-static double Battery_Compensation = 40.0;
+ double Pre_Pitch_Error = 0.0;
+ double Pre_Roll_Error = 0.0;
+ double Pre_Yaw_Error = 0.0;
+ double Battery_Compensation = 40.0;
 /* Sum up */
-static double PID_OutputPitch = 0.0;
-static double PID_OutputRoll = 0.0;
-static double PID_OutputYaw = 0.0;
+ double PID_OutputPitch = 0.0;
+ double PID_OutputRoll = 0.0;
+ double PID_OutputYaw = 0.0;
 /********************** END OF DEFINE PID VARIABLE ****************************/
 PID_Data_Type PID_Pwm;
 /*******************************************************************************
@@ -127,20 +127,24 @@ void PID_Calculate(double *PitchVal, double *RollVal, double *YawVal,
 		PID_OutputYaw = PID_Max_Yaw;
 	else if (PID_OutputYaw < PID_Max_Yaw * -1)	
 		PID_OutputYaw = PID_Max_Yaw * -1;
-	/* Sum up */
-	PID_Pwm.FrontRight = GPIO_Pwm->Throttle - (ui16)PID_OutputPitch 
-		+ (ui16)PID_OutputRoll - (ui16)PID_OutputYaw;
-	PID_Pwm.FrontLeft  = GPIO_Pwm->Throttle - (ui16)PID_OutputPitch
-		- (ui16)PID_OutputRoll + (ui16)PID_OutputYaw;
-	PID_Pwm.BackLeft   = GPIO_Pwm->Throttle + (ui16)PID_OutputPitch
-		- (ui16)PID_OutputRoll - (ui16)PID_OutputYaw;
-	PID_Pwm.BackRight  = GPIO_Pwm->Throttle + (ui16)PID_OutputPitch
-		+ (ui16)PID_OutputRoll + (ui16)PID_OutputYaw;
-	/* Battery compensation */
-	PID_Pwm.FrontRight 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
-	PID_Pwm.FrontLeft 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
-	PID_Pwm.BackLeft 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
-	PID_Pwm.BackRight 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
+	/* Limit throttle*/
+//	if (GPIO_Pwm->Throttle > 1800)
+//		GPIO_Pwm->Throttle = 1800;
+//	/* Sum up */
+//	PID_Pwm.FrontRight = GPIO_Pwm->Throttle - (ui16)PID_OutputPitch 
+//		+ (ui16)PID_OutputRoll - (ui16)PID_OutputYaw;
+//	PID_Pwm.FrontLeft  = GPIO_Pwm->Throttle - (ui16)PID_OutputPitch
+//		- (ui16)PID_OutputRoll + (ui16)PID_OutputYaw;
+//	PID_Pwm.BackLeft   = GPIO_Pwm->Throttle + (ui16)PID_OutputPitch
+//		- (ui16)PID_OutputRoll - (ui16)PID_OutputYaw;
+//	PID_Pwm.BackRight  = GPIO_Pwm->Throttle + (ui16)PID_OutputPitch
+//		+ (ui16)PID_OutputRoll + (ui16)PID_OutputYaw;
+//	/* Battery compensation */
+//	PID_Pwm.FrontRight 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
+//	PID_Pwm.FrontLeft 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
+//	PID_Pwm.BackLeft 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
+//	PID_Pwm.BackRight 	+= (ui16) ((12.4 - *BatLevel) * Battery_Compensation);
+	
 	/* Saving error */
 	Pre_Pitch_Error = Pitch_Error;
 	Pre_Roll_Error  = Roll_Error;

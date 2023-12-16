@@ -24,8 +24,8 @@
 #define GREEN_LED1				IO_B14
 #define GREEN_LED2				IO_B15
 #define MAX_THROTTLE			2000
-#define MIN_THROTTLE			1050
-
+#define MIN_THROTTLE			1100
+#define ui16 					uint16_t
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -42,7 +42,7 @@ static FlyingStateType FlyingState = IDLE;
 static FlyingStateType PreviousFlyingState = IDLE;
 static uint8_t loopCounter = 0;
 static bool ErrorTimeout = FALSE;
- double Battery = 0;
+double Battery = 0;
 static uint8_t Error = 0;
 static uint8_t RedLedCnt = 0;
 #if (TUNING_PID == ON)
@@ -63,7 +63,9 @@ void ESC_Clibration(void);
 /*******************************************************************************
  * Code
  ******************************************************************************/
-
+extern double PID_OutputPitch ;
+extern double PID_OutputRoll ;
+extern double PID_OutputYaw ;
 int main(void) {
 	/*SystemCoreClockUpdate();*/
 	
@@ -72,18 +74,16 @@ int main(void) {
 	if (GPIO_PulseWidth.Throttle >= 1900) {
 		ESC_Clibration();
 	}
-	/*
 	while (GetFlyingState() != IDLE || TX_Unavailable()) {
 		LedWarning_NotInIdleMode();
 	}
-	*/
 	GPIO_PINHigh(WARNING_LED);
 	loop_timer = micros();
 	while (1) {
 		loopCounter++;
 		MPU6050_CalculateAngle();
 		Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
-		PID_Calculate(&angle_roll_output, &angle_pitch_output, &Yaw_Gyro, &GPIO_PulseWidth, &Battery);
+		PID_Calculate(&Angle_Pitch, &Angle_Roll, &Yaw_Gyro, &GPIO_PulseWidth, &Battery);
 		FlyingState = GetFlyingState();
 		if (PreviousFlyingState == IDLE && FlyingState == TAKE_OFF) {
 			PID_Reset();
@@ -91,14 +91,35 @@ int main(void) {
 			
 		}
 		if (FlyingState == TAKE_OFF) {
+			if (GPIO_PulseWidth.Throttle > 1800)
+				GPIO_PulseWidth.Throttle = 1800;
+			/* Sum up */
+			PID_Pwm.FrontRight = GPIO_PulseWidth.Throttle - (ui16)PID_OutputPitch 
+				+ (ui16)PID_OutputRoll - (ui16)PID_OutputYaw;
+			PID_Pwm.FrontLeft  = GPIO_PulseWidth.Throttle - (ui16)PID_OutputPitch
+				- (ui16)PID_OutputRoll + (ui16)PID_OutputYaw;
+			PID_Pwm.BackLeft   = GPIO_PulseWidth.Throttle + (ui16)PID_OutputPitch
+				- (ui16)PID_OutputRoll - (ui16)PID_OutputYaw;
+			PID_Pwm.BackRight  = GPIO_PulseWidth.Throttle + (ui16)PID_OutputPitch
+				+ (ui16)PID_OutputRoll + (ui16)PID_OutputYaw;
 			FlyingMode_TAKE_OFF();
 		}
+		else {
+			PID_Pwm.FrontRight 	= 1000;
+			PID_Pwm.FrontLeft	= 1000;
+			PID_Pwm.BackLeft	= 1000;
+			PID_Pwm.BackRight	= 1000;
+		}
+		GPIO_B6_PWM(PID_Pwm.FrontRight);
+		GPIO_B7_PWM(PID_Pwm.FrontLeft);
+		GPIO_B8_PWM(PID_Pwm.BackLeft);
+		GPIO_B9_PWM(PID_Pwm.BackRight);
 #if (TUNING_PID == ON)
-		sprintf(buffer, "%.2f",angle_pitch_output); 
+		sprintf(buffer, "%.2f",angle_pitch_acc); 
 		UART1_sendStr("Pitch:");
 		UART1_sendStr(buffer);
 		UART1_sendStr("\t");
-		sprintf(buffer, "%.2f",angle_roll_output); 
+		sprintf(buffer, "%.2f",angle_roll_acc); 
 		UART1_sendStr("Roll:");
 		UART1_sendStr(buffer);
 		UART1_sendStr("\n");
@@ -199,10 +220,7 @@ void FlyingMode_TAKE_OFF(void) {
 		PID_Pwm.BackLeft   = MIN_THROTTLE;
 	if (PID_Pwm.BackRight  < MIN_THROTTLE)
 		PID_Pwm.BackRight  = MIN_THROTTLE;
-	GPIO_B6_PWM(PID_Pwm.FrontRight);
-	GPIO_B7_PWM(PID_Pwm.FrontLeft);
-	GPIO_B8_PWM(PID_Pwm.BackLeft);
-	GPIO_B9_PWM(PID_Pwm.BackRight);
+	
 }
 
 void FlyingMode_STAND_BY(void) {

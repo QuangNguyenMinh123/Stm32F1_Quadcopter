@@ -27,51 +27,17 @@ Project File Date:  12/07/2023
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target 1'
-../USER/MPU6050.c(29): warning: no previous extern declaration for non-static variable 'Pitch_Acc' [-Wmissing-variable-declarations]
- double Pitch_Acc = 0.0;
-        ^
-../USER/MPU6050.c(29): note: declare 'static' if the variable is not intended to be used outside of this translation unit
- double Pitch_Acc = 0.0;
- ^
-../USER/MPU6050.c(30): warning: no previous extern declaration for non-static variable 'Roll_Acc' [-Wmissing-variable-declarations]
- double Roll_Acc = 0.0;
-        ^
-../USER/MPU6050.c(30): note: declare 'static' if the variable is not intended to be used outside of this translation unit
- double Roll_Acc = 0.0;
- ^
-../USER/MPU6050.c(136): warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
-        uint32_t Gyro_X_Cal = 0;
-                 ^
-../USER/MPU6050.c(36): warning: unused variable 'Temp_Pitch_Gyro' [-Wunused-variable]
-static double Temp_Pitch_Gyro = 0.0;
-              ^
-../USER/MPU6050.c(37): warning: unused variable 'Temp_Roll_Gyro' [-Wunused-variable]
-static double Temp_Roll_Gyro = 0.0;
-              ^
-../USER/MPU6050.c(38): warning: unused variable 'Temp_Yaw_Gyro' [-Wunused-variable]
-static double Temp_Yaw_Gyro = 0.0;
-              ^
-../USER/MPU6050.c(52): warning: unused function 'abs' [-Wunused-function]
-static double abs(double value) {
-              ^
-7 warnings generated.
-compiling MPU6050.c...
 ../USER/main.c(45): warning: no previous extern declaration for non-static variable 'Battery' [-Wmissing-variable-declarations]
- double Battery = 0;
-        ^
+double Battery = 0;
+       ^
 ../USER/main.c(45): note: declare 'static' if the variable is not intended to be used outside of this translation unit
- double Battery = 0;
- ^
+double Battery = 0;
+^
 1 warning generated.
 compiling main.c...
 linking...
-.\Objects\BluePill_GPIO.axf: Error: L6218E: Undefined symbol Yaw_Gyro (referred from main.o).
-.\Objects\BluePill_GPIO.axf: Error: L6218E: Undefined symbol Angle_Pitch (referred from mpu6050.o).
-.\Objects\BluePill_GPIO.axf: Error: L6218E: Undefined symbol Angle_Roll (referred from mpu6050.o).
-Not enough information to list image symbols.
-Not enough information to list load addresses in the image map.
-Finished: 2 information, 0 warning and 3 error messages.
-".\Objects\BluePill_GPIO.axf" - 3 Error(s), 8 Warning(s).
+Program Size: Code=20308 RO-data=644 RW-data=4 ZI-data=2172  
+".\Objects\BluePill_GPIO.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -127,8 +93,7 @@ Package Vendor: Keil
    * Component: Keil::Device:StdPeriph Drivers:RCC:3.6.0
       Include file:  Device/StdPeriph_Driver/inc/stm32f10x_rcc.h
       Source file:   Device/StdPeriph_Driver/src/stm32f10x_rcc.c
-Target not created.
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>

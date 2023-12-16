@@ -26,21 +26,20 @@ static MPU6050_Raw_DATA_TYPE Gyro_Z_Raw = 0;
 static uint8_t Buffer_data[14];
 static MPU6050_Data_Type MPU6050_RawData;
 /*****************************ACCELEROMETER VARIABLE***************************/
- double Pitch_Acc = 0.0;
- double Roll_Acc = 0.0;
+
 /*********************************GYRO VARIABLE********************************/
 static long Gyro_X_Offset = 0;
 static long Gyro_Y_Offset = 0;
 static long Gyro_Z_Offset = 0;
 
-static double Temp_Pitch_Gyro = 0.0;
-static double Temp_Roll_Gyro = 0.0;
-static double Temp_Yaw_Gyro = 0.0;
-
 static int TotalVector = 0;
 
-static double angle_pitch_acc = 0.0;
-static double angle_roll_acc = 0.0;
+double Angle_Pitch = 0.0;
+double Angle_Roll = 0.0;
+double Yaw_Gyro = 0.0;
+
+ double angle_pitch_acc = 0.0;
+ double angle_roll_acc = 0.0;
 
 double angle_pitch_output;
 double angle_roll_output;
@@ -49,13 +48,6 @@ static bool firstStart = TRUE;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-static double abs(double value) {
-	if (value < 0)
-		return value * -1;
-	else
-		return value;
-}
-
 void MPU6050_Write(uint8_t MPU_Address, uint8_t RegisterAddress, uint8_t Data)
 {
 	I2C2_WriteToDevice(MPU_Address, RegisterAddress, Data);

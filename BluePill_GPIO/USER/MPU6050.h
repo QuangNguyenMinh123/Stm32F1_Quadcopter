@@ -75,6 +75,8 @@ extern double Angle_Roll;
 extern double Yaw_Gyro;
 extern double angle_pitch_output;
 extern double angle_roll_output;
+extern double angle_pitch_acc;
+extern double angle_roll_acc;
 /*******************************************************************************
  * API
  ******************************************************************************/
