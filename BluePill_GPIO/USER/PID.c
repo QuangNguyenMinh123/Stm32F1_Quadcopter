@@ -27,8 +27,8 @@ static const double PID_Max_Roll  = PID_Max_Pitch;
 
 
 /* PID Yaw variable */
-static const double PID_Yaw_P_Gain 	= 4.0;		/* 4.0  */
-static const double PID_Yaw_I_Gain 	= 0.015;		/* 0.015 */
+static const double PID_Yaw_P_Gain 	= 0.0;		/* 4.0  */
+static const double PID_Yaw_I_Gain 	= 0.0;		/* 0.015 */
 static const double PID_Yaw_D_Gain 	= 0.0;		/* 0 */
 static const double PID_Max_Yaw  	= 400.0;
 /* Desired angle */

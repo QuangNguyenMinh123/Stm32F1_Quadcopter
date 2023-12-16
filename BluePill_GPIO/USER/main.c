@@ -10,6 +10,9 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+#define PINLOW					1
+#define TIMEOUT					2
+#define TIMEOUT_PINLOW			3
 #define ON						1
 #define OFF						0
 #define TUNING_PID				OFF
@@ -36,9 +39,12 @@ typedef enum{
  ******************************************************************************/
 static unsigned uint32_t loop_timer = 0U;
 static FlyingStateType FlyingState = IDLE;
+static FlyingStateType PreviousFlyingState = IDLE;
 static uint8_t loopCounter = 0;
-static uint8_t ErrorIdx = 0;
+static bool ErrorTimeout = FALSE;
  double Battery = 0;
+static uint8_t Error = 0;
+static uint8_t RedLedCnt = 0;
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -63,21 +69,25 @@ int main(void) {
 	if (GPIO_PulseWidth.Throttle >= 1900) {
 		ESC_Clibration();
 	}
+	/*
 	while (GetFlyingState() != IDLE || TX_Unavailable()) {
 		LedWarning_NotInIdleMode();
 	}
+	*/
 	GPIO_PINHigh(WARNING_LED);
 	while (1) {
-		
 		loop_timer = micros();
+		loopCounter++;
+		MPU6050_CalculateAngle();
+		Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
+		PID_Calculate(&Angle_Pitch, &Angle_Roll, &Yaw_Gyro, &GPIO_PulseWidth, &Battery);
 		FlyingState = GetFlyingState();
-		if (FlyingState == IDLE) {
-			FlyingMode_IDLE();
+		if (PreviousFlyingState == IDLE && FlyingState == TAKE_OFF) {
+			PID_Reset();
+			MPU6050_AngleReset();
+			
 		}
 		if (FlyingState == TAKE_OFF) {
-			FlyingMode_TAKE_OFF();
-		}
-		if (FlyingState == STAND_BY) {
 			FlyingMode_TAKE_OFF();
 		}
 		
@@ -95,7 +105,31 @@ int main(void) {
 		UART1_sendNum(PID_Pwm.BackRight);
 		UART1_sendStr("\n");
 #endif
+		if (FlyingState == IDLE) {
+			GPIO_PINHigh(GREEN_LED1);
+		}
+		if (loopCounter == 125) {
+			if (FlyingState != IDLE)
+				GPIO_PINToggle(GREEN_LED1);
+			loopCounter = 0;
+			RedLedCnt++;
+			if (RedLedCnt == Error) {
+				GPIO_PINToggle(WARNING_LED);
+				RedLedCnt = 0;
+			}
+		}
 		CheckTimeOut();
+		/* warning */
+		if (Battery < 10.5 && ErrorTimeout == FALSE) {
+			Error = PINLOW;
+		}
+		if (Battery >= 10.5 && ErrorTimeout == TRUE) {
+			Error = TIMEOUT;
+		}
+		if (Battery < 10.5 && ErrorTimeout == TRUE) {
+			Error = TIMEOUT_PINLOW;
+		}
+		PreviousFlyingState = FlyingState;
 		while (micros() - loop_timer < 4000);
 	}
 }
@@ -150,12 +184,6 @@ FlyingStateType GetFlyingState(void)
 }
 
 void FlyingMode_TAKE_OFF(void) {
-	loopCounter++;
-	MPU6050_CalculateAngle();
-	if (GPIO_PulseWidth.Throttle < 1000)
-		GPIO_PulseWidth.Throttle = 1000;
-	Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
-	PID_Calculate(&Pitch_Gyro, &Roll_Gyro, &Yaw_Gyro, &GPIO_PulseWidth, &Battery);
 	if (PID_Pwm.FrontRight > MAX_THROTTLE)
 		PID_Pwm.FrontRight = MAX_THROTTLE;
 	if (PID_Pwm.FrontLeft  > MAX_THROTTLE)
@@ -176,14 +204,6 @@ void FlyingMode_TAKE_OFF(void) {
 	GPIO_B7_PWM(PID_Pwm.FrontLeft);
 	GPIO_B8_PWM(PID_Pwm.BackLeft);
 	GPIO_B9_PWM(PID_Pwm.BackRight);
-	if (loopCounter == 125) {
-		GPIO_PINToggle(GREEN_LED1);
-		/* Battery warning */
-		if (Battery < 11.1) {
-			GPIO_PINToggle(WARNING_LED);
-		}
-		loopCounter = 0;
-	}
 }
 
 void FlyingMode_STAND_BY(void) {
@@ -192,9 +212,7 @@ void FlyingMode_STAND_BY(void) {
 
 void CheckTimeOut(void) {
 	if (micros() - loop_timer > 4000)
-		ErrorIdx++;
-	if (ErrorIdx)
-		GPIO_PINLow(WARNING_LED);
+		ErrorTimeout = TRUE;
 }
 
 void LedWarning_NotInIdleMode(void) {
@@ -219,12 +237,10 @@ bool TX_Unavailable(void) {
 }
 
 void FlyingMode_IDLE(void) {
-	GPIO_PINHigh(GREEN_LED1);
 	GPIO_B6_PWM(1000);
 	GPIO_B7_PWM(1000);
 	GPIO_B8_PWM(1000);
 	GPIO_B9_PWM(1000);
-	PID_Reset();
 }
 
 void ESC_Clibration(void) {

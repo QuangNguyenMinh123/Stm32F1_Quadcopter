@@ -70,14 +70,9 @@ typedef struct MPU6050_Data_Type{
 /*******************************************************************************
  * Global variables
  ******************************************************************************/
-extern double Pitch;
-extern double Roll;
-extern double Yaw;
-extern double Pitch_Gyro;
-extern double Roll_Gyro;
+extern double Angle_Pitch;
+extern double Angle_Roll;
 extern double Yaw_Gyro;
-extern double Pitch_Acc;
-extern double Roll_Acc;
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -87,4 +82,5 @@ void MPU6050_Init (void);
 void MPU6050_getPara (void);
 void MPU6050_Calibration (void);
 void MPU6050_CalculateAngle(void);
+void MPU6050_AngleReset(void);
 #endif   /* _MPU6050_H */
