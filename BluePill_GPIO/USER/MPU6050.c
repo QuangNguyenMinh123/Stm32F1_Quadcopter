@@ -5,7 +5,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define MPU6050_Raw_DATA_TYPE	signed short int
+
 #define ui32					uint32_t
 #define CALIBRATION_TIMES		2000
 #define DELTA					0.9996
@@ -17,12 +17,12 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-static MPU6050_Raw_DATA_TYPE Accel_X_Raw = 0;
-static MPU6050_Raw_DATA_TYPE Accel_Y_Raw = 0;
-static MPU6050_Raw_DATA_TYPE Accel_Z_Raw = 0;
-static MPU6050_Raw_DATA_TYPE Gyro_X_Raw = 0;
-static MPU6050_Raw_DATA_TYPE Gyro_Y_Raw = 0;
-static MPU6050_Raw_DATA_TYPE Gyro_Z_Raw = 0;
+ MPU6050_Raw_DATA_TYPE Accel_X_Raw = 0;
+ MPU6050_Raw_DATA_TYPE Accel_Y_Raw = 0;
+ MPU6050_Raw_DATA_TYPE Accel_Z_Raw = 0;
+ MPU6050_Raw_DATA_TYPE Gyro_X_Raw = 0;
+ MPU6050_Raw_DATA_TYPE Gyro_Y_Raw = 0;
+ MPU6050_Raw_DATA_TYPE Gyro_Z_Raw = 0;
 static uint8_t Buffer_data[14];
 static MPU6050_Data_Type MPU6050_RawData;
 /*****************************ACCELEROMETER VARIABLE***************************/
@@ -66,7 +66,6 @@ void MPU6050_Init (void)
 	MPU6050_Write(MPU6050_ADDR, PWR_MGMT_1_REG, 0x00);		/* 0x6B */
 	MPU6050_Write(MPU6050_ADDR, GYRO_CONFIG_REG, 0x08);		/* 0x1B */
 	MPU6050_Write(MPU6050_ADDR, ACCEL_CONFIG_REG, 0x10);	/* 0x1C */
-	MPU6050_Write(MPU6050_ADDR, MPU6050_CONFIG, 0x03);
 }
 
 void MPU6050_getPara (void)
@@ -93,8 +92,8 @@ void MPU6050_CalculateAngle (void) {
 	Angle_Pitch	+= Gyro_X_Raw * 0.0000611;
 	Angle_Roll 	+= Gyro_Y_Raw * 0.0000611;
 	
-	Angle_Pitch += Angle_Roll  * sin(Gyro_Z_Raw * 0.000001066);
-	Angle_Roll 	-= Angle_Pitch * sin(Gyro_Z_Raw * 0.000001066);
+	Angle_Pitch -= Angle_Roll  * sin(Gyro_Z_Raw * 0.000001066);
+	Angle_Roll 	+= Angle_Pitch * sin(Gyro_Z_Raw * 0.000001066);
 	
 	TotalVector = Accel_X_Raw*Accel_X_Raw + Accel_Y_Raw*Accel_Y_Raw + 
 				Accel_Z_Raw*Accel_Z_Raw;
@@ -113,10 +112,6 @@ void MPU6050_CalculateAngle (void) {
 		Angle_Pitch = Angle_Pitch * DELTA + angle_pitch_acc * (1.0 - DELTA);
 		Angle_Roll = Angle_Roll * DELTA + angle_roll_acc * (1.0 - DELTA);
 	}
-	/* angle_pitch_output = Roll */
-	angle_pitch_output = angle_pitch_output * 0.9 + Angle_Pitch * 0.1;
-	/* angle_roll_output = Pitch */
-	angle_roll_output = angle_roll_output * 0.9 + Angle_Roll * 0.1;
 }
 
 void MPU6050_Calibration (void) {

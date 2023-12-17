@@ -27,17 +27,68 @@ Project File Date:  12/07/2023
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target 1'
-../USER/main.c(45): warning: no previous extern declaration for non-static variable 'Battery' [-Wmissing-variable-declarations]
-double Battery = 0;
-       ^
-../USER/main.c(45): note: declare 'static' if the variable is not intended to be used outside of this translation unit
-double Battery = 0;
-^
-1 warning generated.
-compiling main.c...
+../USER/MPU6050.c(20): warning: no previous extern declaration for non-static variable 'Accel_X_Raw' [-Wmissing-variable-declarations]
+ MPU6050_Raw_DATA_TYPE Accel_X_Raw = 0;
+                       ^
+../USER/MPU6050.c(20): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+ MPU6050_Raw_DATA_TYPE Accel_X_Raw = 0;
+ ^
+../USER/MPU6050.h(8): note: expanded from macro 'MPU6050_Raw_DATA_TYPE'
+#define MPU6050_Raw_DATA_TYPE   signed short int
+                                ^
+../USER/MPU6050.c(21): warning: no previous extern declaration for non-static variable 'Accel_Y_Raw' [-Wmissing-variable-declarations]
+ MPU6050_Raw_DATA_TYPE Accel_Y_Raw = 0;
+                       ^
+../USER/MPU6050.c(21): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+ MPU6050_Raw_DATA_TYPE Accel_Y_Raw = 0;
+ ^
+../USER/MPU6050.h(8): note: expanded from macro 'MPU6050_Raw_DATA_TYPE'
+#define MPU6050_Raw_DATA_TYPE   signed short int
+                                ^
+../USER/MPU6050.c(22): warning: no previous extern declaration for non-static variable 'Accel_Z_Raw' [-Wmissing-variable-declarations]
+ MPU6050_Raw_DATA_TYPE Accel_Z_Raw = 0;
+                       ^
+../USER/MPU6050.c(22): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+ MPU6050_Raw_DATA_TYPE Accel_Z_Raw = 0;
+ ^
+../USER/MPU6050.h(8): note: expanded from macro 'MPU6050_Raw_DATA_TYPE'
+#define MPU6050_Raw_DATA_TYPE   signed short int
+                                ^
+../USER/MPU6050.c(23): warning: no previous extern declaration for non-static variable 'Gyro_X_Raw' [-Wmissing-variable-declarations]
+ MPU6050_Raw_DATA_TYPE Gyro_X_Raw = 0;
+                       ^
+../USER/MPU6050.c(23): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+ MPU6050_Raw_DATA_TYPE Gyro_X_Raw = 0;
+ ^
+../USER/MPU6050.h(8): note: expanded from macro 'MPU6050_Raw_DATA_TYPE'
+#define MPU6050_Raw_DATA_TYPE   signed short int
+                                ^
+../USER/MPU6050.c(24): warning: no previous extern declaration for non-static variable 'Gyro_Y_Raw' [-Wmissing-variable-declarations]
+ MPU6050_Raw_DATA_TYPE Gyro_Y_Raw = 0;
+                       ^
+../USER/MPU6050.c(24): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+ MPU6050_Raw_DATA_TYPE Gyro_Y_Raw = 0;
+ ^
+../USER/MPU6050.h(8): note: expanded from macro 'MPU6050_Raw_DATA_TYPE'
+#define MPU6050_Raw_DATA_TYPE   signed short int
+                                ^
+../USER/MPU6050.c(25): warning: no previous extern declaration for non-static variable 'Gyro_Z_Raw' [-Wmissing-variable-declarations]
+ MPU6050_Raw_DATA_TYPE Gyro_Z_Raw = 0;
+                       ^
+../USER/MPU6050.c(25): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+ MPU6050_Raw_DATA_TYPE Gyro_Z_Raw = 0;
+ ^
+../USER/MPU6050.h(8): note: expanded from macro 'MPU6050_Raw_DATA_TYPE'
+#define MPU6050_Raw_DATA_TYPE   signed short int
+                                ^
+../USER/MPU6050.c(123): warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
+        uint32_t Gyro_X_Cal = 0;
+                 ^
+7 warnings generated.
+compiling MPU6050.c...
 linking...
-Program Size: Code=20308 RO-data=644 RW-data=4 ZI-data=2172  
-".\Objects\BluePill_GPIO.axf" - 0 Error(s), 1 Warning(s).
+Program Size: Code=20916 RO-data=644 RW-data=88 ZI-data=2184  
+".\Objects\BluePill_GPIO.axf" - 0 Error(s), 7 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -93,7 +144,7 @@ Package Vendor: Keil
    * Component: Keil::Device:StdPeriph Drivers:RCC:3.6.0
       Include file:  Device/StdPeriph_Driver/inc/stm32f10x_rcc.h
       Source file:   Device/StdPeriph_Driver/src/stm32f10x_rcc.c
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

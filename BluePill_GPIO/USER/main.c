@@ -48,6 +48,27 @@ static uint8_t RedLedCnt = 0;
 #if (TUNING_PID == ON)
 char buffer[10];
 #endif
+double roll_level_adjust, pitch_level_adjust;
+double pid_error_temp;
+double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
+double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
+double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
+double pid_p_gain_roll = 1.3;               //Gain setting for the pitch and roll P-controller (default = 1.3).
+double pid_i_gain_roll = 0.04;              //Gain setting for the pitch and roll I-controller (default = 0.04).
+double pid_d_gain_roll = 18.0;              //Gain setting for the pitch and roll D-controller (default = 18.0).
+int pid_max_roll = 400;                    //Maximum output of the PID-controller (+/-).
+
+double pid_p_gain_pitch = 1.3;  //Gain setting for the pitch P-controller.
+double pid_i_gain_pitch = 0.04;  //Gain setting for the pitch I-controller.
+double pid_d_gain_pitch = 18.0;  //Gain setting for the pitch D-controller.
+int pid_max_pitch = 400;          //Maximum output of the PID-controller (+/-).
+
+double pid_p_gain_yaw = 4.0;                //Gain setting for the pitch P-controller (default = 4.0).
+double pid_i_gain_yaw = 0.02;               //Gain setting for the pitch I-controller (default = 0.02).
+double pid_d_gain_yaw = 0.0;                //Gain setting for the pitch D-controller (default = 0.0).
+int pid_max_yaw = 400; 
+uint16_t throttle;
+uint16_t FR, RR, RL, FL;
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -66,6 +87,12 @@ void ESC_Clibration(void);
 extern double PID_OutputPitch ;
 extern double PID_OutputRoll ;
 extern double PID_OutputYaw ;
+extern MPU6050_Raw_DATA_TYPE Accel_X_Raw;
+extern MPU6050_Raw_DATA_TYPE Accel_Y_Raw;
+extern MPU6050_Raw_DATA_TYPE Accel_Z_Raw;
+extern MPU6050_Raw_DATA_TYPE Gyro_X_Raw;
+extern MPU6050_Raw_DATA_TYPE Gyro_Y_Raw;
+extern MPU6050_Raw_DATA_TYPE Gyro_Z_Raw;
 int main(void) {
 	/*SystemCoreClockUpdate();*/
 	
@@ -82,38 +109,113 @@ int main(void) {
 	while (1) {
 		loopCounter++;
 		MPU6050_CalculateAngle();
-		Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
-		PID_Calculate(&Angle_Pitch, &Angle_Roll, &Yaw_Gyro, &GPIO_PulseWidth, &Battery);
+		gyro_roll_input = (gyro_roll_input * 0.7) + (((double)Gyro_Y_Raw / 65.5) * 0.3);   
+		gyro_pitch_input = (gyro_pitch_input * 0.7) + (((double)Gyro_X_Raw / 65.5) * 0.3);
+		gyro_yaw_input = (gyro_yaw_input * 0.7) + (((double)Gyro_Z_Raw / 65.5) * 0.3);  
+		pitch_level_adjust = Angle_Pitch * 15;
+		roll_level_adjust = Angle_Roll * 15;
+		
+		
 		FlyingState = GetFlyingState();
 		if (PreviousFlyingState == IDLE && FlyingState == TAKE_OFF) {
 			PID_Reset();
 			MPU6050_AngleReset();
-			
 		}
+		pid_roll_setpoint = 0;
+		//We need a little dead band of 16us for better results.
+		if (GPIO_PulseWidth.Roll > 1508)pid_roll_setpoint = GPIO_PulseWidth.Roll - 1508;
+		else if (GPIO_PulseWidth.Roll < 1492)pid_roll_setpoint = GPIO_PulseWidth.Roll - 1492;
+
+		pid_roll_setpoint -= roll_level_adjust;                                          //Subtract the angle correction from the standardized receiver roll input value.
+		pid_roll_setpoint /= 3.0;                                                        //Divide the setpoint for the PID roll controller by 3 to get angles in degrees.
+
+
+		//The PID set point in degrees per second is determined by the pitch receiver input.
+		//In the case of deviding by 3 the max pitch rate is aprox 164 degrees per second ( (500-8)/3 = 164d/s ).
+		pid_pitch_setpoint = 0;
+		//We need a little dead band of 16us for better results.
+		if (GPIO_PulseWidth.Pitch > 1508)pid_pitch_setpoint = GPIO_PulseWidth.Pitch - 1508;
+		else if (GPIO_PulseWidth.Pitch < 1492)pid_pitch_setpoint = GPIO_PulseWidth.Pitch - 1492;
+
+		pid_pitch_setpoint -= pitch_level_adjust;                                        //Subtract the angle correction from the standardized receiver pitch input value.
+		pid_pitch_setpoint /= 3.0;                                                       //Divide the setpoint for the PID pitch controller by 3 to get angles in degrees.
+
+		//The PID set point in degrees per second is determined by the yaw receiver input.
+		//In the case of deviding by 3 the max yaw rate is aprox 164 degrees per second ( (500-8)/3 = 164d/s ).
+		pid_yaw_setpoint = 0;
+		//We need a little dead band of 16us for better results.
+		if (GPIO_PulseWidth.Throttle > 1050) { //Do not yaw when turning off the motors.
+		if (GPIO_PulseWidth.Yaw > 1508)pid_yaw_setpoint = (GPIO_PulseWidth.Yaw - 1508) / 3.0;
+		else if (GPIO_PulseWidth.Yaw < 1492)pid_yaw_setpoint = (GPIO_PulseWidth.Yaw - 1492) / 3.0;
+		}
+
+		//Roll calculations
+		pid_error_temp = gyro_roll_input - pid_roll_setpoint;
+		pid_i_mem_roll += pid_i_gain_roll * pid_error_temp;
+		if(pid_i_mem_roll > pid_max_roll)pid_i_mem_roll = pid_max_roll;
+		else if(pid_i_mem_roll < pid_max_roll * -1)pid_i_mem_roll = pid_max_roll * -1;
+
+		pid_output_roll = pid_p_gain_roll * pid_error_temp + pid_i_mem_roll + pid_d_gain_roll * (pid_error_temp - pid_last_roll_d_error);
+		if(pid_output_roll > pid_max_roll)pid_output_roll = pid_max_roll;
+		else if(pid_output_roll < pid_max_roll * -1)pid_output_roll = pid_max_roll * -1;
+
+		pid_last_roll_d_error = pid_error_temp;
+
+		//Pitch calculations
+		pid_error_temp = gyro_pitch_input - pid_pitch_setpoint;
+		pid_i_mem_pitch += pid_i_gain_pitch * pid_error_temp;
+		if(pid_i_mem_pitch > pid_max_pitch)pid_i_mem_pitch = pid_max_pitch;
+		else if(pid_i_mem_pitch < pid_max_pitch * -1)pid_i_mem_pitch = pid_max_pitch * -1;
+
+		pid_output_pitch = pid_p_gain_pitch * pid_error_temp + pid_i_mem_pitch + pid_d_gain_pitch * (pid_error_temp - pid_last_pitch_d_error);
+		if(pid_output_pitch > pid_max_pitch)pid_output_pitch = pid_max_pitch;
+		else if(pid_output_pitch < pid_max_pitch * -1)pid_output_pitch = pid_max_pitch * -1;
+
+		pid_last_pitch_d_error = pid_error_temp;
+
+		//Yaw calculations
+		pid_error_temp = gyro_yaw_input - pid_yaw_setpoint;
+		pid_i_mem_yaw += pid_i_gain_yaw * pid_error_temp;
+		if(pid_i_mem_yaw > pid_max_yaw)pid_i_mem_yaw = pid_max_yaw;
+		else if(pid_i_mem_yaw < pid_max_yaw * -1)pid_i_mem_yaw = pid_max_yaw * -1;
+
+		pid_output_yaw = pid_p_gain_yaw * pid_error_temp + pid_i_mem_yaw + pid_d_gain_yaw * (pid_error_temp - pid_last_yaw_d_error);
+		if(pid_output_yaw > pid_max_yaw)pid_output_yaw = pid_max_yaw;
+		else if(pid_output_yaw < pid_max_yaw * -1)pid_output_yaw = pid_max_yaw * -1;
+
+		pid_last_yaw_d_error = pid_error_temp;
+		
+		throttle = GPIO_PulseWidth.Throttle;
+		Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
 		if (FlyingState == TAKE_OFF) {
-			if (GPIO_PulseWidth.Throttle > 1800)
-				GPIO_PulseWidth.Throttle = 1800;
-			/* Sum up */
-			PID_Pwm.FrontRight = GPIO_PulseWidth.Throttle - (ui16)PID_OutputPitch 
-				+ (ui16)PID_OutputRoll - (ui16)PID_OutputYaw;
-			PID_Pwm.FrontLeft  = GPIO_PulseWidth.Throttle - (ui16)PID_OutputPitch
-				- (ui16)PID_OutputRoll + (ui16)PID_OutputYaw;
-			PID_Pwm.BackLeft   = GPIO_PulseWidth.Throttle + (ui16)PID_OutputPitch
-				- (ui16)PID_OutputRoll - (ui16)PID_OutputYaw;
-			PID_Pwm.BackRight  = GPIO_PulseWidth.Throttle + (ui16)PID_OutputPitch
-				+ (ui16)PID_OutputRoll + (ui16)PID_OutputYaw;
-			FlyingMode_TAKE_OFF();
-		}
-		else {
-			PID_Pwm.FrontRight 	= 1000;
-			PID_Pwm.FrontLeft	= 1000;
-			PID_Pwm.BackLeft	= 1000;
-			PID_Pwm.BackRight	= 1000;
-		}
-		GPIO_B6_PWM(PID_Pwm.FrontRight);
-		GPIO_B7_PWM(PID_Pwm.FrontLeft);
-		GPIO_B8_PWM(PID_Pwm.BackLeft);
-		GPIO_B9_PWM(PID_Pwm.BackRight);
+			if (throttle > 1800) throttle = 1800;                                          //We need some room to keep full control at full throttle.
+			FR = throttle - pid_output_pitch + pid_output_roll - pid_output_yaw;        //Calculate the pulse for esc 1 (front-right - CCW).
+			RR = throttle + pid_output_pitch + pid_output_roll + pid_output_yaw;        //Calculate the pulse for esc 2 (rear-right - CW).
+			RL = throttle + pid_output_pitch - pid_output_roll - pid_output_yaw;        //Calculate the pulse for esc 3 (rear-left - CCW).
+			FL = throttle - pid_output_pitch - pid_output_roll + pid_output_yaw;        //Calculate the pulse for esc 4 (front-left - CW).
+
+			if (FR < 1100) FR = 1100;                                                //Keep the motors running.
+			if (RR < 1100) RR = 1100;                                                //Keep the motors running.
+			if (RL < 1100) RL = 1100;                                                //Keep the motors running.
+			if (FL < 1100) FL = 1100;                                                //Keep the motors running.
+
+			if (FR > 2000)FR = 2000;                                                 //Limit the esc-1 pulse to 2000us.
+			if (RR > 2000)RR = 2000;                                                 //Limit the esc-2 pulse to 2000us.
+			if (RL > 2000)RL = 2000;                                                 //Limit the esc-3 pulse to 2000us.
+			if (FL > 2000)FL = 2000;                                                 //Limit the esc-4 pulse to 2000us.
+		  }
+
+		  else {
+			FR = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-1.
+			RR = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-2.
+			RL = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-3.
+			FL = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-4.
+		  }
+		GPIO_B6_PWM(FR);
+		GPIO_B7_PWM(FL);
+		GPIO_B8_PWM(RL);
+		GPIO_B9_PWM(RR);
+		TIM4->CNT = 5000;
 #if (TUNING_PID == ON)
 		sprintf(buffer, "%.2f",angle_pitch_acc); 
 		UART1_sendStr("Pitch:");
