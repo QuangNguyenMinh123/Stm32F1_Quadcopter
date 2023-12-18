@@ -111,10 +111,12 @@ int main(void) {
 	loop_timer = micros();
 	while (1) {
 		loopCounter++;
-		MPU6050_CalculateAngle();
+		MPU6050_getPara();
 		gyro_roll_input = (gyro_roll_input * 0.7) + (((double)Gyro_Y_Raw / 65.5) * 0.3);   
 		gyro_pitch_input = (gyro_pitch_input * 0.7) + (((double)Gyro_X_Raw / 65.5) * 0.3);
 		gyro_yaw_input = (gyro_yaw_input * 0.7) + (((double)Gyro_Z_Raw / 65.5) * 0.3);  
+		
+		MPU6050_CalculateAngle();
 		
 		pitch_level_adjust = Angle_Pitch * 15;
 		roll_level_adjust = Angle_Roll * 15;
@@ -154,7 +156,7 @@ int main(void) {
 		else if (GPIO_PulseWidth.Roll < 1492)pid_roll_setpoint = GPIO_PulseWidth.Roll - 1492;
 
 		pid_roll_setpoint -= roll_level_adjust;                                          //Subtract the angle correction from the standardized receiver roll input value.
-		pid_roll_setpoint /= 3.0;                                                        //Divide the setpoint for the PID roll controller by 3 to get angles in degrees.
+		pid_roll_setpoint /= 6.0;                                                        //Divide the setpoint for the PID roll controller by 3 to get angles in degrees.
 
 
 		//The PID set point in degrees per second is determined by the pitch receiver input.
@@ -165,15 +167,15 @@ int main(void) {
 		else if (GPIO_PulseWidth.Pitch < 1492)pid_pitch_setpoint = GPIO_PulseWidth.Pitch - 1492;
 
 		pid_pitch_setpoint -= pitch_level_adjust;                                        //Subtract the angle correction from the standardized receiver pitch input value.
-		pid_pitch_setpoint /= 3.0;                                                       //Divide the setpoint for the PID pitch controller by 3 to get angles in degrees.
+		pid_pitch_setpoint /= 6.0;                                                       //Divide the setpoint for the PID pitch controller by 3 to get angles in degrees.
 
 		//The PID set point in degrees per second is determined by the yaw receiver input.
 		//In the case of deviding by 3 the max yaw rate is aprox 164 degrees per second ( (500-8)/3 = 164d/s ).
 		pid_yaw_setpoint = 0;
 		//We need a little dead band of 16us for better results.
 		if (GPIO_PulseWidth.Throttle > 1050) { //Do not yaw when turning off the motors.
-			if (GPIO_PulseWidth.Yaw > 1508)pid_yaw_setpoint = (GPIO_PulseWidth.Yaw - 1508) / 3.0;
-			else if (GPIO_PulseWidth.Yaw < 1492)pid_yaw_setpoint = (GPIO_PulseWidth.Yaw - 1492) / 3.0;
+			if (GPIO_PulseWidth.Yaw > 1508)pid_yaw_setpoint = (GPIO_PulseWidth.Yaw - 1508) / 6.0;
+			else if (GPIO_PulseWidth.Yaw < 1492)pid_yaw_setpoint = (GPIO_PulseWidth.Yaw - 1492) / 6.0;
 		}
 
 		//Roll calculations

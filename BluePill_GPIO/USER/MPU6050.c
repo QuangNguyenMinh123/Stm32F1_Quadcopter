@@ -63,9 +63,9 @@ void MPU6050_Init (void)
 	MPU6050_RawData.Acc_X = 0.0;
 	MPU6050_RawData.Acc_Y = 0.0;
 	MPU6050_RawData.Acc_Z = 0.0;
-	MPU6050_Write(MPU6050_ADDR, PWR_MGMT_1_REG, 0x00);		/* 0x6B */
-	MPU6050_Write(MPU6050_ADDR, GYRO_CONFIG_REG, 0x08);		/* 0x1B */
-	MPU6050_Write(MPU6050_ADDR, ACCEL_CONFIG_REG, 0x10);	/* 0x1C */
+	MPU6050_Write(MPU6050_ADDR, 0x6B, 0x00);		/* 0x6B */
+	MPU6050_Write(MPU6050_ADDR, 0x1B, 0x08);		/* 0x1B */
+	MPU6050_Write(MPU6050_ADDR, 0x1C, 0x10);	/* 0x1C */
 	MPU6050_Write(MPU6050_ADDR, 0x1A, 0x03);				/* 0x1C */
 }
 
@@ -91,7 +91,7 @@ void MPU6050_getPara (void)
 }	
 	
 void MPU6050_CalculateAngle (void) {
-	MPU6050_getPara();
+	//MPU6050_getPara();
 	
 	Angle_Pitch	+= Gyro_Y_Raw * 0.0000611;
 	Angle_Roll 	+= Gyro_X_Raw * 0.0000611;
@@ -102,28 +102,22 @@ void MPU6050_CalculateAngle (void) {
 	TotalVector = Accel_X_Raw*Accel_X_Raw + Accel_Y_Raw*Accel_Y_Raw + 
 				Accel_Z_Raw*Accel_Z_Raw;
 	
-	if (Accel_X_Raw > 4096)
-		Accel_X_Raw = 4096;
-    if (Accel_X_Raw < -4096)
-		Accel_X_Raw = -4096;
-    if (Accel_Y_Raw > 4096)
-		Accel_Y_Raw = 4096;
-    if (Accel_Y_Raw < -4096)
-		Accel_Y_Raw = -4096;
-	angle_pitch_acc = asin((double)((double)Accel_X_Raw) / 
-				4096) * 57.296;
-	angle_roll_acc = asin((double)((double)Accel_Y_Raw) / 
-				4096) * 57.296;
-	
-	if (firstStart == TRUE) {
+	if (Accel_X_Raw*Accel_X_Raw < TotalVector) {
+		angle_pitch_acc = asin((double)((double)Accel_X_Raw) / TotalVector) * 57.296;
+	}
+	if (Accel_Y_Raw*Accel_Y_Raw < TotalVector) {
+		angle_roll_acc = asin((double)((double)Accel_Y_Raw) / TotalVector) * 57.296;
+	}
+	/*if (firstStart == TRUE) {
 		firstStart = FALSE;
 		Angle_Pitch = angle_pitch_acc;
 		Angle_Roll = angle_roll_acc;
 	}
 	else {
-		Angle_Pitch = Angle_Pitch * DELTA + angle_pitch_acc * (1.0 - DELTA);
-		Angle_Roll = Angle_Roll * DELTA + angle_roll_acc * (1.0 - DELTA);
-	}
+		
+	}*/
+	Angle_Pitch = Angle_Pitch * DELTA + angle_pitch_acc * (1.0 - DELTA);
+	Angle_Roll = Angle_Roll * DELTA + angle_roll_acc * (1.0 - DELTA);
 	
 }
 
