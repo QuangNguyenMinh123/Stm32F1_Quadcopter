@@ -15,8 +15,8 @@
 #define TIMEOUT_PINLOW			3
 #define ON						1
 #define OFF						0
-#define TUNING_PID				OFF
-#if (TUNING_PID == ON)
+#define UART_ENABLE				OFF
+#if (UART_ENABLE == ON)
 #include "UART.h"
 #endif
 #define PWM_FREQ				250
@@ -45,7 +45,8 @@ static bool ErrorTimeout = FALSE;
 double Battery = 0;
 static uint8_t Error = 0;
 static uint8_t RedLedCnt = 0;
-#if (TUNING_PID == ON)
+uint8_t start = 0;
+#if (UART_ENABLE == ON)
 char buffer[10];
 #endif
 double roll_level_adjust, pitch_level_adjust;
@@ -56,12 +57,12 @@ double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last
 double pid_p_gain_roll = 1.3;               //Gain setting for the pitch and roll P-controller (default = 1.3).
 double pid_i_gain_roll = 0.04;              //Gain setting for the pitch and roll I-controller (default = 0.04).
 double pid_d_gain_roll = 18.0;              //Gain setting for the pitch and roll D-controller (default = 18.0).
-int pid_max_roll = 400;                    //Maximum output of the PID-controller (+/-).
+int pid_max_roll = 200;                    //Maximum output of the PID-controller (+/-).
 
 double pid_p_gain_pitch = 1.3;  //Gain setting for the pitch P-controller.
 double pid_i_gain_pitch = 0.04;  //Gain setting for the pitch I-controller.
 double pid_d_gain_pitch = 18.0;  //Gain setting for the pitch D-controller.
-int pid_max_pitch = 400;          //Maximum output of the PID-controller (+/-).
+int pid_max_pitch = 200;          //Maximum output of the PID-controller (+/-).
 
 double pid_p_gain_yaw = 4.0;                //Gain setting for the pitch P-controller (default = 4.0).
 double pid_i_gain_yaw = 0.02;               //Gain setting for the pitch I-controller (default = 0.02).
@@ -69,6 +70,7 @@ double pid_d_gain_yaw = 0.0;                //Gain setting for the pitch D-contr
 int pid_max_yaw = 400; 
 uint16_t throttle;
 uint16_t FR, RR, RL, FL;
+uint16_t FrontRight, BackRight, BackLeft, FrontLeft;
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -101,9 +103,10 @@ int main(void) {
 	if (GPIO_PulseWidth.Throttle >= 1900) {
 		ESC_Clibration();
 	}
+	/*
 	while (GetFlyingState() != IDLE || TX_Unavailable()) {
 		LedWarning_NotInIdleMode();
-	}
+	}*/
 	GPIO_PINHigh(WARNING_LED);
 	loop_timer = micros();
 	while (1) {
@@ -112,15 +115,39 @@ int main(void) {
 		gyro_roll_input = (gyro_roll_input * 0.7) + (((double)Gyro_Y_Raw / 65.5) * 0.3);   
 		gyro_pitch_input = (gyro_pitch_input * 0.7) + (((double)Gyro_X_Raw / 65.5) * 0.3);
 		gyro_yaw_input = (gyro_yaw_input * 0.7) + (((double)Gyro_Z_Raw / 65.5) * 0.3);  
+		
 		pitch_level_adjust = Angle_Pitch * 15;
 		roll_level_adjust = Angle_Roll * 15;
-		
-		
+		/*
 		FlyingState = GetFlyingState();
 		if (PreviousFlyingState == IDLE && FlyingState == TAKE_OFF) {
 			PID_Reset();
 			MPU6050_AngleReset();
 		}
+		*/
+		
+		//For starting the motors: throttle low and yaw left (step 1).
+		if (GPIO_PulseWidth.Throttle < 1050 && GPIO_PulseWidth.Yaw < 1050)start = 1;
+		//When yaw stick is back in the center position start the motors (step 2).
+		if (start == 1 && GPIO_PulseWidth.Throttle < 1050 && GPIO_PulseWidth.Yaw > 1450) {
+			start = 2;
+			
+			Angle_Pitch = angle_pitch_acc;                                                 //Set the gyro pitch angle equal to the accelerometer pitch angle when the quadcopter is started.
+			Angle_Roll = angle_roll_acc;                                                   //Set the gyro roll angle equal to the accelerometer roll angle when the quadcopter is started.
+
+			//Reset the PID controllers for a bumpless start.
+			pid_i_mem_roll = 0;
+			pid_last_roll_d_error = 0;
+			pid_i_mem_pitch = 0;
+			pid_last_pitch_d_error = 0;
+			pid_i_mem_yaw = 0;
+			pid_last_yaw_d_error = 0;
+		}
+		//Stopping the motors: throttle low and yaw right.
+		if (start == 2 && GPIO_PulseWidth.Throttle < 1050 && GPIO_PulseWidth.Yaw > 1950) {
+			start = 0;                                                             //Turn on the green led.
+		}
+			
 		pid_roll_setpoint = 0;
 		//We need a little dead band of 16us for better results.
 		if (GPIO_PulseWidth.Roll > 1508)pid_roll_setpoint = GPIO_PulseWidth.Roll - 1508;
@@ -145,8 +172,8 @@ int main(void) {
 		pid_yaw_setpoint = 0;
 		//We need a little dead band of 16us for better results.
 		if (GPIO_PulseWidth.Throttle > 1050) { //Do not yaw when turning off the motors.
-		if (GPIO_PulseWidth.Yaw > 1508)pid_yaw_setpoint = (GPIO_PulseWidth.Yaw - 1508) / 3.0;
-		else if (GPIO_PulseWidth.Yaw < 1492)pid_yaw_setpoint = (GPIO_PulseWidth.Yaw - 1492) / 3.0;
+			if (GPIO_PulseWidth.Yaw > 1508)pid_yaw_setpoint = (GPIO_PulseWidth.Yaw - 1508) / 3.0;
+			else if (GPIO_PulseWidth.Yaw < 1492)pid_yaw_setpoint = (GPIO_PulseWidth.Yaw - 1492) / 3.0;
 		}
 
 		//Roll calculations
@@ -185,38 +212,56 @@ int main(void) {
 
 		pid_last_yaw_d_error = pid_error_temp;
 		
+		if (GPIO_PulseWidth.Aux1 >= 1250)	/* Urgent stop */
+			start = 0;
+			
 		throttle = GPIO_PulseWidth.Throttle;
 		Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
-		if (FlyingState == TAKE_OFF) {
+		if (start == 2) {
 			if (throttle > 1800) throttle = 1800;                                          //We need some room to keep full control at full throttle.
-			FR = throttle - pid_output_pitch + pid_output_roll - pid_output_yaw;        //Calculate the pulse for esc 1 (front-right - CCW).
-			RR = throttle + pid_output_pitch + pid_output_roll + pid_output_yaw;        //Calculate the pulse for esc 2 (rear-right - CW).
-			RL = throttle + pid_output_pitch - pid_output_roll - pid_output_yaw;        //Calculate the pulse for esc 3 (rear-left - CCW).
-			FL = throttle - pid_output_pitch - pid_output_roll + pid_output_yaw;        //Calculate the pulse for esc 4 (front-left - CW).
+			FR = throttle - (ui16)pid_output_pitch + (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 1 (front-right - CCW).
+			RR = throttle + (ui16)pid_output_pitch + (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 2 (rear-right - CW).
+			RL = throttle + (ui16)pid_output_pitch - (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 3 (rear-left - CCW).
+			FL = throttle - (ui16)pid_output_pitch - (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 4 (front-left - CW).
 
-			if (FR < 1100) FR = 1100;                                                //Keep the motors running.
-			if (RR < 1100) RR = 1100;                                                //Keep the motors running.
-			if (RL < 1100) RL = 1100;                                                //Keep the motors running.
-			if (FL < 1100) FL = 1100;                                                //Keep the motors running.
+			if (FR < MIN_THROTTLE) FR = MIN_THROTTLE;                                                //Keep the motors running.
+			if (RR < MIN_THROTTLE) RR = MIN_THROTTLE;                                                //Keep the motors running.
+			if (RL < MIN_THROTTLE) RL = MIN_THROTTLE;                                                //Keep the motors running.
+			if (FL < MIN_THROTTLE) FL = MIN_THROTTLE;                                                //Keep the motors running.
 
 			if (FR > 2000)FR = 2000;                                                 //Limit the esc-1 pulse to 2000us.
 			if (RR > 2000)RR = 2000;                                                 //Limit the esc-2 pulse to 2000us.
 			if (RL > 2000)RL = 2000;                                                 //Limit the esc-3 pulse to 2000us.
 			if (FL > 2000)FL = 2000;                                                 //Limit the esc-4 pulse to 2000us.
-		  }
-
-		  else {
+		}
+		else {
 			FR = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-1.
 			RR = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-2.
 			RL = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-3.
 			FL = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-4.
-		  }
-		GPIO_B6_PWM(FR);
-		GPIO_B7_PWM(FL);
-		GPIO_B8_PWM(RL);
-		GPIO_B9_PWM(RR);
+		}
+		
+		FrontRight = throttle - (ui16)pid_output_pitch + (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 1 (front-right - CCW).
+		BackRight = throttle + (ui16)pid_output_pitch + (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 2 (rear-right - CW).
+		BackLeft = throttle + (ui16)pid_output_pitch - (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 3 (rear-left - CCW).
+		FrontLeft = throttle - (ui16)pid_output_pitch - (ui16)pid_output_roll + (ui16)pid_output_yaw;        
+		
+		if (FrontRight < MIN_THROTTLE) FrontRight = MIN_THROTTLE;                                                //Keep the motors running.
+		if (BackRight < MIN_THROTTLE) BackRight = MIN_THROTTLE;                                                //Keep the motors running.
+		if (BackLeft < MIN_THROTTLE) BackLeft = MIN_THROTTLE;                                                //Keep the motors running.
+		if (FrontLeft < MIN_THROTTLE) FrontLeft = MIN_THROTTLE;                                                //Keep the motors running.
+
+		if (FrontRight > 2000)FrontRight = 2000;                                                 //Limit the esc-1 pulse to 2000us.
+		if (BackRight > 2000)BackRight = 2000;                                                 //Limit the esc-2 pulse to 2000us.
+		if (BackLeft > 2000)BackLeft = 2000;                                                 //Limit the esc-3 pulse to 2000us.
+		if (FrontLeft > 2000)FrontLeft = 2000;                                                 
+		
+		TIM4->CCR1 = FR;
+		TIM4->CCR2 = FL;
+		TIM4->CCR3 = RL;
+		TIM4->CCR4 = RR;
 		TIM4->CNT = 5000;
-#if (TUNING_PID == ON)
+#if (UART_ENABLE == ON)
 		sprintf(buffer, "%.2f",angle_pitch_acc); 
 		UART1_sendStr("Pitch:");
 		UART1_sendStr(buffer);
@@ -258,10 +303,10 @@ int main(void) {
 
 void System_Init(void) {
 	int i=0;
-	GPIO_SetPWM(IO_B6, PWM_FREQ);
-	GPIO_SetPWM(IO_B7, PWM_FREQ);
-	GPIO_SetPWM(IO_B8, PWM_FREQ);
-	GPIO_SetPWM(IO_B9, PWM_FREQ);
+	GPIO_SetPWM(IO_B6);
+	GPIO_SetPWM(IO_B7);
+	GPIO_SetPWM(IO_B8);
+	GPIO_SetPWM(IO_B9);
 	CLOCK_SystickInit();
 	GPIO_SetPWMMeasurement();
 	GPIO_SetOutPut(IO_C13, General_Push_Pull);
@@ -277,13 +322,10 @@ void System_Init(void) {
 		GPIO_PINToggle(WARNING_LED);
 		delay(100*MS);
 	}
-#if (TUNING_PID == ON)
+#if (UART_ENABLE == ON)
 	UART1_Init(UART_BAUDRATE_115200);
 #endif
 	I2C2_Init(I2C_SPEED_400);
-	if (LCD_Check()) {
-		LCD_Test();
-	}
 	MPU6050_Init();
 	MPU6050_Calibration();
 	

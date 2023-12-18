@@ -66,6 +66,7 @@ void MPU6050_Init (void)
 	MPU6050_Write(MPU6050_ADDR, PWR_MGMT_1_REG, 0x00);		/* 0x6B */
 	MPU6050_Write(MPU6050_ADDR, GYRO_CONFIG_REG, 0x08);		/* 0x1B */
 	MPU6050_Write(MPU6050_ADDR, ACCEL_CONFIG_REG, 0x10);	/* 0x1C */
+	MPU6050_Write(MPU6050_ADDR, 0x1A, 0x03);				/* 0x1C */
 }
 
 void MPU6050_getPara (void)
@@ -80,6 +81,9 @@ void MPU6050_getPara (void)
 	Gyro_Y_Raw = (MPU6050_Raw_DATA_TYPE)(Buffer_data[10] << 8 | Buffer_data [11]);
 	Gyro_Z_Raw = (MPU6050_Raw_DATA_TYPE)(Buffer_data[12] << 8 | Buffer_data [13]);
 	
+	Gyro_Y_Raw *= -1;
+	Gyro_Z_Raw *= -1;
+	
 	Gyro_X_Raw 	-= Gyro_X_Offset;
 	Gyro_Y_Raw 	-= Gyro_Y_Offset;
 	Gyro_Z_Raw 	-= Gyro_Z_Offset;
@@ -89,8 +93,8 @@ void MPU6050_getPara (void)
 void MPU6050_CalculateAngle (void) {
 	MPU6050_getPara();
 	
-	Angle_Pitch	+= Gyro_X_Raw * 0.0000611;
-	Angle_Roll 	+= Gyro_Y_Raw * 0.0000611;
+	Angle_Pitch	+= Gyro_Y_Raw * 0.0000611;
+	Angle_Roll 	+= Gyro_X_Raw * 0.0000611;
 	
 	Angle_Pitch -= Angle_Roll  * sin(Gyro_Z_Raw * 0.000001066);
 	Angle_Roll 	+= Angle_Pitch * sin(Gyro_Z_Raw * 0.000001066);
@@ -98,10 +102,18 @@ void MPU6050_CalculateAngle (void) {
 	TotalVector = Accel_X_Raw*Accel_X_Raw + Accel_Y_Raw*Accel_Y_Raw + 
 				Accel_Z_Raw*Accel_Z_Raw;
 	
-	angle_pitch_acc = asin((double)((double)Accel_Y_Raw) / 
-			((double)sqrt(TotalVector))) * 57.296;
-	angle_roll_acc = asin((double)((double)Accel_X_Raw) / 
-			((double)sqrt(TotalVector))) * -57.296;
+	if (Accel_X_Raw > 4096)
+		Accel_X_Raw = 4096;
+    if (Accel_X_Raw < -4096)
+		Accel_X_Raw = -4096;
+    if (Accel_Y_Raw > 4096)
+		Accel_Y_Raw = 4096;
+    if (Accel_Y_Raw < -4096)
+		Accel_Y_Raw = -4096;
+	angle_pitch_acc = asin((double)((double)Accel_X_Raw) / 
+				4096) * 57.296;
+	angle_roll_acc = asin((double)((double)Accel_Y_Raw) / 
+				4096) * 57.296;
 	
 	if (firstStart == TRUE) {
 		firstStart = FALSE;
@@ -112,6 +124,7 @@ void MPU6050_CalculateAngle (void) {
 		Angle_Pitch = Angle_Pitch * DELTA + angle_pitch_acc * (1.0 - DELTA);
 		Angle_Roll = Angle_Roll * DELTA + angle_roll_acc * (1.0 - DELTA);
 	}
+	
 }
 
 void MPU6050_Calibration (void) {

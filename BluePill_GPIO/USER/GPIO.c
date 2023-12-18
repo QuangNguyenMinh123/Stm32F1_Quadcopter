@@ -481,7 +481,7 @@ uint32_t GPIO_ReadAnalog(ADC_TypeDef *ADCx) {
 }
 
 /* GPIO PWM Module */
-void GPIO_SetPWM(IO_PIN PIN, uint32_t Frequency) {
+void GPIO_SetPWM(IO_PIN PIN) {
 	if ( (PIN > IO_B9) || (PIN < IO_B6) )
 	{
 		return;
@@ -512,7 +512,7 @@ void GPIO_SetPWM(IO_PIN PIN, uint32_t Frequency) {
 	}
 	if (TIM4->PSC == 0) {
 		TIM4->PSC = 71;
-		TIM4->ARR = (uint16_t) (1000000 / Frequency);
+		TIM4->ARR = 5000;
 	}
 }
 

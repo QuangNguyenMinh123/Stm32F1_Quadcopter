@@ -5,11 +5,11 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define MPU6050_Raw_DATA_TYPE	signed short int
-#define MPU6050_DEFAULT_ADR		0x68  	/* MPU6050 default i2c address */
-#define MPU6050_ID 				0x68 	/* The correct MPU6050_WHO_AM_I value */
-#define MPU6050_DEFAULT_ADR		0x68  	/* MPU6050 default i2c address */
-#define MPU6050_HIGH_ADR		0x69	/* MPU6050 i2c address with AD0 on high */
+#define MPU6050_Raw_DATA_TYPE		signed short int
+#define MPU6050_DEFAULT_ADR			0x68  	/* MPU6050 default i2c address */
+#define MPU6050_ID 					0x68 	/* The correct MPU6050_WHO_AM_I value */
+#define MPU6050_DEFAULT_ADR			0x68  	/* MPU6050 default i2c address */
+#define MPU6050_HIGH_ADR			0x69	/* MPU6050 i2c address with AD0 on high */
 /* Register adress */
 #define MPU6050_SELF_TEST_X     	0x0D 	/* Self test factory calibrated values register */
 #define MPU6050_SELF_TEST_Y     	0x0E   	/* Self test factory calibrated values register */

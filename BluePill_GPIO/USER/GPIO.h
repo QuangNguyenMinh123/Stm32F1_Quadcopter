@@ -208,7 +208,7 @@ uint32_t GPIO_ReadPIN(IO_PIN PIN);
 void GPIO_SetAnalog(ADC_PIN PIN);
 uint32_t GPIO_ReadAnalog(ADC_TypeDef *ADCx);
 /* GPIO PWM Module */
-void GPIO_SetPWM(IO_PIN PIN, uint32_t Frequency);
+void GPIO_SetPWM(IO_PIN PIN);
 void GPIO_B6_PWM(uint16_t PWMValue);
 void GPIO_B7_PWM(uint16_t PWMValue);
 void GPIO_B8_PWM(uint16_t PWMValue);
