@@ -78,6 +78,12 @@ extern double angle_pitch_output;
 extern double angle_roll_output;
 extern double angle_pitch_acc;
 extern double angle_roll_acc;
+extern MPU6050_Raw_DATA_TYPE Accel_X_Raw;
+extern MPU6050_Raw_DATA_TYPE Accel_Y_Raw;
+extern MPU6050_Raw_DATA_TYPE Accel_Z_Raw;
+extern MPU6050_Raw_DATA_TYPE Gyro_X_Raw;
+extern MPU6050_Raw_DATA_TYPE Gyro_Y_Raw;
+extern MPU6050_Raw_DATA_TYPE Gyro_Z_Raw;
 /*******************************************************************************
  * API
  ******************************************************************************/

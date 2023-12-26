@@ -43,8 +43,6 @@ double Yaw_Gyro = 0.0;
 
 double angle_pitch_output;
 double angle_roll_output;
-
-static bool firstStart = TRUE;
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -91,10 +89,10 @@ void MPU6050_getPara (void)
 }	
 	
 void MPU6050_CalculateAngle (void) {
-	//MPU6050_getPara();
+	/*MPU6050_getPara();*/
 	
-	Angle_Pitch	+= Gyro_Y_Raw * 0.0000611;
-	Angle_Roll 	+= Gyro_X_Raw * 0.0000611;
+	Angle_Pitch	+= (double) Gyro_Y_Raw * 0.0000611;
+	Angle_Roll 	+= (double) Gyro_X_Raw * 0.0000611;
 	
 	Angle_Pitch -= Angle_Roll  * sin(Gyro_Z_Raw * 0.000001066);
 	Angle_Roll 	+= Angle_Pitch * sin(Gyro_Z_Raw * 0.000001066);
@@ -124,12 +122,12 @@ void MPU6050_CalculateAngle (void) {
 void MPU6050_Calibration (void) {
 	uint16_t i_ui16;
 	unsigned uint32_t loop_time = 0U;
-	Gyro_X_Offset = 0;
-	Gyro_Y_Offset = 0;
-	Gyro_Z_Offset = 0;
 	uint32_t Gyro_X_Cal = 0;
 	uint32_t Gyro_Y_Cal = 0;
 	uint32_t Gyro_Z_Cal = 0;
+	Gyro_X_Offset = 0;
+	Gyro_Y_Offset = 0;
+	Gyro_Z_Offset = 0;
 	for (i_ui16 = 0; i_ui16 < CALIBRATION_TIMES; i_ui16++) {
 		loop_time = micros();
 		if (i_ui16 % 20 == 0)
