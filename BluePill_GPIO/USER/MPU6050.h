@@ -74,13 +74,8 @@ typedef struct MPU6050_Data_Type{
 extern double Angle_Pitch;
 extern double Angle_Roll;
 extern double Yaw_Gyro;
-extern double angle_pitch_output;
-extern double angle_roll_output;
 extern double angle_pitch_acc;
 extern double angle_roll_acc;
-extern MPU6050_Raw_DATA_TYPE Accel_X_Raw;
-extern MPU6050_Raw_DATA_TYPE Accel_Y_Raw;
-extern MPU6050_Raw_DATA_TYPE Accel_Z_Raw;
 extern MPU6050_Raw_DATA_TYPE Gyro_X_Raw;
 extern MPU6050_Raw_DATA_TYPE Gyro_Y_Raw;
 extern MPU6050_Raw_DATA_TYPE Gyro_Z_Raw;
@@ -93,5 +88,4 @@ void MPU6050_Init (void);
 void MPU6050_getPara (void);
 void MPU6050_Calibration (void);
 void MPU6050_CalculateAngle(void);
-void MPU6050_AngleReset(void);
 #endif   /* _MPU6050_H */

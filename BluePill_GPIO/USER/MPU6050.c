@@ -17,9 +17,9 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
- MPU6050_Raw_DATA_TYPE Accel_X_Raw = 0;
- MPU6050_Raw_DATA_TYPE Accel_Y_Raw = 0;
- MPU6050_Raw_DATA_TYPE Accel_Z_Raw = 0;
+static MPU6050_Raw_DATA_TYPE Accel_X_Raw = 0;
+static MPU6050_Raw_DATA_TYPE Accel_Y_Raw = 0;
+static MPU6050_Raw_DATA_TYPE Accel_Z_Raw = 0;
  MPU6050_Raw_DATA_TYPE Gyro_X_Raw = 0;
  MPU6050_Raw_DATA_TYPE Gyro_Y_Raw = 0;
  MPU6050_Raw_DATA_TYPE Gyro_Z_Raw = 0;
@@ -40,9 +40,6 @@ double Yaw_Gyro = 0.0;
 
  double angle_pitch_acc = 0.0;
  double angle_roll_acc = 0.0;
-
-double angle_pitch_output;
-double angle_roll_output;
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -141,11 +138,6 @@ void MPU6050_Calibration (void) {
 	Gyro_X_Offset 	= Gyro_X_Cal / CALIBRATION_TIMES;
 	Gyro_Y_Offset 	= Gyro_Y_Cal / CALIBRATION_TIMES;
 	Gyro_Z_Offset 	= Gyro_Z_Cal / CALIBRATION_TIMES;	
-}
-
-void MPU6050_AngleReset(void) {
-	Angle_Pitch = angle_pitch_acc;
-	Angle_Roll 	= angle_roll_acc;
 }
 /*******************************************************************************
  * EOF
