@@ -22,12 +22,280 @@ Dialog DLL:      TARMSTM.DLL V1.67.1.0
  
 <h2>Project:</h2>
 F:\Stm32F1_Quadcopter\BluePill_GPIO\PROJECT\BluePill_GPIO.uvprojx
-Project File Date:  12/07/2023
+Project File Date:  01/01/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.19', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target 1'
-".\Objects\BluePill_GPIO.axf" - 0 Error(s), 0 Warning(s).
+../USER/main.c(54): warning: no previous extern declaration for non-static variable 'pid_p_gain_roll' [-Wmissing-variable-declarations]
+double pid_p_gain_roll = 1.3;               //Gain setting for the pitch and roll P-controller (default = 1.3).
+       ^
+../USER/main.c(54): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_p_gain_roll = 1.3;               //Gain setting for the pitch and roll P-controller (default = 1.3).
+^
+../USER/main.c(54): warning: // comments are not allowed in this language [-Wcomment]
+double pid_p_gain_roll = 1.3;               //Gain setting for the pitch and roll P-controller (default = 1.3).
+                                            ^
+../USER/main.c(55): warning: no previous extern declaration for non-static variable 'pid_i_gain_roll' [-Wmissing-variable-declarations]
+double pid_i_gain_roll = 0.04;              //Gain setting for the pitch and roll I-controller (default = 0.04).
+       ^
+../USER/main.c(55): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_gain_roll = 0.04;              //Gain setting for the pitch and roll I-controller (default = 0.04).
+^
+../USER/main.c(56): warning: no previous extern declaration for non-static variable 'pid_d_gain_roll' [-Wmissing-variable-declarations]
+double pid_d_gain_roll = 18.0;              //Gain setting for the pitch and roll D-controller (default = 18.0).
+       ^
+../USER/main.c(56): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_d_gain_roll = 18.0;              //Gain setting for the pitch and roll D-controller (default = 18.0).
+^
+../USER/main.c(57): warning: no previous extern declaration for non-static variable 'pid_max_roll' [-Wmissing-variable-declarations]
+int pid_max_roll = 400;                    //Maximum output of the PID-controller (+/-).
+    ^
+../USER/main.c(57): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+int pid_max_roll = 400;                    //Maximum output of the PID-controller (+/-).
+^
+../USER/main.c(62): warning: no previous extern declaration for non-static variable 'pid_max_pitch' [-Wmissing-variable-declarations]
+int pid_max_pitch = 400;          //Maximum output of the PID-controller (+/-).
+    ^
+../USER/main.c(62): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+int pid_max_pitch = 400;          //Maximum output of the PID-controller (+/-).
+^
+../USER/main.c(64): warning: no previous extern declaration for non-static variable 'pid_p_gain_yaw' [-Wmissing-variable-declarations]
+double pid_p_gain_yaw = 4.0;                //Gain setting for the pitch P-controller (default = 4.0).
+       ^
+../USER/main.c(64): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_p_gain_yaw = 4.0;                //Gain setting for the pitch P-controller (default = 4.0).
+^
+../USER/main.c(65): warning: no previous extern declaration for non-static variable 'pid_i_gain_yaw' [-Wmissing-variable-declarations]
+double pid_i_gain_yaw = 0.02;               //Gain setting for the pitch I-controller (default = 0.02).
+       ^
+../USER/main.c(65): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_gain_yaw = 0.02;               //Gain setting for the pitch I-controller (default = 0.02).
+^
+../USER/main.c(66): warning: no previous extern declaration for non-static variable 'pid_d_gain_yaw' [-Wmissing-variable-declarations]
+double pid_d_gain_yaw = 0.0;                //Gain setting for the pitch D-controller (default = 0.0).
+       ^
+../USER/main.c(66): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_d_gain_yaw = 0.0;                //Gain setting for the pitch D-controller (default = 0.0).
+^
+../USER/main.c(67): warning: no previous extern declaration for non-static variable 'pid_max_yaw' [-Wmissing-variable-declarations]
+int pid_max_yaw = 400; 
+    ^
+../USER/main.c(67): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+int pid_max_yaw = 400; 
+^
+../USER/main.c(49): warning: no previous extern declaration for non-static variable 'roll_level_adjust' [-Wmissing-variable-declarations]
+double roll_level_adjust, pitch_level_adjust;
+       ^
+../USER/main.c(49): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double roll_level_adjust, pitch_level_adjust;
+^
+../USER/main.c(49): warning: no previous extern declaration for non-static variable 'pitch_level_adjust' [-Wmissing-variable-declarations]
+double roll_level_adjust, pitch_level_adjust;
+                          ^
+../USER/main.c(49): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double roll_level_adjust, pitch_level_adjust;
+^
+../USER/main.c(50): warning: no previous extern declaration for non-static variable 'pid_error_temp' [-Wmissing-variable-declarations]
+double pid_error_temp;
+       ^
+../USER/main.c(50): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_error_temp;
+^
+../USER/main.c(51): warning: no previous extern declaration for non-static variable 'pid_i_mem_roll' [-Wmissing-variable-declarations]
+double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
+       ^
+../USER/main.c(51): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
+^
+../USER/main.c(51): warning: no previous extern declaration for non-static variable 'pid_roll_setpoint' [-Wmissing-variable-declarations]
+double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
+                       ^
+../USER/main.c(51): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
+^
+../USER/main.c(51): warning: no previous extern declaration for non-static variable 'gyro_roll_input' [-Wmissing-variable-declarations]
+double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
+                                          ^
+../USER/main.c(51): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
+^
+../USER/main.c(51): warning: no previous extern declaration for non-static variable 'pid_output_roll' [-Wmissing-variable-declarations]
+double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
+                                                           ^
+../USER/main.c(51): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
+^
+../USER/main.c(51): warning: no previous extern declaration for non-static variable 'pid_last_roll_d_error' [-Wmissing-variable-declarations]
+double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
+                                                                            ^
+../USER/main.c(51): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
+^
+../USER/main.c(52): warning: no previous extern declaration for non-static variable 'pid_i_mem_pitch' [-Wmissing-variable-declarations]
+double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
+       ^
+../USER/main.c(52): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
+^
+../USER/main.c(52): warning: no previous extern declaration for non-static variable 'pid_pitch_setpoint' [-Wmissing-variable-declarations]
+double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
+                        ^
+../USER/main.c(52): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
+^
+../USER/main.c(52): warning: no previous extern declaration for non-static variable 'gyro_pitch_input' [-Wmissing-variable-declarations]
+double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
+                                            ^
+../USER/main.c(52): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
+^
+../USER/main.c(52): warning: no previous extern declaration for non-static variable 'pid_output_pitch' [-Wmissing-variable-declarations]
+double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
+                                                              ^
+../USER/main.c(52): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
+^
+../USER/main.c(52): warning: no previous extern declaration for non-static variable 'pid_last_pitch_d_error' [-Wmissing-variable-declarations]
+double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
+                                                                                ^
+../USER/main.c(52): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
+^
+../USER/main.c(53): warning: no previous extern declaration for non-static variable 'pid_i_mem_yaw' [-Wmissing-variable-declarations]
+double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
+       ^
+../USER/main.c(53): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
+^
+../USER/main.c(53): warning: no previous extern declaration for non-static variable 'pid_yaw_setpoint' [-Wmissing-variable-declarations]
+double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
+                      ^
+../USER/main.c(53): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
+^
+../USER/main.c(53): warning: no previous extern declaration for non-static variable 'gyro_yaw_input' [-Wmissing-variable-declarations]
+double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
+                                        ^
+../USER/main.c(53): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
+^
+../USER/main.c(53): warning: no previous extern declaration for non-static variable 'pid_output_yaw' [-Wmissing-variable-declarations]
+double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
+                                                        ^
+../USER/main.c(53): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
+^
+../USER/main.c(53): warning: no previous extern declaration for non-static variable 'pid_last_yaw_d_error' [-Wmissing-variable-declarations]
+double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
+                                                                        ^
+../USER/main.c(53): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
+^
+../USER/main.c(59): warning: no previous extern declaration for non-static variable 'pid_p_gain_pitch' [-Wmissing-variable-declarations]
+double pid_p_gain_pitch ;  //Gain setting for the pitch P-controller.
+       ^
+../USER/main.c(59): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_p_gain_pitch ;  //Gain setting for the pitch P-controller.
+^
+../USER/main.c(60): warning: no previous extern declaration for non-static variable 'pid_i_gain_pitch' [-Wmissing-variable-declarations]
+double pid_i_gain_pitch ;  //Gain setting for the pitch I-controller.
+       ^
+../USER/main.c(60): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_i_gain_pitch ;  //Gain setting for the pitch I-controller.
+^
+../USER/main.c(61): warning: no previous extern declaration for non-static variable 'pid_d_gain_pitch' [-Wmissing-variable-declarations]
+double pid_d_gain_pitch ;  //Gain setting for the pitch D-controller.
+       ^
+../USER/main.c(61): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+double pid_d_gain_pitch ;  //Gain setting for the pitch D-controller.
+^
+../USER/main.c(68): warning: no previous extern declaration for non-static variable 'throttle' [-Wmissing-variable-declarations]
+uint16_t throttle;
+         ^
+../USER/main.c(68): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint16_t throttle;
+^
+../USER/COMMON.h(71): note: expanded from macro 'uint16_t'
+#define uint16_t        unsigned short int
+                        ^
+../USER/main.c(69): warning: no previous extern declaration for non-static variable 'FR' [-Wmissing-variable-declarations]
+uint16_t FR, RR, RL, FL;
+         ^
+../USER/main.c(69): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint16_t FR, RR, RL, FL;
+^
+../USER/COMMON.h(71): note: expanded from macro 'uint16_t'
+#define uint16_t        unsigned short int
+                        ^
+../USER/main.c(69): warning: no previous extern declaration for non-static variable 'RR' [-Wmissing-variable-declarations]
+uint16_t FR, RR, RL, FL;
+             ^
+../USER/main.c(69): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint16_t FR, RR, RL, FL;
+^
+../USER/COMMON.h(71): note: expanded from macro 'uint16_t'
+#define uint16_t        unsigned short int
+                        ^
+../USER/main.c(69): warning: no previous extern declaration for non-static variable 'RL' [-Wmissing-variable-declarations]
+uint16_t FR, RR, RL, FL;
+                 ^
+../USER/main.c(69): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint16_t FR, RR, RL, FL;
+^
+../USER/COMMON.h(71): note: expanded from macro 'uint16_t'
+#define uint16_t        unsigned short int
+                        ^
+../USER/main.c(69): warning: no previous extern declaration for non-static variable 'FL' [-Wmissing-variable-declarations]
+uint16_t FR, RR, RL, FL;
+                     ^
+../USER/main.c(69): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint16_t FR, RR, RL, FL;
+^
+../USER/COMMON.h(71): note: expanded from macro 'uint16_t'
+#define uint16_t        unsigned short int
+                        ^
+../USER/main.c(70): warning: no previous extern declaration for non-static variable 'FrontRight' [-Wmissing-variable-declarations]
+uint16_t FrontRight, BackRight, BackLeft, FrontLeft;
+         ^
+../USER/main.c(70): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint16_t FrontRight, BackRight, BackLeft, FrontLeft;
+^
+../USER/COMMON.h(71): note: expanded from macro 'uint16_t'
+#define uint16_t        unsigned short int
+                        ^
+../USER/main.c(70): warning: no previous extern declaration for non-static variable 'BackRight' [-Wmissing-variable-declarations]
+uint16_t FrontRight, BackRight, BackLeft, FrontLeft;
+                     ^
+../USER/main.c(70): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint16_t FrontRight, BackRight, BackLeft, FrontLeft;
+^
+../USER/COMMON.h(71): note: expanded from macro 'uint16_t'
+#define uint16_t        unsigned short int
+                        ^
+../USER/main.c(70): warning: no previous extern declaration for non-static variable 'BackLeft' [-Wmissing-variable-declarations]
+uint16_t FrontRight, BackRight, BackLeft, FrontLeft;
+                                ^
+../USER/main.c(70): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint16_t FrontRight, BackRight, BackLeft, FrontLeft;
+^
+../USER/COMMON.h(71): note: expanded from macro 'uint16_t'
+#define uint16_t        unsigned short int
+                        ^
+../USER/main.c(70): warning: no previous extern declaration for non-static variable 'FrontLeft' [-Wmissing-variable-declarations]
+uint16_t FrontRight, BackRight, BackLeft, FrontLeft;
+                                          ^
+../USER/main.c(70): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+uint16_t FrontRight, BackRight, BackLeft, FrontLeft;
+^
+../USER/COMMON.h(71): note: expanded from macro 'uint16_t'
+#define uint16_t        unsigned short int
+                        ^
+40 warnings generated.
+compiling main.c...
+linking...
+Program Size: Code=20292 RO-data=644 RW-data=56 ZI-data=2144  
+".\Objects\BluePill_GPIO.axf" - 0 Error(s), 40 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -64,26 +332,26 @@ Package Vendor: Keil
       Include file:  RTE_Driver/GPIO_STM32F10x.h
 
    * Component: Keil::Device:Startup:1.0.0
-      Source file:   Device/Source/ARM/startup_stm32f10x_md.s
       Source file:   Device/Source/ARM/STM32F1xx_OPT.s
+      Source file:   Device/Source/ARM/startup_stm32f10x_md.s
       Include file:  RTE_Driver/Config/RTE_Device.h
       Source file:   Device/Source/system_stm32f10x.c
 
    * Component: Keil::Device:StdPeriph Drivers:Framework:3.6.0
-      Source file:   Device/StdPeriph_Driver/templates/stm32f10x_conf.h
-      Source file:   Device/StdPeriph_Driver/src/misc.c
       Source file:   Device/StdPeriph_Driver/templates/stm32f10x_it.c
       Include file:  Device/StdPeriph_Driver/templates/stm32f10x_it.h
+      Source file:   Device/StdPeriph_Driver/src/misc.c
       Include file:  Device/StdPeriph_Driver/inc/misc.h
+      Source file:   Device/StdPeriph_Driver/templates/stm32f10x_conf.h
 
    * Component: Keil::Device:StdPeriph Drivers:GPIO:3.6.0
-      Include file:  Device/StdPeriph_Driver/inc/stm32f10x_gpio.h
       Source file:   Device/StdPeriph_Driver/src/stm32f10x_gpio.c
+      Include file:  Device/StdPeriph_Driver/inc/stm32f10x_gpio.h
 
    * Component: Keil::Device:StdPeriph Drivers:RCC:3.6.0
       Include file:  Device/StdPeriph_Driver/inc/stm32f10x_rcc.h
       Source file:   Device/StdPeriph_Driver/src/stm32f10x_rcc.c
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

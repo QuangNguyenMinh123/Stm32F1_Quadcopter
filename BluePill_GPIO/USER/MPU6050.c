@@ -71,8 +71,8 @@ void MPU6050_getPara (void)
 {
 	MPU6050_Read (MPU6050_ADDR, 0x3B, &Buffer_data[0], 14);
 	
-	Accel_X_Raw = (MPU6050_Raw_DATA_TYPE)(Buffer_data[0] << 8 | Buffer_data [1]);
-	Accel_Y_Raw = (MPU6050_Raw_DATA_TYPE)(Buffer_data[2] << 8 | Buffer_data [3]);
+	Accel_Y_Raw = (MPU6050_Raw_DATA_TYPE)(Buffer_data[0] << 8 | Buffer_data [1]);
+	Accel_X_Raw = (MPU6050_Raw_DATA_TYPE)(Buffer_data[2] << 8 | Buffer_data [3]);
 	Accel_Z_Raw = (MPU6050_Raw_DATA_TYPE)(Buffer_data[4] << 8 | Buffer_data [5]);
 	
 	Gyro_X_Raw = (MPU6050_Raw_DATA_TYPE)(Buffer_data[8] << 8 | Buffer_data [9]);
@@ -91,29 +91,21 @@ void MPU6050_getPara (void)
 void MPU6050_CalculateAngle (void) {
 	/*MPU6050_getPara();*/
 	
-	Angle_Pitch	+= (double) Gyro_Y_Raw * 0.0000611;
-	Angle_Roll 	+= (double) Gyro_X_Raw * 0.0000611;
+	Angle_Pitch	+= (double) Gyro_X_Raw * 0.0000611;
+	Angle_Roll 	+= (double) Gyro_Y_Raw * 0.0000611;
 	
 	Angle_Pitch -= Angle_Roll  * sin(Gyro_Z_Raw * 0.000001066);
 	Angle_Roll 	+= Angle_Pitch * sin(Gyro_Z_Raw * 0.000001066);
 	
-	TotalVector = Accel_X_Raw*Accel_X_Raw + Accel_Y_Raw*Accel_Y_Raw + 
-				Accel_Z_Raw*Accel_Z_Raw;
+	TotalVector = (Accel_X_Raw*Accel_X_Raw + Accel_Y_Raw*Accel_Y_Raw + 
+				Accel_Z_Raw*Accel_Z_Raw);
 	
 	if (Accel_X_Raw*Accel_X_Raw < TotalVector) {
-		angle_pitch_acc = asin((double)((double)Accel_X_Raw) / TotalVector) * 57.296;
+		angle_pitch_acc = asin((double)((double)Accel_X_Raw) / sqrt(TotalVector)) * 57.296;
 	}
 	if (Accel_Y_Raw*Accel_Y_Raw < TotalVector) {
-		angle_roll_acc = asin((double)((double)Accel_Y_Raw) / TotalVector) * 57.296;
+		angle_roll_acc = asin((double)((double)Accel_Y_Raw) / sqrt(TotalVector)) * 57.296;
 	}
-	/*if (firstStart == TRUE) {
-		firstStart = FALSE;
-		Angle_Pitch = angle_pitch_acc;
-		Angle_Roll = angle_roll_acc;
-	}
-	else {
-		
-	}*/
 	Angle_Pitch = Angle_Pitch * DELTA + angle_pitch_acc * (1.0 - DELTA);
 	Angle_Roll = Angle_Roll * DELTA + angle_roll_acc * (1.0 - DELTA);
 	

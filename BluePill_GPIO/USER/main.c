@@ -51,9 +51,9 @@ double pid_error_temp;
 double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_last_roll_d_error;
 double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
 double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
-double pid_p_gain_roll = 1.0;               //Gain setting for the pitch and roll P-controller (default = 1.3).
-double pid_i_gain_roll = 0.01;              //Gain setting for the pitch and roll I-controller (default = 0.04).
-double pid_d_gain_roll = 20.0;              //Gain setting for the pitch and roll D-controller (default = 18.0).
+double pid_p_gain_roll = 1.3;               //Gain setting for the pitch and roll P-controller (default = 1.3).
+double pid_i_gain_roll = 0.04;              //Gain setting for the pitch and roll I-controller (default = 0.04).
+double pid_d_gain_roll = 18.0;              //Gain setting for the pitch and roll D-controller (default = 18.0).
 int pid_max_roll = 400;                    //Maximum output of the PID-controller (+/-).
 
 double pid_p_gain_pitch ;  //Gain setting for the pitch P-controller.
@@ -205,9 +205,9 @@ int main(void) {
 		Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
 		if (start == 2) {
 			if (throttle > 1800) throttle = 1800;                                          //We need some room to keep full control at full throttle.
-			FR = throttle - (ui16)pid_output_pitch + (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 1 (front-right - CCW).
+			RL = throttle - (ui16)pid_output_pitch + (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 1 (front-right - CCW).
 			RR = throttle + (ui16)pid_output_pitch + (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 2 (rear-right - CW).
-			RL = throttle + (ui16)pid_output_pitch - (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 3 (rear-left - CCW).
+			FR = throttle + (ui16)pid_output_pitch - (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 3 (rear-left - CCW).
 			FL = throttle - (ui16)pid_output_pitch - (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 4 (front-left - CW).
 
 			if (FR < MIN_THROTTLE) FR = MIN_THROTTLE;                                                //Keep the motors running.
