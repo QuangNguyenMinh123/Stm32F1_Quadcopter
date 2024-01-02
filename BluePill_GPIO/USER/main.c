@@ -203,10 +203,10 @@ int main(void) {
 		Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
 		if (start == 2) {
 			if (throttle > 1800) throttle = 1800;                                          //We need some room to keep full control at full throttle.
-			RearLeft = throttle - (ui16)pid_output_pitch + (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 1 (front-right - CCW).
-			RearRight = throttle + (ui16)pid_output_pitch + (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 2 (rear-right - CW).
-			FrontRight = throttle + (ui16)pid_output_pitch - (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 3 (rear-left - CCW).
-			FrontLeft = throttle - (ui16)pid_output_pitch - (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 4 (front-left - CW).
+			FrontRight = throttle - (ui16)pid_output_pitch + (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 1 (front-right - CCW).
+			FrontLeft = throttle + (ui16)pid_output_pitch + (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 2 (rear-right - CW).
+			RearLeft = throttle + (ui16)pid_output_pitch - (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 3 (rear-left - CCW).
+			RearRight = throttle - (ui16)pid_output_pitch - (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 4 (front-left - CW).
 
 			if (FrontRight < MIN_THROTTLE) FrontRight = MIN_THROTTLE;                                                //Keep the motors running.
 			if (RearRight < MIN_THROTTLE) RearRight = MIN_THROTTLE;                                                //Keep the motors running.
@@ -225,9 +225,9 @@ int main(void) {
 			FrontLeft = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-4.
 		}
 		TIM4->CCR1 = FrontRight;
-		TIM4->CCR2 = FrontLeft;
+		TIM4->CCR2 = RearRight;
 		TIM4->CCR3 = RearLeft;
-		TIM4->CCR4 = RearRight;
+		TIM4->CCR4 = FrontLeft;
 		TIM4->CNT = 5000;
 #if (UART_ENABLE == ON)
 		UART1_sendStr("Pitch:");

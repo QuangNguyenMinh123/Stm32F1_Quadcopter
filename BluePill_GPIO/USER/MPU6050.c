@@ -32,8 +32,8 @@ static long Gyro_Y_Offset = 0;
 static long Gyro_Z_Offset = 0;
 static int TotalVector = 0;
 
-double Angle_Pitch = 0.0;
 double Angle_Roll = 0.0;
+double Angle_Pitch = 0.0;
 double Yaw_Gyro = 0.0;
 
 double angle_pitch_acc = 0.0;
@@ -87,23 +87,23 @@ void MPU6050_getPara (void)
 }	
 	
 void MPU6050_CalculateAngle (void) {
-	Angle_Pitch	+= (double) Gyro_X_Raw * 0.0000611;
-	Angle_Roll 	+= (double) Gyro_Y_Raw * 0.0000611;
+	Angle_Roll	+= (double) Gyro_X_Raw * 0.0000611;
+	Angle_Pitch 	+= (double) Gyro_Y_Raw * 0.0000611;
 	
-	Angle_Pitch -= Angle_Roll  * sin(Gyro_Z_Raw * 0.000001066);
-	Angle_Roll 	+= Angle_Pitch * sin(Gyro_Z_Raw * 0.000001066);
+	Angle_Roll -= Angle_Pitch  * sin(Gyro_Z_Raw * 0.000001066);
+	Angle_Pitch 	+= Angle_Roll * sin(Gyro_Z_Raw * 0.000001066);
 	
 	TotalVector = (Accel_X_Raw*Accel_X_Raw + Accel_Y_Raw*Accel_Y_Raw + 
 				Accel_Z_Raw*Accel_Z_Raw);
 	
-	if (Accel_X_Raw*Accel_X_Raw < TotalVector) {
-		angle_pitch_acc = asin((double)((double)Accel_X_Raw) / sqrt(TotalVector)) * 57.296;
-	}
 	if (Accel_Y_Raw*Accel_Y_Raw < TotalVector) {
-		angle_roll_acc = asin((double)((double)Accel_Y_Raw) / sqrt(TotalVector)) * 57.296;
+		angle_pitch_acc = asin((double)((double)Accel_Y_Raw) / sqrt(TotalVector)) * 57.296;
 	}
-	Angle_Pitch = Angle_Pitch * DELTA + angle_pitch_acc * (1.0 - DELTA);
+	if (Accel_X_Raw*Accel_X_Raw < TotalVector) {
+		angle_roll_acc = asin((double)((double)Accel_X_Raw) / sqrt(TotalVector)) * 57.296;
+	}
 	Angle_Roll = Angle_Roll * DELTA + angle_roll_acc * (1.0 - DELTA);
+	Angle_Pitch = Angle_Pitch * DELTA + angle_pitch_acc * (1.0 - DELTA);
 }
 
 static void MPU6050_Calibration (void) {
