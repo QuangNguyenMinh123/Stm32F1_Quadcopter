@@ -66,8 +66,7 @@ double pid_i_gain_yaw = 0.02;               //Gain setting for the pitch I-contr
 double pid_d_gain_yaw = 0.0;                //Gain setting for the pitch D-controller (default = 0.0).
 int pid_max_yaw = 400; 
 uint16_t throttle;
-uint16_t FR, RR, RL, FL;
-uint16_t FrontRight, BackRight, BackLeft, FrontLeft;
+uint16_t FrontRight, RearRight, RearLeft, FrontLeft;
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -94,10 +93,9 @@ int main(void) {
 	if (GPIO_PulseWidth.Throttle >= 1900) {
 		ESC_Clibration();
 	}
-	/*
-	while (GetFlyingState() != IDLE || TX_Unavailable()) {
+	while (TX_Unavailable()) {
 		LedWarning_NotInIdleMode();
-	}*/
+	}
 	GPIO_PINHigh(WARNING_LED);
 	loop_timer = micros();
 	while (1) {
@@ -205,31 +203,31 @@ int main(void) {
 		Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
 		if (start == 2) {
 			if (throttle > 1800) throttle = 1800;                                          //We need some room to keep full control at full throttle.
-			RL = throttle - (ui16)pid_output_pitch + (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 1 (front-right - CCW).
-			RR = throttle + (ui16)pid_output_pitch + (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 2 (rear-right - CW).
-			FR = throttle + (ui16)pid_output_pitch - (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 3 (rear-left - CCW).
-			FL = throttle - (ui16)pid_output_pitch - (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 4 (front-left - CW).
+			RearLeft = throttle - (ui16)pid_output_pitch + (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 1 (front-right - CCW).
+			RearRight = throttle + (ui16)pid_output_pitch + (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 2 (rear-right - CW).
+			FrontRight = throttle + (ui16)pid_output_pitch - (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 3 (rear-left - CCW).
+			FrontLeft = throttle - (ui16)pid_output_pitch - (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 4 (front-left - CW).
 
-			if (FR < MIN_THROTTLE) FR = MIN_THROTTLE;                                                //Keep the motors running.
-			if (RR < MIN_THROTTLE) RR = MIN_THROTTLE;                                                //Keep the motors running.
-			if (RL < MIN_THROTTLE) RL = MIN_THROTTLE;                                                //Keep the motors running.
-			if (FL < MIN_THROTTLE) FL = MIN_THROTTLE;                                                //Keep the motors running.
+			if (FrontRight < MIN_THROTTLE) FrontRight = MIN_THROTTLE;                                                //Keep the motors running.
+			if (RearRight < MIN_THROTTLE) RearRight = MIN_THROTTLE;                                                //Keep the motors running.
+			if (RearLeft < MIN_THROTTLE) RearLeft = MIN_THROTTLE;                                                //Keep the motors running.
+			if (FrontLeft < MIN_THROTTLE) FrontLeft = MIN_THROTTLE;                                                //Keep the motors running.
 
-			if (FR > 2000)FR = 2000;                                                 //Limit the esc-1 pulse to 2000us.
-			if (RR > 2000)RR = 2000;                                                 //Limit the esc-2 pulse to 2000us.
-			if (RL > 2000)RL = 2000;                                                 //Limit the esc-3 pulse to 2000us.
-			if (FL > 2000)FL = 2000;                                                 //Limit the esc-4 pulse to 2000us.
+			if (FrontRight > 2000)FrontRight = 2000;                                                 //Limit the esc-1 pulse to 2000us.
+			if (RearRight > 2000)RearRight = 2000;                                                 //Limit the esc-2 pulse to 2000us.
+			if (RearLeft > 2000)RearLeft = 2000;                                                 //Limit the esc-3 pulse to 2000us.
+			if (FrontLeft > 2000)FrontLeft = 2000;                                                 //Limit the esc-4 pulse to 2000us.
 		}
 		else {
-			FR = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-1.
-			RR = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-2.
-			RL = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-3.
-			FL = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-4.
+			FrontRight = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-1.
+			RearRight = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-2.
+			RearLeft = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-3.
+			FrontLeft = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-4.
 		}
-		TIM4->CCR1 = FR;
-		TIM4->CCR2 = FL;
-		TIM4->CCR3 = RL;
-		TIM4->CCR4 = RR;
+		TIM4->CCR1 = FrontRight;
+		TIM4->CCR2 = FrontLeft;
+		TIM4->CCR3 = RearLeft;
+		TIM4->CCR4 = RearRight;
 		TIM4->CNT = 5000;
 #if (UART_ENABLE == ON)
 		UART1_sendStr("Pitch:");
@@ -261,6 +259,10 @@ void System_Init(void) {
 	GPIO_SetPWM(IO_B7);
 	GPIO_SetPWM(IO_B8);
 	GPIO_SetPWM(IO_B9);
+	GPIO_B6_PWM(1000);
+	GPIO_B7_PWM(1000);
+	GPIO_B8_PWM(1000);
+	GPIO_B9_PWM(1000);
 	CLOCK_SystickInit();
 	GPIO_SetPWMMeasurement();
 	GPIO_SetOutPut(IO_C13, General_Push_Pull);
