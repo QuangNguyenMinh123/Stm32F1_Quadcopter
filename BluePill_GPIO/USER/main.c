@@ -281,7 +281,6 @@ void System_Init(void) {
 #endif
 	I2C2_Init(I2C_SPEED_400);
 	MPU6050_Init();
-	MPU6050_Calibration();
 	
 }
 

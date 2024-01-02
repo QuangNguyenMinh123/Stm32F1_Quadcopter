@@ -14,27 +14,27 @@
  ******************************************************************************/
 /**************************** DEFINE PID VARIABLE *****************************/
 /* PID Pitch variable */
- const double PID_Pitch_P_Gain = 1.3;			/* 1.3 */
- const double PID_Pitch_I_Gain = 0.04;			/* 0.0112 */
- const double PID_Pitch_D_Gain = 18;				/* 17.5 */
- const double PID_Max_Pitch  = 400.0;
+static const double PID_Pitch_P_Gain = 1.3;			/* 1.3 */
+static const double PID_Pitch_I_Gain = 0.04;			/* 0.0112 */
+static const double PID_Pitch_D_Gain = 18;			/* 17.5 */
+static const double PID_Max_Pitch  = 400.0;
 
 /* PID Roll variable */
- const double PID_Roll_P_Gain = PID_Pitch_P_Gain;
- const double PID_Roll_I_Gain = PID_Pitch_I_Gain;
- const double PID_Roll_D_Gain = PID_Pitch_D_Gain;
- const double PID_Max_Roll  = PID_Max_Pitch;
+static const double PID_Roll_P_Gain = PID_Pitch_P_Gain;
+static const double PID_Roll_I_Gain = PID_Pitch_I_Gain;
+static const double PID_Roll_D_Gain = PID_Pitch_D_Gain;
+static const double PID_Max_Roll  = PID_Max_Pitch;
 
 
 /* PID Yaw variable */
- const double PID_Yaw_P_Gain 	= 4.0;		/* 4.0  */
- const double PID_Yaw_I_Gain 	= 0.2;		/* 0.015 */
- const double PID_Yaw_D_Gain 	= 0.0;		/* 0 */
- const double PID_Max_Yaw  	= 400.0;
+static const double PID_Yaw_P_Gain 	= 4.0;		/* 4.0  */
+static const double PID_Yaw_I_Gain 	= 0.2;		/* 0.015 */
+static const double PID_Yaw_D_Gain 	= 0.0;		/* 0 */
+static const double PID_Max_Yaw  	= 400.0;
 /* Desired angle */
 static double Desired_Pitch;
 static double Desired_Roll;
- double Desired_Yaw;
+static double Desired_Yaw;
 /* Variable declaration */
 /* Error */
  double Pitch_Error = 0.0;
@@ -45,7 +45,7 @@ static double Desired_Roll;
  double P_Roll = 0.0;
  double P_Yaw = 0.0;
 /* I element */
- double I_Pitch = 0.0;			/* I of Pitch element accumulation */
+ double I_Pitch = 0.0;				/* I of Pitch element accumulation */
  double I_Roll = 0.0;				/* I of Roll element accumulation */
  double I_Yaw = 0.0;				/* I of Yaw element accumulation */
 /* D element */

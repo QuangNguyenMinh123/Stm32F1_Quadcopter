@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\BluePill_GPIO.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\BluePill_GPIO.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Mon Jan  1 19:36:23 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Mon Jan  1 20:53:31 2024
 <BR><P>
 <H3>Maximum Stack Usage =        832 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -692,20 +692,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[71]"></a>MPU6050_Calibration</STRONG> (Thumb, 290 bytes, Stack size 32 bytes, mpu6050.o(.text.MPU6050_Calibration))
-<BR><BR>[Stack]<UL><LI>Max Depth = 124<LI>Call Chain = MPU6050_Calibration &rArr; MPU6050_getPara &rArr; MPU6050_Read &rArr; I2C2_ReadDevice &rArr; I2C2_Read &rArr; I2C2_CallAdress
-</UL>
-<BR>[Calls]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PINToggle
-<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_getPara
-<LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
-</UL>
-<BR>[Called By]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;System_Init
-</UL>
-
-<P><STRONG><a name="[73]"></a>MPU6050_Init</STRONG> (Thumb, 70 bytes, Stack size 16 bytes, mpu6050.o(.text.MPU6050_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = MPU6050_Init &rArr; MPU6050_Write &rArr; I2C2_WriteToDevice &rArr; I2C2_CallAdress
+<P><STRONG><a name="[73]"></a>MPU6050_Init</STRONG> (Thumb, 66 bytes, Stack size 16 bytes, mpu6050.o(.text.MPU6050_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 140<LI>Call Chain = MPU6050_Init &rArr; MPU6050_Calibration &rArr; MPU6050_getPara &rArr; MPU6050_Read &rArr; I2C2_ReadDevice &rArr; I2C2_Read &rArr; I2C2_CallAdress
 </UL>
 <BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Write
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Calibration
+<LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;System_Init
 </UL>
@@ -757,13 +749,12 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_md.o(.text)
 </UL>
-<P><STRONG><a name="[78]"></a>System_Init</STRONG> (Thumb, 210 bytes, Stack size 32 bytes, main.o(.text.System_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 156<LI>Call Chain = System_Init &rArr; MPU6050_Calibration &rArr; MPU6050_getPara &rArr; MPU6050_Read &rArr; I2C2_ReadDevice &rArr; I2C2_Read &rArr; I2C2_CallAdress
+<P><STRONG><a name="[78]"></a>System_Init</STRONG> (Thumb, 206 bytes, Stack size 32 bytes, main.o(.text.System_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 172<LI>Call Chain = System_Init &rArr; MPU6050_Init &rArr; MPU6050_Calibration &rArr; MPU6050_getPara &rArr; MPU6050_Read &rArr; I2C2_ReadDevice &rArr; I2C2_Read &rArr; I2C2_CallAdress
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
 <LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
 <LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
-<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Calibration
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Init
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C2_Init
 <LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay
@@ -788,7 +779,8 @@ Global Symbols
 <P><STRONG><a name="[59]"></a>delay</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, common.o(.text.delay))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = delay
 </UL>
-<BR>[Called By]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C2_Init
+<BR>[Called By]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Init
+<LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C2_Init
 <LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetAnalog
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;System_Init
 </UL>
@@ -1197,6 +1189,16 @@ Global Symbols
 <H3>
 Local Symbols
 </H3>
+<P><STRONG><a name="[71]"></a>MPU6050_Calibration</STRONG> (Thumb, 290 bytes, Stack size 32 bytes, mpu6050.o(.text.MPU6050_Calibration))
+<BR><BR>[Stack]<UL><LI>Max Depth = 124<LI>Call Chain = MPU6050_Calibration &rArr; MPU6050_getPara &rArr; MPU6050_Read &rArr; I2C2_ReadDevice &rArr; I2C2_Read &rArr; I2C2_CallAdress
+</UL>
+<BR>[Calls]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PINToggle
+<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_getPara
+<LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
+</UL>
+<BR>[Called By]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU6050_Init
+</UL>
+
 <P><STRONG><a name="[76]"></a>SetSysClock</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, system_stm32f10x.o(.text.SetSysClock))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = SetSysClock &rArr; SetSysClockTo72
 </UL>
