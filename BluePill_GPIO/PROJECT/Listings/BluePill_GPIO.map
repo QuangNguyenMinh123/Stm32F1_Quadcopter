@@ -63,9 +63,9 @@ Section Cross References
     main.o(.text.main) refers to main.o(.bss.Battery) for Battery
     main.o(.text.main) refers to gpio.o(.text.GPIO_ReadAnalog) for GPIO_ReadAnalog
     main.o(.text.main) refers to dfix.o(x$fpl$dfix) for __aeabi_d2iz
-    main.o(.text.main) refers to main.o(.bss.FrontRight) for FrontRight
-    main.o(.text.main) refers to main.o(.bss.RearRight) for RearRight
     main.o(.text.main) refers to main.o(.bss.RearLeft) for RearLeft
+    main.o(.text.main) refers to main.o(.bss.RearRight) for RearRight
+    main.o(.text.main) refers to main.o(.bss.FrontRight) for FrontRight
     main.o(.text.main) refers to main.o(.bss.FrontLeft) for FrontLeft
     main.o(.text.main) refers to main.o(.text.CheckTimeOut) for CheckTimeOut
     main.o(.text.main) refers to main.o(.bss.ErrorTimeout) for ErrorTimeout
@@ -308,11 +308,11 @@ Section Cross References
     mpu6050.o(.ARM.exidx.text.MPU6050_getPara) refers to mpu6050.o(.text.MPU6050_getPara) for [Anonymous Symbol]
     mpu6050.o(.text.MPU6050_CalculateAngle) refers to mpu6050.o(.bss.Gyro_X_Raw) for Gyro_X_Raw
     mpu6050.o(.text.MPU6050_CalculateAngle) refers to dflt_clz.o(x$fpl$dflt) for __aeabi_i2d
-    mpu6050.o(.text.MPU6050_CalculateAngle) refers to mpu6050.o(.bss.Angle_Roll) for Angle_Roll
+    mpu6050.o(.text.MPU6050_CalculateAngle) refers to mpu6050.o(.bss.Angle_Pitch) for Angle_Pitch
     mpu6050.o(.text.MPU6050_CalculateAngle) refers to dmul.o(x$fpl$dmul) for __aeabi_dmul
     mpu6050.o(.text.MPU6050_CalculateAngle) refers to daddsub_clz.o(x$fpl$dadd) for __aeabi_dadd
     mpu6050.o(.text.MPU6050_CalculateAngle) refers to mpu6050.o(.bss.Gyro_Y_Raw) for Gyro_Y_Raw
-    mpu6050.o(.text.MPU6050_CalculateAngle) refers to mpu6050.o(.bss.Angle_Pitch) for Angle_Pitch
+    mpu6050.o(.text.MPU6050_CalculateAngle) refers to mpu6050.o(.bss.Angle_Roll) for Angle_Roll
     mpu6050.o(.text.MPU6050_CalculateAngle) refers to mpu6050.o(.bss.Gyro_Z_Raw) for Gyro_Z_Raw
     mpu6050.o(.text.MPU6050_CalculateAngle) refers to sin.o(i.sin) for sin
     mpu6050.o(.text.MPU6050_CalculateAngle) refers to daddsub_clz.o(x$fpl$dsub) for __aeabi_dsub
@@ -1770,14 +1770,14 @@ Memory Map of the image
     0x2000009a        -       0x00000002   Zero   RW          293    .bss.Accel_Y_Raw    mpu6050.o
     0x2000009c        -       0x00000002   Zero   RW          295    .bss.Accel_Z_Raw    mpu6050.o
     0x2000009e   0x080052f0   0x00000002   PAD
-    0x200000a0        -       0x00000008   Zero   RW          288    .bss.Angle_Pitch    mpu6050.o
-    0x200000a8        -       0x00000008   Zero   RW          287    .bss.Angle_Roll     mpu6050.o
+    0x200000a0        -       0x00000008   Zero   RW          287    .bss.Angle_Pitch    mpu6050.o
+    0x200000a8        -       0x00000008   Zero   RW          288    .bss.Angle_Roll     mpu6050.o
     0x200000b0        -       0x00000008   Zero   RW           48    .bss.Battery        main.o
     0x200000b8        -       0x0000000e   Zero   RW          292    .bss.Buffer_data    mpu6050.o
     0x200000c6        -       0x00000001   Zero   RW           54    .bss.Error          main.o
     0x200000c7        -       0x00000001   Zero   RW           53    .bss.ErrorTimeout   main.o
     0x200000c8        -       0x00000002   Zero   RW           52    .bss.FrontLeft      main.o
-    0x200000ca        -       0x00000002   Zero   RW           49    .bss.FrontRight     main.o
+    0x200000ca        -       0x00000002   Zero   RW           51    .bss.FrontRight     main.o
     0x200000cc        -       0x0000000c   Zero   RW          101    .bss.GPIO_PulseWidth  gpio.o
     0x200000d8        -       0x00000004   Zero   RW          296    .bss.Gyro_X_Offset  mpu6050.o
     0x200000dc        -       0x00000002   Zero   RW          284    .bss.Gyro_X_Raw     mpu6050.o
@@ -1789,7 +1789,7 @@ Memory Map of the image
     0x200000ec        -       0x00000002   Zero   RW          286    .bss.Gyro_Z_Raw     mpu6050.o
     0x200000ee   0x080052f0   0x00000002   PAD
     0x200000f0        -       0x00000004   Zero   RW          146    .bss.Pointer        uart.o
-    0x200000f4        -       0x00000002   Zero   RW           51    .bss.RearLeft       main.o
+    0x200000f4        -       0x00000002   Zero   RW           49    .bss.RearLeft       main.o
     0x200000f6        -       0x00000002   Zero   RW           50    .bss.RearRight      main.o
     0x200000f8        -       0x00000004   Zero   RW           99    .bss.RisingTimeTIM2  gpio.o
     0x200000fc        -       0x00000004   Zero   RW          100    .bss.RisingTimeTIM3  gpio.o
