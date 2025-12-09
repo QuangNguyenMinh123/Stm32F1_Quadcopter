@@ -52,7 +52,7 @@ double pid_i_mem_roll, pid_roll_setpoint, gyro_roll_input, pid_output_roll, pid_
 double pid_i_mem_pitch, pid_pitch_setpoint, gyro_pitch_input, pid_output_pitch, pid_last_pitch_d_error;
 double pid_i_mem_yaw, pid_yaw_setpoint, gyro_yaw_input, pid_output_yaw, pid_last_yaw_d_error;
 double pid_p_gain_roll = 1.3;               //Gain setting for the pitch and roll P-controller (default = 1.3).
-double pid_i_gain_roll = 0.04;              //Gain setting for the pitch and roll I-controller (default = 0.04).
+double pid_i_gain_roll = 0.03;              //Gain setting for the pitch and roll I-controller (default = 0.04).
 double pid_d_gain_roll = 18.0;              //Gain setting for the pitch and roll D-controller (default = 18.0).
 int pid_max_roll = 400;                    //Maximum output of the PID-controller (+/-).
 
@@ -89,11 +89,27 @@ int main(void) {
 	pid_i_gain_pitch = pid_i_gain_roll;
 	pid_d_gain_pitch = pid_d_gain_roll;
 	pid_max_pitch = pid_max_roll;
-	
+	delay(5000*MS);
 	System_Init();
-	if (GPIO_PulseWidth.Throttle >= 1900) {
-		ESC_Clibration();
-	}
+	// ESC calib
+    if (GPIO_PulseWidth.Throttle >= 1900) {
+        TIM4->CCR1 = GPIO_PulseWidth.Throttle;
+        TIM4->CCR2 = GPIO_PulseWidth.Throttle;
+        TIM4->CCR3 = GPIO_PulseWidth.Throttle;
+        TIM4->CCR4 = GPIO_PulseWidth.Throttle;
+        while (1)
+        {
+          if (GPIO_PulseWidth.Throttle < 1050) break;
+          TIM4->CCR1 = GPIO_PulseWidth.Throttle;
+          TIM4->CCR2 = GPIO_PulseWidth.Throttle;
+          TIM4->CCR3 = GPIO_PulseWidth.Throttle;
+          TIM4->CCR4 = GPIO_PulseWidth.Throttle;
+        }
+    }
+    TIM4->CCR1 = 1000;
+	TIM4->CCR2 = 1000;
+	TIM4->CCR3 = 1000;
+	TIM4->CCR4 = 1000;
 	/*
 	while (GetFlyingState() != IDLE || TX_Unavailable()) {
 		LedWarning_NotInIdleMode();
@@ -113,9 +129,10 @@ int main(void) {
 		roll_level_adjust = Angle_Roll * 15;
 		
 		//For starting the motors: throttle low and yaw left (step 1).
-		if (GPIO_PulseWidth.Throttle < 1050 && GPIO_PulseWidth.Yaw < 1050)start = 1;
-		//When yaw stick is back in the center position start the motors (step 2).
-		if (start == 1 && GPIO_PulseWidth.Throttle < 1050 && GPIO_PulseWidth.Yaw > 1450) {
+		if (GPIO_PulseWidth.Aux1 < 1050)
+			start = 0;
+		if (GPIO_PulseWidth.Aux1 > 1950 && start != 2)
+		{
 			start = 2;
 			
 			Angle_Pitch = angle_pitch_acc;                                                 //Set the gyro pitch angle equal to the accelerometer pitch angle when the quadcopter is started.
@@ -128,10 +145,6 @@ int main(void) {
 			pid_last_pitch_d_error = 0;
 			pid_i_mem_yaw = 0;
 			pid_last_yaw_d_error = 0;
-		}
-		//Stopping the motors: throttle low and yaw right.
-		if (start == 2 && GPIO_PulseWidth.Throttle < 1050 && GPIO_PulseWidth.Yaw > 1950) {
-			start = 0;                                                             //Turn on the green led.
 		}
 			
 		pid_roll_setpoint = 0;
@@ -197,39 +210,40 @@ int main(void) {
 		else if(pid_output_yaw < pid_max_yaw * -1)pid_output_yaw = pid_max_yaw * -1;
 
 		pid_last_yaw_d_error = pid_error_temp;
-		
-		if (GPIO_PulseWidth.Aux1 >= 1250)	/* Urgent stop */
-			start = 0;
 			
 		throttle = GPIO_PulseWidth.Throttle;
 		Battery = Battery * 0.92 + GPIO_ReadAnalog(ADC1) * 0.08 * 36.3 / 4096.0;
 		if (start == 2) {
 			if (throttle > 1800) throttle = 1800;                                          //We need some room to keep full control at full throttle.
-			RL = throttle - (ui16)pid_output_pitch + (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 1 (front-right - CCW).
-			RR = throttle + (ui16)pid_output_pitch + (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 2 (rear-right - CW).
-			FR = throttle + (ui16)pid_output_pitch - (ui16)pid_output_roll - (ui16)pid_output_yaw;        //Calculate the pulse for esc 3 (rear-left - CCW).
-			FL = throttle - (ui16)pid_output_pitch - (ui16)pid_output_roll + (ui16)pid_output_yaw;        //Calculate the pulse for esc 4 (front-left - CW).
+			BackLeft    = throttle - (uint16_t)pid_output_pitch - (uint16_t)pid_output_roll;// - (uint16_t)pid_output_yaw;        //Calculate the pulse for esc 1 (front-right - CCW).
+			FrontRight  = throttle + (uint16_t)pid_output_pitch + (uint16_t)pid_output_roll;// - (uint16_t)pid_output_yaw;        //Calculate the pulse for esc 2 (rear-right - CW).
+			FrontLeft   = throttle + (uint16_t)pid_output_pitch - (uint16_t)pid_output_roll;// + (uint16_t)pid_output_yaw;        //Calculate the pulse for esc 3 (rear-left - CCW).
+			BackRight   = throttle - (uint16_t)pid_output_pitch + (uint16_t)pid_output_roll;// + (uint16_t)pid_output_yaw;        //Calculate the pulse for esc 4 (front-left - CW).
 
-			if (FR < MIN_THROTTLE) FR = MIN_THROTTLE;                                                //Keep the motors running.
-			if (RR < MIN_THROTTLE) RR = MIN_THROTTLE;                                                //Keep the motors running.
-			if (RL < MIN_THROTTLE) RL = MIN_THROTTLE;                                                //Keep the motors running.
-			if (FL < MIN_THROTTLE) FL = MIN_THROTTLE;                                                //Keep the motors running.
+			if (FrontRight < MIN_THROTTLE) FrontRight = MIN_THROTTLE;                                                //Keep the motors running.
+			if (BackRight < MIN_THROTTLE) BackRight = MIN_THROTTLE;                                                //Keep the motors running.
+			if (BackLeft < MIN_THROTTLE) BackLeft = MIN_THROTTLE;                                                //Keep the motors running.
+			if (FrontLeft < MIN_THROTTLE) FrontLeft = MIN_THROTTLE;                                                //Keep the motors running.
 
-			if (FR > 2000)FR = 2000;                                                 //Limit the esc-1 pulse to 2000us.
-			if (RR > 2000)RR = 2000;                                                 //Limit the esc-2 pulse to 2000us.
-			if (RL > 2000)RL = 2000;                                                 //Limit the esc-3 pulse to 2000us.
-			if (FL > 2000)FL = 2000;                                                 //Limit the esc-4 pulse to 2000us.
+			if (FrontRight > MAX_THROTTLE)
+            FrontRight = MAX_THROTTLE;                                                 //Limit the esc-1 pulse to 2000us.
+			if (BackRight > MAX_THROTTLE)
+				BackRight = MAX_THROTTLE;                                                 //Limit the esc-2 pulse to 2000us.
+			if (BackLeft > MAX_THROTTLE)
+				BackLeft = MAX_THROTTLE;                                                 //Limit the esc-3 pulse to 2000us.
+			if (FrontLeft > MAX_THROTTLE)
+				FrontLeft = MAX_THROTTLE;                                                 //Limit the esc-4 pulse to 2000us.
 		}
 		else {
-			FR = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-1.
-			RR = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-2.
-			RL = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-3.
-			FL = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-4.
+			FrontRight = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-1.
+			BackRight = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-2.
+			BackLeft = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-3.
+			FrontLeft = 1000;                                                                  //If start is not 2 keep a 1000us pulse for ess-4.
 		}
-		TIM4->CCR1 = FR;
-		TIM4->CCR2 = FL;
-		TIM4->CCR3 = RL;
-		TIM4->CCR4 = RR;
+		TIM4->CCR1 = FrontRight;	// PB6
+		TIM4->CCR2 = FrontLeft;		// PB7
+		TIM4->CCR3 = BackRight;		// PB8
+		TIM4->CCR4 = BackLeft;		// PB9
 		TIM4->CNT = 5000;
 #if (UART_ENABLE == ON)
 		UART1_sendStr("Pitch:");
